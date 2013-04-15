@@ -7,7 +7,14 @@ function addBookmark(title, url) {
     if (url.indexOf("http") != 0)
         url = 'http://' + url;
 
-    chrome.bookmarks.create({'parentId': $("#dial").attr('name').toString(), 'title': title, 'url': url}, function() {});
+//    chrome.bookmarks.create({'parentId': $("#dial").attr('name').toString(), 'title': title, 'url': url}, function() {});
+
+    var folder_id  = localStorage['folder'];
+    var dfolder_id = localStorage['default_folder_id'];
+        if (dfolder_id != undefined || dfolder_id > 1) {
+            folder_id = dfolder_id;
+        }
+    chrome.bookmarks.create({'parentId': folder_id, 'title': title, 'url': url}, function() {});
 }
 
 // Adds a bookmark onto the speed dial. Takes a chrome bookmark node object.
@@ -158,9 +165,17 @@ function generateFolderList() {
             return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
         });
 
+
+        var folder_id  = localStorage['folder'];
+        var dfolder_id = localStorage['default_folder_id'];
+            if (dfolder_id != undefined || dfolder_id > 1) {
+                folder_id = dfolder_id;
+            }
+
         for (index in folderList) {
-            if (folderList[index].path.toLowerCase() == 'bookmarks bar') {
+            if (folderList[index].id == folder_id) { //folderList[index].path.toLowerCase() == 'bookmarks bar') {
                 selected = ' selected="selected"';
+
             } else {
                 selected = '';
             }
@@ -182,6 +197,7 @@ function initialise() {
     defaultStorage('new_entry', 'block');
     defaultStorage('show_advanced', 'true');
     defaultStorage('show_folder_list', 'auto');
+    defaultStorage('default_folder_index', 0);
     defaultStorage('thumbnail_url', 'http://immediatenet.com/t/l?Size=1024x768&URL=[URL]');
     defaultStorage('width', 70);
 }
@@ -267,7 +283,16 @@ function updateBookmarkPositions() {
 $(document).ready(function() {
     initialise();
     generateFolderList();
-    createSpeedDial(localStorage['folder']);
+//    createSpeedDial(localStorage['folder']);
+
+    var folder_id  = localStorage['folder'];
+    var dfolder_id = localStorage['default_folder_id'];
+        if (dfolder_id != undefined || dfolder_id > 1) {
+            folder_id = dfolder_id;
+            // TODO: if dfolder_id isn't in folder_list then put back to '1' (~folder_list)
+        }
+    createSpeedDial(folder_id);
+
 
     $(window).resize(function(){
         scaleSpeedDial();
