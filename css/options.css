@@ -1,0 +1,86 @@
+body {
+    background: #CCC;
+    color: #444;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+div {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    border-bottom: 1px solid #888;
+    display: inner-block;
+    margin: 20px auto;
+    width: 50%;
+}
+
+div#advanced {
+    display: none;
+    margin-top: 50px;
+}
+
+div#content {
+    background: #FFF;
+    border: 1px solid #888;
+    border-top: 0;
+    margin: 0 auto;
+    padding: 30px;
+    text-align: center;
+    width: 880px;
+}
+
+table.form {
+    border-spacing: 0;
+    margin: 30px auto;
+    padding: 0;
+    width: 100%;
+}
+
+    table.form td {
+        margin: 0;
+        padding: 10px;
+        width: 50%;
+    }
+
+    table.form tr {
+        margin: 0;
+        padding: 0;
+    }
+
+
+    table.form td.field {
+        border-right: 1px solid #888;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    table.form td.value {
+        text-align: left;
+    }
+
+        table.form td.value input {
+            float: left;
+        }
+
+        table.form td.value p {
+            float: left;
+            margin: 0;
+            padding: 3px 0;
+        }
+
+input#save {
+    text-align: center;
+    width: 150px;
+}
+
+input.text {
+    width: 400px;
+}
+
+select {
+    width: 200px;
+}
