@@ -1,61 +1,53 @@
 <html>
 
-    <head>
-        <title>Speed Dial</title>
+	<head>
+		<title>Speed Dial</title>
 
-        <link rel="icon" type="image/png" href="icon16.png" />
+		<link rel="icon" type="image/png" href="icon16.png" />
 
-        <link type="text/css" rel="stylesheet" href="css/newtab.css" />
-        <link type="text/css" rel="stylesheet" href="css/popbox.css" />
+		<link type="text/css" rel="stylesheet" href="css/newtab.css" />
+		<link type="text/css" rel="stylesheet" href="css/popbox.css" />
 
-        <script type="text/javascript" src="javascript/jquery.min.js"></script>
-        <script type="text/javascript" src="javascript/jquery.dragsort.min.js"></script>
-        <script type='text/javascript' src="javascript/popbox.js"></script>
-        <script type="text/javascript" src="javascript/newtab.js"></script>
-    </head>
+		<script type="text/javascript" src="javascript/jquery.min.js"></script>
+		<script type="text/javascript" src="javascript/jquery.dragsort.min.js"></script>
+		<script type='text/javascript' src="javascript/popbox.js"></script>
+		<script type="text/javascript" src="javascript/newtab.js"></script>
+	</head>
 
-    <body>
-        <div id="content">
-            <input type="hidden" id="entry_height" name="entityHeight" value="75" />
-            <input type="hidden" id="entry_width" name="entityWidth" value="100" />
+	<body>
+		<div id="content">
+			<input type="hidden" id="entry_height" name="entityHeight" value="75" />
+			<input type="hidden" id="entry_width" name="entityWidth" value="100" />
 
-            <div id="folder">
-                <select id="folder_list"></select>
-            </div>
+			<div id="folder">
+				<select id="folder_list"></select>
+			</div>
 
-            <ul id="dial">
-                <li id="new_entry" class="entry">
-                    <div class="popbox">
-                        <div class="open">
-                            <a href="#" class="bookmark">&nbsp;</a>
-                        </div>
-                        <div class="collapse">
-                            <div class="box">
-                                <div class="arrow"></div>
-                                <div class="arrow-border"></div>
-                                <div class="form">
-                                    <input type="hidden" id="new_entry_id" value="" />
-                                    <div><p>Title</p><input type="text" id="new_entry_title" value="" /></div>
-                                    <div><p>URL</p><input type="text" id="new_entry_url" value="" /></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+			<ul id="dial">
+				<li id="new_entry" class="entry">
+					<div class="popbox">
+						<div class="open">
+							<a href="#" class="bookmark">&nbsp;</a>
+						</div>
+						<div class="collapse">
+							<div class="box">
+								<div class="arrow"></div>
+								<div class="arrow-border"></div>
+								<div class="form">
+									<input type="hidden" id="new_entry_id" value="" />
+									<div><p>Title</p><input type="text" id="new_entry_title" value="" /></div>
+									<div><p>URL</p><input type="text" id="new_entry_url" value="" /></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
 
-            <div id="options">
-                <a href="options.html">&nbsp;</a>
-            </div>
-        </div>
-
-<div>
-// TODO: onmouseover - remove button better visibility<br/>
-// TODO: onmouseover - update button better visibility<br/>
-// TODO: thumbnail - better solution ...like in FVD Speed Dial<br/>
-// TODO: thumbnail - updater<br/>
-// TODO: translations<br/>
-</div>
-    </body>
+			<div id="options">
+					<a href="options.html">&nbsp;</a>
+			</div>
+		</div>
+	</body>
 
 </html>

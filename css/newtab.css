@@ -1,181 +1,201 @@
 body {
-    background: #CCC;
-    color: #444;
-    font-family: "Trebuchet MS", Helvetica, sans-serif;
-    font-size: 0.8em;
-    margin: 0;
-    padding: 0 auto;
+	background: #CCC;
+	color: #444;
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 0.8em;
+	margin: 0;
+	padding: 0 auto;
 }
 
 div, li, ul {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 li {
-    float: left;
+	float: left;
 }
 
 ul {
-    list-style-type:none;
+	list-style-type:none;
 }
 
 /* Container for primary content */
 #content {
-    float: left;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
+	float: left;
+	margin: 0 auto;
+	text-align: center;
+	width: 100%;
 }
 
 /* The actual dial container */
 #dial {
-    display: inline-block;
-    margin: 8px auto 0 auto;
+	display: inline-block;
+	margin: 8px auto 0 auto;
 }
 
 /* A single entry in the speed dial */
 .entry {
-    background: none;
-    border-radius: 5px;
-    display: block;
-    float: left;
-    height: 75;
-    margin: 8px;
-    padding: 5px;
-    width: 100;
+	background: none;
+	border-radius: 5px;
+	display: block;
+	float: left;
+	height: 75;
+	margin: 8px;
+	padding: 5px;
+	width: 100;
 }
 
-    .entry:hover {
-        background: rgba(53, 191, 256, 0.5);
-    }
+	.entry:hover {
+		background: rgba(53, 191, 256, 0.5);
+	}
 
-    .entry .bookmark {
-        background: #FFF;
-        border-radius: 5px;
-        border: 1px solid #888;
-        box-shadow: 0px 0px 5px #444;
-        color: #888;
-        display: block;
-        float: left;
-        height: 100%;
-        text-decoration: none;
-        width: 100%;
-    }
+	.entry .bookmark {
+		background: #FFF;
+		border-radius: 5px;
+		border: 1px solid #888;
+		box-shadow: 0px 0px 5px #444;
+		color: #888;
+		display: block;
+		float: left;
+		height: 100%;
+		text-decoration: none;
+		width: 100%;
+	}
 
-        .entry .bookmark:hover {
-            color: #444;
-        }
+		.entry .bookmark:hover {
+			color: #444;
+		}
 
-    .bookmark img {
-        background: #FFF;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        width: 100%;
-    }
+	.bookmark img {
+		background: #FFF;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		width: 100%;
+	}
 
-    .bookmark .edit, .bookmark .remove {
-        display: block;
-        float: left;
-        line-height: 25px;
-        margin: 0;
-        padding: 0;
-        width: 10%;
-    }
+	.bookmark .edit, .bookmark .remove {
+		display: block;
+		float: left;
+		line-height: 25px;
+		margin: 0;
+		padding: 0;
+		width: 10%;
+	}
 
-        .bookmark .remove:hover {
-            background: url('/images/close.png') 50% 50% no-repeat;
-        }
+		.bookmark .edit {
+			background: url('/images/edit.png') 50% 50% no-repeat;
+			opacity: 0.0;
+		}
 
-    .bookmark .title {
-        display: block;
-        float: left;
-        line-height: 25px;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        width: 80%;
-    }
+		.bookmark .edit:hover {
+/*            background: url('/images/edit.png') 50% 50% no-repeat; */
+			opacity: 1;
+		}
+
+		.bookmark .remove {
+			background: url('/images/close.png') 50% 50% no-repeat;
+			opacity: 0.0;
+		}
+
+		.bookmark .remove:hover {
+/*            background: url('/images/close.png') 50% 50% no-repeat; */
+			opacity: 1;
+		}
+
+		.bookmark .controls {
+			opacity: 0.3;
+		}
+
+	.bookmark .title {
+		display: block;
+		float: left;
+		line-height: 25px;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+		width: 80%;
+	}
 
 /* The new bookmark entry form */
 .form {
-    border: 1px solid #888;
-    border-radius: 5px;
-    float: left;
-    padding: 15px;
-    width: 400px;
+	border: 1px solid #888;
+	border-radius: 5px;
+	float: left;
+	padding: 15px;
+	width: 400px;
 }
 
-    .form button {
-        float: right;
-        margin: 10px 0 0 5px;
-        width: 100px;
-    }
+	.form button {
+		float: right;
+		margin: 10px 0 0 5px;
+		width: 100px;
+	}
 
-    .form div {
-        float: left;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-    }
+	.form div {
+		float: left;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}
 
-        .form div p {
-            border-right: 1px solid #888;
-            float: left;
-            font-weight: bold;
-            line-height: 20px;
-            margin: 0;
-            padding: 10px;
-            text-align: right;
-            width: 50px;
-        }
+		.form div p {
+			border-right: 1px solid #888;
+			float: left;
+			font-weight: bold;
+			line-height: 20px;
+			margin: 0;
+			padding: 10px;
+			text-align: right;
+			width: 50px;
+		}
 
-        .form div input {
-            float: left;
-            margin: 10px 0 0 10px;
-            width: 300px;
-        }
+		.form div input {
+			float: left;
+			margin: 10px 0 0 10px;
+			width: 300px;
+		}
 
 #folder select {
-    margin: 20px 0 0 0;
-    width: auto;
+	margin: 20px 0 0 0;
+	width: auto;
 }
 
 /* The [+] button */
 #new_entry {
-    display: none;
+	display: none;
 }
 
-    #new_entry a {
-        background: url('/images/add.png') 50% 50% no-repeat;
-        background-color: #AAA;
-        border-radius: 5px;
-        display: block;
-        float: left;
-        height: 100%;
-        text-decoration: none;
-        width: 100%;
-    }
+	#new_entry a {
+		background: url('/images/add.png') 50% 50% no-repeat;
+		background-color: #AAA;
+		border-radius: 5px;
+		display: block;
+		float: left;
+		height: 100%;
+		text-decoration: none;
+		width: 100%;
+	}
 
 /* The options icon in the top right corner */
 #options {
-    background: url('/images/options.png') 50% 50% no-repeat;
-    border-radius: 5px;
-    height: 64px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 64px;
+	background: url('/images/options.png') 50% 50% no-repeat;
+	border-radius: 5px;
+	height: 64px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 64px;
 }
 
-    #options:hover {
-        background: url('/images/options_hover.png') 50% 50% no-repeat;
-    }
+	#options:hover {
+		background: url('/images/options_hover.png') 50% 50% no-repeat;
+	}
 
-    #options a {
-        display: block;
-        height: 100%;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-    }
+	#options a {
+		display: block;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		width: 100%;
+	}

@@ -24,6 +24,7 @@ Editing of bookmarks is in the works.
 
 Release Notes
 --------------
+- 1.2.3: Miscellaneous tidy up
 - 1.2.2: Fixed a bug with the show advanced checkbox
 - 1.2.1: CSS fixes (by Jan Smid)
 - 1.2.0: Option implemented for default folder (by Jan Smid)
@@ -35,5 +36,4 @@ Release Notes
 Author and contributors
 --------------
 - Matt Ellis
-- -
 - Jan Smid
