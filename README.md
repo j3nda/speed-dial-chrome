@@ -19,11 +19,10 @@ I found the hardest part of transitioning to Chrome from Opera to be the lack of
 
 This implementation is more limited than Opera's. Opera generates thumbnail internally, meaning that it's not dependent on any external services .As far as I'm aware there is no provision to do the same in Chrome. The external service that was chosen to perform this role is free and unrestricted, but is only able to generate thumbnails for HTTP pages (no HTTPS). Advanced configuration options allow for this service to be changed if desired.
 
-Editing of bookmarks is in the works.
-
 
 Release Notes
 --------------
+- 2.0.0: Large-scale code rewrite. Bookmarks can now be edited
 - 1.2.3: Miscellaneous tidy up
 - 1.2.2: Fixed a bug with the show advanced checkbox
 - 1.2.1: CSS fixes (by Jan Smid)
