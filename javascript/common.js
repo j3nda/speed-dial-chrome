@@ -1,7 +1,3 @@
-/*
-* Shared functions between newtab and options
-*/
-
 // Create and default a localStorage parameter if it doesn't already exist
 function defaultStorage(name, value) {
 	if (localStorage[name] === null || localStorage[name] === undefined) {
@@ -54,11 +50,7 @@ function generateFolderList() {
 			return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 		});
 
-		var folder_id  = localStorage['folder'];
-		var dfolder_id = localStorage['default_folder_id'];
-		if (dfolder_id !== undefined || dfolder_id > 1) {
-			folder_id = dfolder_id;
-		}
+		var folder_id  = getStartingFolder();
 
 		for (var item in folderList) {
 			selected = (folderList[item].id == folder_id) ? ' selected="selected"' : '';
@@ -67,15 +59,39 @@ function generateFolderList() {
 	});
 }
 
+function getStartingFolder() {
+	var folder_id = '1';
+	var dfolder_id = localStorage['default_folder_id'];
+
+	if (dfolder_id !== undefined || dfolder_id > 1) {
+		folder_id = dfolder_id;
+
+		try {
+			chrome.bookmarks.get(folder_id, function() {});
+		} catch(e) {
+			folder_id = '1';
+		}
+	}
+
+	return folder_id;
+}
+
 // Defaults the local storage options
 function initialise() {
 	defaultStorage('default_folder_id', 1);
 	defaultStorage('dial_columns', 6);
 	defaultStorage('dial_width', 90);
 	defaultStorage('force_http', 'true');
-	defaultStorage('folder', "1");
-	defaultStorage('new_entry', 'block');
 	defaultStorage('show_advanced', 'false');
-	defaultStorage('show_folder_list', 'auto');
+	defaultStorage('show_new_entry', 'true');
+	defaultStorage('show_folder_list', 'true');
 	defaultStorage('thumbnail_url', 'http://immediatenet.com/t/l?Size=1024x768&URL=[URL]');
+}
+
+function loadSetting(element, setting) {
+	if (setting == 'true') {
+		element.show();
+	} else {
+		element.hide();
+	}
 }

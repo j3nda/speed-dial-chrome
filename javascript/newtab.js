@@ -1,12 +1,11 @@
-/*
-* Generation and maintenence of the speed dial interface
-*/
-
 // Adds a new bookmark to chrome, and displays it on the speed dial
 function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 	hash.parentId = $('#folder_list :selected').val();
-	chrome.bookmarks.create(hash, function() {});
+
+	chrome.bookmarks.create(hash, function(result) {
+		addSpeedDialEntry(result);
+	});
 }
 
 // Adds a bookmark onto the speed dial. Takes a chrome bookmark node object.
@@ -24,7 +23,6 @@ function addSpeedDialEntry(bookmark) {
 			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
 			}
-
 			return false;
 		});
 
@@ -73,19 +71,6 @@ function clearSpeedDial() {
 	});
 }
 
-// Creates event handlers to respond to changes to Chromes bookmarks (which don't happen through the dial)
-function createChromeEventHandlers() {
-	chrome.bookmarks.onRemoved.addListener(function(id, info) {
-		removeSpeedDialEntry(id);
-	});
-
-	chrome.bookmarks.onCreated.addListener(function(id, bookmark) {
-		if (bookmark.parentId == $('#dial').attr('name')) {
-			addSpeedDialEntry(bookmark);
-		}
-	});
-}
-
 function createNewEntryButton() {
 	entryHtml =	'<div class="entry"  id="new_entry">' +
 						'<div>&nbsp;</div>' +
@@ -103,9 +88,10 @@ function createSpeedDial(folderId) {
 	clearSpeedDial();
 	createNewEntryButton();
 
-	$("#dial").attr('name', folderId);
-	$('#folder_list').css('display', localStorage['show_folder_list']);  // Check options and make the folder list visible
-	$('#new_entry').css('display', localStorage["new_entry"]);  // Check options and make the new entry button visible
+	$("#dial").attr('folder', folderId);
+
+	loadSetting($('#new_entry'), localStorage['show_new_entry'])
+	loadSetting($('#folder_list'), localStorage['show_folder_list'])
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		var folder = {'folderId': folderId, 'folderName': node[0].title, 'folderNode': node[0]};
@@ -116,8 +102,6 @@ function createSpeedDial(folderId) {
 		for ( var index in folder.folderNode.children) {
 			addSpeedDialEntry(folder.folderNode.children[index]);
 		}
-
-		createChromeEventHandlers();
 	});
 
 	$("#dial").dragsort({
@@ -126,23 +110,6 @@ function createSpeedDial(folderId) {
 		dragEnd: updateBookmarksOrder,
 		placeHolderTemplate: '<div class="entry"></div>'
 	});
-}
-
-function getDefaultFolder() {
-	var folder_id = localStorage['folder'];
-	var dfolder_id = localStorage['default_folder_id'];
-
-	if (dfolder_id !== undefined || dfolder_id > 1) {
-		folder_id = dfolder_id;
-
-		try {
-			chrome.bookmarks.get(folder_id, function() {});
-		} catch(e) {
-			folder_id = '1';
-		}
-	}
-
-	return folder_id;
 }
 
 // Gets the HTML of the entry to be inserted into the dial
@@ -224,19 +191,8 @@ function scaleSpeedDialEntry(entry) {
 function updateBookmark(id, title, url) {
 	var hash = buildBookmarkHash(title, url);
 
-	chrome.bookmarks.update(id, hash, function() {
-		var entry = $('#' + id);
-
-		entry.find('img').attr('src', getThumbnailUrl(url));
-		entry.find('.bookmark').attr('href', hash.url);
-		entry.find('.bookmark').attr('alt', hash.title);
-		entry.find('.title').text(hash.title);
-
-		entry.find('.edit').unbind('click');
-		entry.find('.edit').click(function() {
-			openReveal('Edit Bookmark: ' + hash.title, hash.title, hash.url, id);
-			return false;
-		});
+	chrome.bookmarks.update(id, hash, function(result) {
+		updateSpeedDialEntry(result);
 	});
 }
 
@@ -245,16 +201,32 @@ function updateBookmarksOrder() {
 
 	$(".entry").not("#new_entry").each(function(index) {
 		if (parseInt($(this).attr('index')) != index) {
-			chrome.bookmarks.move($(this).attr('id'), {'parentId': $("#dial").attr('name'), 'index': index});
+			chrome.bookmarks.move($(this).attr('id'), {'parentId': $("#dial").attr('folder'), 'index': index});
 			$(this).attr('index', index);
 		}
+	});
+}
+
+function updateSpeedDialEntry(bookmark) {
+	var entry = $('#' + bookmark.id);
+
+	entry.find('img').attr('src', getThumbnailUrl(bookmark.url));
+	entry.find('.bookmark').attr('href', bookmark.url);
+	entry.find('.bookmark').attr('alt', bookmark.title);
+	entry.find('.title').text(bookmark.title);
+
+	entry.find('.edit').unbind('click');
+
+	entry.find('.edit').click(function() {
+		openReveal('Edit Bookmark: ' + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
+		return false;
 	});
 }
 
 $(document).ready(function() {
 	initialise();
 	generateFolderList();
-	createSpeedDial(getDefaultFolder());
+	createSpeedDial(getStartingFolder());
 
 	$('#bookmark_form .title, #bookmark_form .url').keyup(function(e) {
 		if (e.which === 13) {
