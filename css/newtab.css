@@ -107,7 +107,7 @@ div {
 }
 
 .entry:hover .details .edit, .entry:hover .details .remove {
-	opacity: 0.15;
+	opacity: 0.25;
 }
 
 
