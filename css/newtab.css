@@ -115,7 +115,7 @@ div {
 	display: none;
 }
 
-#new_entry a {
+#new_entry div {
 	background: url('/images/add.png') 50% 50% no-repeat;
 	background-color: #aaa;
 	border-radius: 5px;

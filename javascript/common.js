@@ -25,14 +25,16 @@ function generateFolderList() {
 			if (!node.hasOwnProperty('url')) {
 				var hasBookmarks = false;
 
-				if (node.path === undefined || node.parentId == "0")
-					node.path = "";
+				if (node.path === undefined || node.parentId == "0") {
+					node.path = "";  // Root element, so it has no parent and we don't need to show the path
+				}
 
 				node.path += node.title;
 
 				for (var child in node.children) {
-					if (node.children[child].hasOwnProperty('url'))
+					if (node.children[child].hasOwnProperty('url')) {
 						hasBookmarks = true;
+					}
 
 					node.children[child].path = node.path + '/';
 					openList.push(node.children[child]);
@@ -54,9 +56,9 @@ function generateFolderList() {
 
 		var folder_id  = localStorage['folder'];
 		var dfolder_id = localStorage['default_folder_id'];
-			if (dfolder_id !== undefined || dfolder_id > 1) {
-				folder_id = dfolder_id;
-			}
+		if (dfolder_id !== undefined || dfolder_id > 1) {
+			folder_id = dfolder_id;
+		}
 
 		for (var item in folderList) {
 			selected = (folderList[item].id == folder_id) ? ' selected="selected"' : '';

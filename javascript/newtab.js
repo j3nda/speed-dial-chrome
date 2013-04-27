@@ -50,9 +50,7 @@ function calculateScale() {
 // Removes all entries under the dial
 function clearSpeedDial() {
 	$(".entry").each(function() {
-		if ($(this).attr('id') != 'new_entry') {
-			$(this).remove();
-		}
+		$(this).remove();
 	});
 }
 
@@ -69,16 +67,29 @@ function createChromeEventHandlers() {
 	});
 }
 
+function createNewEntryButton() {
+	entryHtml =	'<div class="entry"  id="new_entry">' +
+						'<div>&nbsp;</div>' +
+					'</div>'
+
+	$("#dial").append(entryHtml);
+
+	$("#new_entry").click(function() {
+		alert('hi!');
+	});
+}
+
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
 	clearSpeedDial();
+	createNewEntryButton();
+
+	$("#dial").attr('name', folderId);
+	$('#folder_list').css('display', localStorage['show_folder_list']);  // Check options and make the folder list visible
+	$('#new_entry').css('display', localStorage["new_entry"]);  // Check options and make the new entry button visible
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		var folder = {'folderId': folderId, 'folderName': node[0].title, 'folderNode': node[0]};
-
-		$("#dial").attr('name', folder.folderId);
-		$('#folder_list').css('display', localStorage['show_folder_list']);  // Check options and make the folder list visible
-		$('#new_entry').css('display', localStorage["new_entry"]);  // Check options and make the new entry button visible
 
 		calculateScale();
 		scaleSpeedDialEntry($('#new_entry'));
@@ -89,6 +100,30 @@ function createSpeedDial(folderId) {
 
 		createChromeEventHandlers();
 	});
+
+	$("#dial").dragsort({
+		dragSelector: ".entry",
+		dragSelectorExclude: '#new_entry',
+        	dragEnd: updateBookmarksOrder,
+        	placeHolderTemplate: '<div class="entry"></div>'
+	});
+}
+
+function getDefaultFolder() {
+	var folder_id = localStorage['folder'];
+	var dfolder_id = localStorage['default_folder_id'];
+
+	if (dfolder_id !== undefined || dfolder_id > 1) {
+		folder_id = dfolder_id;
+
+		try {
+			chrome.bookmarks.get(folder_id, function() {});
+		} catch(e) {
+			folder_id = '1';
+		}
+	}
+
+	return folder_id;
 }
 
 // Gets the HTML of the entry to be inserted into the dial
@@ -145,36 +180,31 @@ function scaleSpeedDialEntry(entry) {
 	}
 }
 
+function updateBookmarksOrder() {
+	$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
+
+	$(".entry").not("#new_entry").each(function(index) {
+		if (parseInt($(this).attr('index')) != index) {
+			chrome.bookmarks.move($(this).attr('id'), {'parentId': $("#dial").attr('name'), 'index': index});
+			$(this).attr('index', index);
+		}
+	});
+}
+
 $(document).ready(function() {
 	initialise();
 	generateFolderList();
-
-	var folder_id  = localStorage['folder'];
-	var dfolder_id = localStorage['default_folder_id'];
-
-	if (dfolder_id !== undefined || dfolder_id > 1) {
-		folder_id = dfolder_id;
-
-		try {
-			chrome.bookmarks.get(folder_id, function() {});
-		} catch(e) {
-			folder_id = '1';
-		}
-	}
-
-	calculateScale();
-	createSpeedDial(folder_id);
+	createSpeedDial(getDefaultFolder());
 
 	$("#folder_list").bind('change', function() {
 		createSpeedDial($("#folder_list option:selected").val());
 	});
 
-	$("#new_entry").click(function() {
-		alert('hi!');
-	});
-
 	$(window).resize(function() {
 		calculateScale();
-		$('.entry').each(function(index) { scaleSpeedDialEntry($(this)); });
+
+		$('.entry').each(function(index) {
+			scaleSpeedDialEntry($(this));
+		});
 	});
 });
