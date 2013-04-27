@@ -89,7 +89,7 @@ function createChromeEventHandlers() {
 function createNewEntryButton() {
 	entryHtml =	'<div class="entry"  id="new_entry">' +
 						'<div>&nbsp;</div>' +
-					'</div>'
+					'</div>';
 
 	$("#dial").append(entryHtml);
 
@@ -123,8 +123,8 @@ function createSpeedDial(folderId) {
 	$("#dial").dragsort({
 		dragSelector: ".entry",
 		dragSelectorExclude: '#new_entry',
-        	dragEnd: updateBookmarksOrder,
-        	placeHolderTemplate: '<div class="entry"></div>'
+		dragEnd: updateBookmarksOrder,
+		placeHolderTemplate: '<div class="entry"></div>'
 	});
 }
 
@@ -222,8 +222,21 @@ function scaleSpeedDialEntry(entry) {
 }
 
 function updateBookmark(id, title, url) {
-	chrome.bookmarks.update(id, buildBookmarkHash(title, url), function() {
-		$('#' + id).find('img').attr('src', getThumbnailUrl(url))
+	var hash = buildBookmarkHash(title, url);
+
+	chrome.bookmarks.update(id, hash, function() {
+		var entry = $('#' + id);
+
+		entry.find('img').attr('src', getThumbnailUrl(url));
+		entry.find('.bookmark').attr('href', hash.url);
+		entry.find('.bookmark').attr('alt', hash.title);
+		entry.find('.title').text(hash.title);
+
+		entry.find('.edit').unbind('click');
+		entry.find('.edit').click(function() {
+			openReveal('Edit Bookmark: ' + hash.title, hash.title, hash.url, id);
+			return false;
+		});
 	});
 }
 
@@ -244,9 +257,9 @@ $(document).ready(function() {
 	createSpeedDial(getDefaultFolder());
 
 	$('#bookmark_form .title, #bookmark_form .url').keyup(function(e) {
- 		if (e.which === 13) {
- 			$('#bookmark_form button').trigger('click');
- 		}
+		if (e.which === 13) {
+			$('#bookmark_form button').trigger('click');
+		}
 	});
 
 	$('#bookmark_form button').click(function () {
