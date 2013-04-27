@@ -67,13 +67,13 @@ function generateFolderList() {
 
 // Defaults the local storage options
 function initialise() {
+	defaultStorage('default_folder_id', 1);
 	defaultStorage('dial_columns', 6);
-	defaultStorage('dial_width', 70);
+	defaultStorage('dial_width', 90);
 	defaultStorage('force_http', 'true');
 	defaultStorage('folder', "1");
 	defaultStorage('new_entry', 'block');
 	defaultStorage('show_advanced', 'false');
 	defaultStorage('show_folder_list', 'auto');
-	defaultStorage('default_folder_id', 1);
 	defaultStorage('thumbnail_url', 'http://immediatenet.com/t/l?Size=1024x768&URL=[URL]');
 }

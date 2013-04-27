@@ -26,6 +26,8 @@ div {
 	background: none;
 	border-radius: 10px;
 	float: left;
+	min-height: 75px;
+	min-width: 100px;
 	padding: 7px;
 }
 
@@ -37,7 +39,7 @@ div {
 	background: #fff;
 	border-radius: 10px;
 	border: 1px solid #888;
-	box-shadow: 0px 0px 5px #444;
+	box-shadow: 0 0 5px #444;
 	color: #888;
 	float: left;
 	height: 100%;
@@ -48,57 +50,65 @@ div {
 	color: #444;
 }
 
+
 .bookmark img {
 	background: #fff;
 	border-top-left-radius: 5px;
 	border-top-right-radius: 5px;
+	clear: both;
 	float: left;
 	width: 100%;
 }
 
-.bookmark .details {
+
+.details {
+	border-collapse: collapse;
+	clear: both;
 	float: left;
-	height: 25px;
-	line-height: 25px;
 	width: 100%;
 }
 
-.bookmark .edit, .bookmark .remove {
-	float: left;
-	width: 10%;
-}
-
-.bookmark .edit {
-	background: url('/images/edit.png') 50% 50% no-repeat;
-	opacity: 0.0;
-}
-
-.bookmark .edit:hover {
-	opacity: 1;
-}
-
-.bookmark .remove {
-	background: url('/images/close.png') 50% 50% no-repeat;
-	opacity: 0.0;
-}
-
-.bookmark .remove:hover {
-	opacity: 1;
-}
-
-.bookmark .controls {
-	opacity: 0.3;
-}
-
-.bookmark .title {
-	float: left;
+.details td {
+	height: 20px;
+	line-height: 20px;
 	margin: 0;
+	opacity: 0.4;
 	padding: 0;
-	overflow: hidden;
-	width: 80%;
+	text-align: center;
 }
 
+.details .edit, .details .remove {
+	opacity: 0.0;
+	width: 20px;
+}
 
+.entry:hover .details .edit:hover, .entry:hover .details .remove:hover {
+	opacity: 0.6;
+}
+
+.details .edit {
+	background: url('/images/edit.png') 100% 50% no-repeat;
+	background-size: 12px 12px;
+}
+
+.details .remove {
+	background: url('/images/remove.png') 0 50% no-repeat;
+	background-size: 12px 12px;
+}
+
+.details .title {
+	color: #000;
+	font-size: 0.8em;
+	overflow: hidden;
+}
+
+.entry:hover .details .title {
+	opacity: 0.8;
+}
+
+.entry:hover .details .edit, .entry:hover .details .remove {
+	opacity: 0.15;
+}
 
 
 #new_entry {

@@ -7,64 +7,44 @@
 function addSpeedDialEntry(bookmark) {
 	if (bookmark.hasOwnProperty('url')) {
 		$("#dial").append(getEntryHtml(bookmark));
+		var entry = $('#' + bookmark.id);
 
-		$('#' + bookmark.id + '_edit').bind('click', function() {
+		entry.find('.edit').click(function() {
 			editBookmark(bookmark.id);
 			return false;
 		});
 
-		$('#' + bookmark.id + '_remove').bind('click', function() {
-			if (confirm("Are you sure you want to remove this dial?")) {
+		entry.find('.remove').click(function() {
+			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
 			}
+
 			return false;
 		});
 
-		// User Interface effects)
-		$('#' + bookmark.id + '_title').mouseover(function() {
-			$('#' + bookmark.id + '_edit'  ).addClass('controls');
-			$('#' + bookmark.id + '_remove').addClass('controls');
-			return false;
-		});
-
-		$('#' + bookmark.id).mouseout(function() {
-			$('#' + bookmark.id + '_edit'  ).removeClass('controls');
-			$('#' + bookmark.id + '_remove').removeClass('controls');
-			return false;
-		});
-
-		$('#' + bookmark.id + '_edit'  ).mouseover(function() { $('#' + bookmark.id + '_edit'  ).attr('title', "edit");    return false; });
-		$('#' + bookmark.id + '_remove').mouseover(function() { $('#' + bookmark.id + '_remove').attr('title', "remove?"); return false; });
-		$('#' + bookmark.id + '_title' ).mouseover(function() { $('#' + bookmark.id + '_title' ).attr('title', title);     return false; });
-		$('#' + bookmark.id + '_edit'  ).mouseout(function() { $('#' + bookmark.id + '_edit'  ).attr('title', "");        return false; });
-		$('#' + bookmark.id + '_remove').mouseout(function() { $('#' + bookmark.id + '_remove').attr('title', "");        return false; });
-
-		$('#' + bookmark.id + '_title' ).mouseout(function() {
-			$('#' + bookmark.id + '_title' ).attr('title', "");
-			$('#' + bookmark.id + '_edit'  ).removeClass('controls');
-			$('#' + bookmark.id + '_remove').removeClass('controls');
-			return false;
-		});
-
-		scaleSpeedDialEntry($('#' + bookmark.id));
+		scaleSpeedDialEntry(entry);
 	}
 
 	$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
 }
 
 function calculateScale() {
-	var borderWidth = 14;
-
 	var dialColumns = parseInt(localStorage["dial_columns"]);
 	var dialWidth = parseInt(localStorage['dial_width']);
 
+	var borderWidth = 14;
+	var minDialWidth = 140 * dialColumns;
+	var minEntryWidth = 140 - borderWidth;
+
 	var adjustedDialWidth = parseInt($(window).width() * 0.01 * dialWidth);
-	var entryWidth = parseInt(adjustedDialWidth / dialColumns);
+	var entryWidth = parseInt(adjustedDialWidth / dialColumns - borderWidth);
+	entryWidth = (entryWidth < minEntryWidth ? minEntryWidth : entryWidth);
 	var entryHeight = parseInt(entryWidth * 0.75);  // height = 3/4 width
 
+	$('#dial').css('min-width', minDialWidth);
 	$('#dial').css('width', adjustedDialWidth);
-	$('#entry_height').val(entryHeight - borderWidth);
-	$('#entry_width').val(entryWidth - borderWidth);
+	$('#entry_height').val(entryHeight);
+	$('#entry_width').val(entryWidth);
 }
 
 // Removes all entries under the dial
@@ -122,12 +102,14 @@ function getEntryHtml(bookmark) {
 	}
 
 	entryHtml =	'<div class="entry" id="' + bookmark.id + '" index="' + bookmark.index + '">' +
-						'<a href="' + url + '" class="bookmark">' +
+						'<a href="' + url + '" class="bookmark" alt="' + title + '">' +
 							'<img src="' + localStorage['thumbnail_url'].replace('[URL]', url) + '" />' +
-							'<div class="details">' +
-								'<div id="' + bookmark.id + '_edit" class="edit">&nbsp;</div>' +
-								'<div class="title">' + title + '</div>' +
-								'<div id="' + bookmark.id + '_remove" class="remove">&nbsp;</div>' +
+							'<table class="details">' +
+								'<tr>' +
+									'<td class="edit" title="Edit">&nbsp;</td>' +
+									'<td class="title">' + title + '</td>' +
+									'<td class="remove" title="Remove">&nbsp;</td>' +
+								'</tr>' +
 							'</div>' +
 						'</a>' +
 					'</div>';
@@ -142,17 +124,22 @@ function removeSpeedDialEntry(id) {
 
 // Scales a single speed dial entry to the specified size
 function scaleSpeedDialEntry(entry) {
-	var captionHeight = 25;
+	var captionHeight = 20;
 
 	var entryHeight = $('#entry_height').val();
 	var entryWidth = $('#entry_width').val();
 
 	entry.css('height', entryHeight);
-	entry.css('min-width', entryWidth);
 	entry.css('width', entryWidth);
 
 	if (entry.attr('id') !== 'new_entry') {
-		var title = entry.find('.title').text();
+		var title = entry.find('.bookmark').attr('alt');
+		var titleLimit = entryWidth / 10;
+
+		if (title.length > titleLimit) {
+			title = title.substr(0, titleLimit - 3) + '...';
+		}
+
 		entry.find('img').css('height', entryHeight - captionHeight);
 		entry.find('.title').text(title);
 	}
@@ -169,7 +156,7 @@ $(document).ready(function() {
 		folder_id = dfolder_id;
 
 		try {
-			chrome.bookmarks.get(folderId, function() {});
+			chrome.bookmarks.get(folder_id, function() {});
 		} catch(e) {
 			folder_id = '1';
 		}
@@ -186,7 +173,8 @@ $(document).ready(function() {
 		alert('hi!');
 	});
 
-	$(window).resize(function(){
+	$(window).resize(function() {
+		calculateScale();
 		$('.entry').each(function(index) { scaleSpeedDialEntry($(this)); });
 	});
 });
