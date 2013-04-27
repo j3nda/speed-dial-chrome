@@ -126,6 +126,28 @@ div {
 	width: 100%;
 }
 
+#bookmark_form h1 {
+	font-size: 1.4em;
+}
+
+#bookmark_form span {
+	display: inline-block;
+	padding: 0 5px;
+	text-align: right;
+	width: 50;
+}
+
+#bookmark_form input {
+	display: inline-block;
+	padding: 0 5px;
+	width: 300px;
+}
+
+#bookmark_form button {
+	padding: 5px;
+	width: 150px;
+}
+
 
 #options {
 	background: url('/images/options.png') 50% 50% no-repeat;
