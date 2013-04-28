@@ -82,6 +82,7 @@ function initialise() {
 	defaultStorage('dial_columns', 6);
 	defaultStorage('dial_width', 90);
 	defaultStorage('force_http', 'true');
+	defaultStorage('drag_and_drop', 'true');
 	defaultStorage('show_advanced', 'false');
 	defaultStorage('show_new_entry', 'true');
 	defaultStorage('show_folder_list', 'true');

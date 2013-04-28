@@ -80,13 +80,15 @@ function createSpeedDial(folderId) {
 		for ( var index in folder.folderNode.children) {
 			addSpeedDialEntry(folder.folderNode.children[index]);
 		}
-	});
 
-	$("#dial").dragsort({
-		dragSelector: ".entry",
-		dragSelectorExclude: '#new_entry',
-		dragEnd: updateBookmarksOrder,
-		placeHolderTemplate: '<div class="entry"></div>'
+		if (localStorage['drag_and_drop'] == 'true') {
+			$("#dial").dragsort({
+				dragSelector: ".entry",
+				dragSelectorExclude: '#new_entry',
+				dragEnd: updateBookmarksOrder,
+				placeHolderTemplate: '<div class="entry"></div>'
+			});
+		}
 	});
 }
 
