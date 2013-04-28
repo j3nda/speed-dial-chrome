@@ -42,9 +42,9 @@ $(document).ready(function() {
 
 	$("#show_advanced").bind('change', function() {
 		if ($(this).is(':checked')) {
-			$(this).show();
+			$('#advanced').show();
 		} else {
-			$(this).hide();
+			$('#advanced').hide();
 		}
 	});
 
