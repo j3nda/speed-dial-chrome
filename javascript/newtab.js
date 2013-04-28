@@ -1,11 +1,16 @@
 // Adds a new bookmark to chrome, and displays it on the speed dial
 function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
-	hash.parentId = $('#folder_list :selected').val();
 
-	chrome.bookmarks.create(hash, function(result) {
-		addSpeedDialEntry(result);
-	});
+	if (hash !== undefined) {
+		hash.parentId = $('#folder_list :selected').val();
+
+		chrome.bookmarks.create(hash, function(result) {
+			addSpeedDialEntry(result);
+		});
+	} else {
+		alert('A bookmark requires a title and a URL');
+	}
 }
 
 // Adds a bookmark onto the speed dial. Takes a chrome bookmark node object.
@@ -14,27 +19,27 @@ function addSpeedDialEntry(bookmark) {
 		$("#dial").append(getEntryHtml(bookmark));
 		var entry = $('#' + bookmark.id);
 
-		entry.find('.edit').click(function() {
+		entry.find('.edit').click(function(event) {
+			event.preventDefault();
 			openReveal('Edit Bookmark: ' + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
-			return false;
 		});
 
-		entry.find('.remove').click(function() {
+		entry.find('.remove').click(function(event) {
+			event.preventDefault();
+
 			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
 			}
-			return false;
 		});
 
 		scaleSpeedDialEntry(entry);
+		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
 	}
-
-	$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
 }
 
 function buildBookmarkHash(title, url) {
 	if (title.length === 0 || url.length === 0) {
-		return;
+		return undefined;
 	}
 
 	// Chrome won't create bookmarks without HTTP
@@ -81,23 +86,23 @@ function createNewEntryButton() {
 	$("#new_entry").click(function() {
 		openReveal('New Bookmark', '', '', '');
 	});
+
+	scaleSpeedDialEntry($('#new_entry'));
 }
 
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
 	clearSpeedDial();
-	createNewEntryButton();
-
-	$("#dial").attr('folder', folderId);
-
-	loadSetting($('#new_entry'), localStorage['show_new_entry'])
-	loadSetting($('#folder_list'), localStorage['show_folder_list'])
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		var folder = {'folderId': folderId, 'folderName': node[0].title, 'folderNode': node[0]};
 
 		calculateScale();
-		scaleSpeedDialEntry($('#new_entry'));
+		createNewEntryButton();
+
+		$("#dial").attr('folder', folderId);
+		loadSetting($('#new_entry'), localStorage['show_new_entry'])
+		loadSetting($('#folder_list'), localStorage['show_folder_list'])
 
 		for ( var index in folder.folderNode.children) {
 			addSpeedDialEntry(folder.folderNode.children[index]);
@@ -191,9 +196,13 @@ function scaleSpeedDialEntry(entry) {
 function updateBookmark(id, title, url) {
 	var hash = buildBookmarkHash(title, url);
 
-	chrome.bookmarks.update(id, hash, function(result) {
-		updateSpeedDialEntry(result);
-	});
+	if (hash !== undefined) {
+		chrome.bookmarks.update(id, hash, function(result) {
+			updateSpeedDialEntry(result);
+		});
+	} else {
+		alert('A bookmark requires a title and a URL');
+	}
 }
 
 function updateBookmarksOrder() {
