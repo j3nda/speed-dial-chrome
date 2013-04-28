@@ -50,8 +50,8 @@ function calculateScale() {
 	var dialWidth = parseInt(localStorage['dial_width']);
 
 	var borderWidth = 14;
-	var minDialWidth = 140 * dialColumns;
-	var minEntryWidth = 140 - borderWidth;
+	var minDialWidth = 120 * dialColumns;
+	var minEntryWidth = 120 - borderWidth;
 
 	var adjustedDialWidth = parseInt($(window).width() * 0.01 * dialWidth);
 	var entryWidth = parseInt(adjustedDialWidth / dialColumns - borderWidth);
