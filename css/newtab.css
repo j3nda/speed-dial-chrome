@@ -80,20 +80,12 @@ div {
 .details .edit, .details .remove {
 	opacity: 0.0;
 	width: 20px;
+	position : relative;
+	top: .1em;
 }
 
 .entry:hover .details .edit:hover, .entry:hover .details .remove:hover {
 	opacity: 0.6;
-}
-
-.details .edit {
-	background: url('/images/edit.png') 100% 50% no-repeat;
-	background-size: 12px 12px;
-}
-
-.details .remove {
-	background: url('/images/remove.png') 0 50% no-repeat;
-	background-size: 12px 12px;
 }
 
 .details .title {

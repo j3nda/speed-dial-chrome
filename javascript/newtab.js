@@ -99,9 +99,9 @@ function getEntryHtml(bookmark) {
 							'<img src="'+ getThumbnailUrl(bookmark.url) + '" />' +
 							'<table class="details">' +
 								'<tr>' +
-									'<td class="edit" title="Edit">&nbsp;</td>' +
-									'<td class="title">' + bookmark.title + '</td>' +
-									'<td class="remove" title="Remove">&nbsp;</td>' +
+									'<td class="edit" title="Edit">&nbsp;<span class="foundicon-edit"></span></td>' +
+									'<td class="title"><div>' + bookmark.title + '</div></td>' +
+									'<td class="remove" title="Remove"><div class="foundicon-remove"></div>&nbsp;</td>' +
 								'</tr>' +
 							'</div>' +
 						'</a>' +
