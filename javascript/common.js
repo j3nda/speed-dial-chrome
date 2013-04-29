@@ -73,6 +73,10 @@ function getStartingFolder() {
 		}
 	}
 
+	// Allow the url to specify the folder as well
+	if (window.location.hash != "") {
+		folder_id = window.location.hash.substring(1);
+	}
 	return folder_id;
 }
 

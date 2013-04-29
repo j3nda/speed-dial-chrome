@@ -199,7 +199,7 @@ $(document).ready(function() {
 	});
 
 	$("#folder_list").bind('change', function() {
-		createSpeedDial($("#folder_list option:selected").val());
+		window.location.hash = $("#folder_list option:selected").val() ;
 	});
 
 	$(window).resize(function() {
@@ -209,4 +209,15 @@ $(document).ready(function() {
 			scaleSpeedDialEntry($(this));
 		});
 	});
+
+	// Change the current dial if the page hash changes
+	$(window).bind("hashchange",function(event) {
+		setCurrentFolder(getStartingFolder());
+	});
 });
+
+// Draws the new Dial and changes the selector menu
+function setCurrentFolder(folder_id) {
+	createSpeedDial(folder_id);
+	document.getElementById("folder_list").value = folder_id;
+}
