@@ -96,7 +96,7 @@ function createSpeedDial(folderId) {
 function getEntryHtml(bookmark) {
 	entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
 						'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '" >' +
-							'<img src="'+ getThumbnailUrl(bookmark.url) + '" />' +
+							'<div class="imgwrapper"><img src="'+ getThumbnailUrl(bookmark.url) + '" /></div>' +
 							'<table class="details">' +
 								'<tr>' +
 									'<td class="edit" title="Edit">&nbsp;<span class="foundicon-edit"></span></td>' +
@@ -141,7 +141,7 @@ function scaleSpeedDialEntry(entry) {
 			title = title.substr(0, titleLimit - 3) + '...';
 		}
 
-		entry.find('img').css('height', entryHeight - captionHeight);
+		entry.find('.imgwrapper').css('height', entryHeight - captionHeight);
 		entry.find('.title').text(title);
 	}
 }
