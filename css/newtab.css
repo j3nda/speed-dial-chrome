@@ -146,25 +146,25 @@ div {
 
 
 #options {
-	background: url('/images/options.png') 50% 50% no-repeat;
-	border-radius: 5px;
-	height: 64px;
 	position: absolute;
-	right: 0;
-	top: 0;
-	width: 64px;
+	right: 0px;
+	top: -5px;
 }
 
-#options:hover {
-	background: url('/images/options_hover.png') 50% 50% no-repeat;
-}
 
 #options a {
 	display: block;
+	font-size: 60px;
 	height: 100%;
 	margin: 0;
 	padding: 0;
 	width: 100%;
+	color: #AAA;
+	text-decoration: none;
+}
+
+#options a:hover {
+	color: #666;
 }
 
 
