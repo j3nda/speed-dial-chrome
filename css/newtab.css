@@ -39,6 +39,7 @@ div {
 	background: #fff;
 	border-radius: 10px;
 	border: 1px solid #888;
+	margin: -1px;
 	box-shadow: 0 0 5px #444;
 	color: #888;
 	float: left;
