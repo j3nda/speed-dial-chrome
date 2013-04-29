@@ -82,12 +82,12 @@ function createSpeedDial(folderId) {
 		}
 
 		if (localStorage['drag_and_drop'] == 'true') {
-			$("#dial").dragsort({
-				dragSelector: ".entry",
-				dragSelectorExclude: '#new_entry',
-				dragEnd: updateBookmarksOrder,
-				placeHolderTemplate: '<div class="entry"></div>'
-			});
+			// distance 20 - dont drag the bookmark until the cursor has moved 20 pixels
+			// forcePlaceHolderSize true - make a placeholder between the bookmarks when dragging
+			// containment parent - dont let the user drag a bookmark out of the container
+			// tolerance pointer - move the dragged bookmark to the spot under the cursor
+			// items "> div:not(.new_entry)" - drag all objects on the top level exept for new_entry
+			$("#dial").sortable({distance:20, forcePlaceholderSize: true, containment: "parent",tolerance: "pointer",items: "> div:not(#new_entry)", stop:function(evebt,ui) {updateBookmarksOrder()} });
 		}
 	});
 }
