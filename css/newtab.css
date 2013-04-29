@@ -35,7 +35,7 @@ div {
 
 .entry .bookmark {
 	background: #fff;
-	border-radius: 10px;
+	border-radius: 5px;
 	border: 1px solid #888;
 	margin: -1px;
 	box-shadow: 0 0 5px #444;
@@ -52,8 +52,8 @@ div {
 
 .bookmark img {
 	background: #fff;
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 	clear: both;
 	float: left;
 	width: 100%;
@@ -61,6 +61,7 @@ div {
 
 .bookmark .imgwrapper {
 	overflow: hidden;
+
 }
 
 .details {
