@@ -62,15 +62,17 @@ function calculateSpeedDialSize() {
 	var dialWidth = parseInt(localStorage['dial_width']);
 
 	var borderWidth = 14;
-	var minDialWidth = 120 * dialColumns;
 	var minEntryWidth = 120 - borderWidth;
 
 	var adjustedDialWidth = parseInt($(window).width() * 0.01 * dialWidth);
+
 	var entryWidth = parseInt(adjustedDialWidth / dialColumns - borderWidth);
-	entryWidth = (entryWidth < minEntryWidth ? minEntryWidth : entryWidth);
+	if (entryWidth < minEntryWidth) {
+		entryWidth = minEntryWidth;
+		adjustedDialWidth = parseInt(adjustedDialWidth / (minEntryWidth+borderWidth)) * (minEntryWidth+borderWidth);
+	}
 	var entryHeight = parseInt(entryWidth * 0.75);  // height = 3/4 width
 
-	$('#dial').css('min-width', minDialWidth);
 	$('#dial').css('width', adjustedDialWidth);
 	$('#entry_height').val(entryHeight);
 	$('#entry_width').val(entryWidth);
