@@ -43,6 +43,7 @@ div {
 	float: left;
 	height: 100%;
 	width: 100%;
+	text-decoration: none;
 }
 
 .entry .bookmark:hover {
@@ -103,6 +104,11 @@ div {
 
 .entry:hover .details .edit, .entry:hover .details .remove {
 	opacity: 0.25;
+}
+
+.entry .foldericon {
+	font-size: 8em;
+	text-decoration: none;
 }
 
 

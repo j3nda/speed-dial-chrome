@@ -33,6 +33,25 @@ function addSpeedDialEntry(bookmark) {
 		scaleSpeedDialEntry(entry);
 		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
 	}
+	else if (bookmark.hasOwnProperty('children')) {
+		entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
+						'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
+							'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
+							'<table class="details">' +
+								'<tr>' +
+									'<td class="edit" title="Edit">&nbsp;<span class="foundicon-edit"></span></td>' +
+									'<td class="title"><div>' + bookmark.title + '</div></td>' +
+									'<td class="remove" title="Remove"><div class="foundicon-remove"></div>&nbsp;</td>' +
+								'</tr>' +
+							'</div>' +
+						'</a>' +
+					'</div>';
+		$("#dial").append(entryHtml);
+		var entry = $('#' + bookmark.id);
+		scaleSpeedDialEntry(entry);
+		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
+
+	}
 }
 
 // Figures out how big the dial and its elements should be
