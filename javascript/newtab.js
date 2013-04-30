@@ -33,7 +33,7 @@ function addSpeedDialEntry(bookmark) {
 		scaleSpeedDialEntry(entry);
 		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
 	}
-	else if (bookmark.hasOwnProperty('children')) {
+	else if (bookmark.hasOwnProperty('children') && localStorage['show_subfolder_icons']=='true') {
 		entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
 						'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 							'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
