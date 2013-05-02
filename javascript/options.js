@@ -8,6 +8,7 @@ function restoreOptions() {
 	$('#show_advanced').attr('checked', (localStorage["show_advanced"] == 'true'));
 	$('#show_new_entry').attr('checked', (localStorage["show_new_entry"] == 'true'));
 	$('#show_folder_list').attr('checked', (localStorage["show_folder_list"] == 'true'));
+	$('#show_subfolder_icons').attr('checked', (localStorage["show_subfolder_icons"] == 'true'));
 	$('#thumbnail_url').val(localStorage["thumbnail_url"]);
 }
 
@@ -26,6 +27,7 @@ function saveOptions() {
 	saveCheckbox('show_advanced');
 	saveCheckbox('show_new_entry');
 	saveCheckbox('show_folder_list');
+	saveCheckbox('show_subfolder_icons');
 	localStorage["thumbnail_url"] = $('#thumbnail_url').val();
 
 	window.location = "newtab.html";
