@@ -22,6 +22,7 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 2.1.0: Drag and drop library changed. Number of minor code and interface improvements
 - 2.0.0: Large-scale code rewrite. Bookmarks can now be edited
 - 1.2.3: Miscellaneous tidy up
 - 1.2.2: Fixed a bug with the show advanced checkbox
@@ -32,7 +33,8 @@ Release Notes
 - 1.0.1: Minor bugfixes and performance enhancements
 
 
-Author and contributors
+Contributors
 --------------
 - Matt Ellis
 - Jan Smid
+- Asher Glick

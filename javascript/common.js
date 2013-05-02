@@ -84,7 +84,7 @@ function getStartingFolder() {
 function initialise() {
 	defaultStorage('default_folder_id', 1);
 	defaultStorage('dial_columns', 6);
-	defaultStorage('dial_width', 90);
+	defaultStorage('dial_width', 70);
 	defaultStorage('force_http', 'true');
 	defaultStorage('drag_and_drop', 'true');
 	defaultStorage('show_advanced', 'false');
