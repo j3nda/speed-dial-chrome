@@ -92,7 +92,7 @@ function initialise() {
 	defaultStorage('show_folder_list', 'true');
 	defaultStorage('show_subfolder_icons', 'false');
 	defaultStorage('thumbnail_url', 'http://immediatenet.com/t/l?Size=1024x768&URL=[URL]');
-
+	$('body').css('background', localStorage["background_color"]);
 }
 
 function loadSetting(element, setting) {
