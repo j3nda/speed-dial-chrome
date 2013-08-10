@@ -3,7 +3,8 @@ Simple Speed Dial
 
 A speed dial functionally similar to the one used in Opera.
 
-[chrome extension](https://chrome.google.com/webstore/detail/simple-speed-dial/gpdpldlbafdmhlmcdllcjgoigmpjonfc/details "")
+[Chrome Extension](https://chrome.google.com/webstore/detail/simple-speed-dial/gpdpldlbafdmhlmcdllcjgoigmpjonfc/details)
+[GitHub Repository](https://github.com/j3nda/speed-dial-chrome)
 
 
 Features
@@ -22,6 +23,7 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 2.1.1: Option to select a background colour (by Eric)
 - 2.1.0: Drag and drop library changed. Number of minor code and interface improvements
 - 2.0.0: Large-scale code rewrite. Bookmarks can now be edited
 - 1.2.3: Miscellaneous tidy up
@@ -35,6 +37,7 @@ Release Notes
 
 Contributors
 --------------
-- Matt Ellis
-- Jan Smid
-- Asher Glick
+- Matt Ellis (waffleau)
+- Jan Smid (J3nda)
+- Asher Glick (AsherGlick)
+- Eric (heavensrevenge)
