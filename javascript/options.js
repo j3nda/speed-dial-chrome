@@ -1,9 +1,9 @@
 // Repopulate form with previously selected options
 function restoreOptions() {
+	$('#background_color').val(localStorage["background_color"]);
 	$('#default_folder_id').val(localStorage["default_folder_id"]);
 	$('#dial_columns').val(localStorage["dial_columns"]);
 	$('#dial_width').val(localStorage["dial_width"]);
-	$('#background_color').val(localStorage["background_color"]);
 	$('#force_http').attr('checked', (localStorage["force_http"] == 'true'));
 	$('#drag_and_drop').attr('checked', (localStorage["drag_and_drop"] == 'true'));
 	$('#show_advanced').attr('checked', (localStorage["show_advanced"] == 'true'));
@@ -20,10 +20,10 @@ function saveCheckbox(name) {
 
 // Write selected options back to local storage
 function saveOptions() {
+	localStorage["background_color"] = $('#background_color').val();
 	localStorage["default_folder_id"] = $('#folder_list :selected').val();
 	localStorage["dial_columns"] = $('#dial_columns :selected').val();
 	localStorage["dial_width"] = $('#dial_width :selected').val();
-	localStorage["background_color"] = $('#background_color').val();
 	saveCheckbox('drag_and_drop');
 	saveCheckbox('force_http');
 	saveCheckbox('show_advanced');
@@ -43,11 +43,11 @@ $(document).ready(function() {
 	$("#save").bind("click", function() {
 		saveOptions();
 	});
-	
-    $("#background_color").bind('change', function() {
-        $("body").css("background-color",$("#background_color").val());
-    });
-    
+
+	$("#background_color").bind('change', function() {
+		$("body").css("background-color", $("#background_color").val());
+	});
+
 	$("#show_advanced").bind('change', function() {
 		if ($(this).is(':checked')) {
 			$('#advanced').show();

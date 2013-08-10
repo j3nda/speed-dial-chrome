@@ -74,14 +74,16 @@ function getStartingFolder() {
 	}
 
 	// Allow the url to specify the folder as well
-	if (window.location.hash != "") {
+	if (window.location.hash !== "") {
 		folder_id = window.location.hash.substring(1);
 	}
+
 	return folder_id;
 }
 
-// Defaults the local storage options
+// Initialisation routines for all pages
 function initialise() {
+	defaultStorage('background_color', '#ccc');
 	defaultStorage('default_folder_id', 1);
 	defaultStorage('dial_columns', 6);
 	defaultStorage('dial_width', 70);

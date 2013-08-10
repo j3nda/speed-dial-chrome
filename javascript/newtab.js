@@ -13,9 +13,11 @@ function addNewEntryButton() {
 }
 
 function addSpeedDialEntry(bookmark) {
+	var entry = null;
+
 	if (bookmark.hasOwnProperty('title') && bookmark.hasOwnProperty('url')) {
 		$("#dial").append(getEntryHtml(bookmark));
-		var entry = $('#' + bookmark.id);
+		entry = $('#' + bookmark.id);
 
 		entry.find('.edit').click(function(event) {
 			event.preventDefault();
@@ -47,7 +49,7 @@ function addSpeedDialEntry(bookmark) {
 						'</a>' +
 					'</div>';
 		$("#dial").append(entryHtml);
-		var entry = $('#' + bookmark.id);
+		entry = $('#' + bookmark.id);
 
 		scaleSpeedDialEntry(entry);
 		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
@@ -96,8 +98,8 @@ function createSpeedDial(folderId) {
 		addNewEntryButton();
 
 		$("#dial").attr('folder', folderId);
-		loadSetting($('#new_entry'), localStorage['show_new_entry'])
-		loadSetting($('#folder_list'), localStorage['show_folder_list'])
+		loadSetting($('#new_entry'), localStorage['show_new_entry']);
+		loadSetting($('#folder_list'), localStorage['show_folder_list']);
 
 		for ( var index in folder.folderNode.children) {
 			addSpeedDialEntry(folder.folderNode.children[index]);
@@ -176,8 +178,8 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find('.target').val(target);
 	form.reveal({
 		animation: 'fade',
-	 	animationspeed: 100
-	 });
+		animationspeed: 100
+	});
 
 	form.find('.title').focus();
 }
