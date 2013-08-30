@@ -26,8 +26,8 @@ function addSpeedDialEntry(bookmark) {
 			}
 		});
 
-		//If custom icon exists, center it
-		if (localStorage.getObject("thumbnail_urls")[bookmark.url]) {
+		//If custom icon for the URL exists, evaluates to true & centers it on the dial
+		if (JSON.parse(localStorage.getItem("thumbnail_urls"))[bookmark.url]) {
 			entry.find(".image").css({
 				"background-size": "contain",
 				"background-position": "center"
@@ -156,8 +156,8 @@ function getEntryHtml(bookmark) {
 }
 
 function getThumbnailUrl(url) {
-	if (localStorage.getObject("thumbnail_urls")[url]) {
-		return localStorage.getObject("thumbnail_urls")[url];
+	if (JSON.parse(localStorage.getItem("thumbnail_urls"))[url]) {
+		return JSON.parse(localStorage.getItem("thumbnail_urls"))[url];
 	} else {
 		if (localStorage["force_http"] === "true") {
 			url = url.replace("https", "http");
@@ -202,7 +202,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find("h1").text(heading);
 	form.find(".title").val(title);
 	form.find(".url").val(url);
-	form.find(".icon").val(localStorage.getObject("thumbnail_urls")[url]);
+	form.find(".icon").val(JSON.parse(localStorage.getItem("thumbnail_urls"))[url]);
 	form.find(".target").val(target);
 
 	//Selector to hide URL & custom icon fields when editing a folder name
@@ -228,19 +228,19 @@ function updateSpeedDialEntry(bookmark) {
 	entry.find(".title").text(bookmark.title);
 
 	//localStorage update code here
-	var icons = localStorage.getObject("thumbnail_urls");
+	var icon_object = JSON.parse(localStorage.getItem("thumbnail_urls"));
 	var custom_url = $(".url").val();
 	var custom_icon = $(".icon").val();
-	var data = {};
-	data[custom_url] = custom_icon;
-	var temp_object = $.extend(icons, data);
+	var new_icon = {};
+	new_icon[custom_url] = custom_icon;
+	var temp_object = $.extend(icon_object, new_icon);
 
-	//Remove the entry with only whitespace before storing back to localStorage
+	//Remove the empty URL entry before storing JSON object back to localStorage
 	if ((/^\s*$/).test(custom_icon)) {
 		delete temp_object[custom_url];
 	}
 
-	localStorage.setObject("thumbnail_urls", temp_object);
+	localStorage.setItem("thumbnail_urls", JSON.stringify(temp_object));
 	createSpeedDial(getStartingFolder());
 }
 

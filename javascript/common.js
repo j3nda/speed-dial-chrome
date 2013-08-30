@@ -87,13 +87,6 @@ function setCurrentFolder(folder_id) {
 	document.getElementById("folder_list").value = folder_id;
 }
 
-Storage.prototype.setObject = function(key, value) {
-	this.setItem(key, JSON.stringify(value));
-}
-Storage.prototype.getObject = function(key) {
-	return JSON.parse(this.getItem(key));
-}
-
 // Initialisation routines for all pages
 function initialise() {
 	defaultStorage("background_color", "#ccc");
