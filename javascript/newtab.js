@@ -226,22 +226,6 @@ function updateSpeedDialEntry(bookmark) {
 	entry.find(".bookmark").prop("href", bookmark.url);
 	entry.find(".bookmark").prop("title", bookmark.title);
 	entry.find(".title").text(bookmark.title);
-
-	//localStorage update code here
-	var icon_object = JSON.parse(localStorage.getItem("thumbnail_urls"));
-	var custom_url = $(".url").val();
-	var custom_icon = $(".icon").val();
-	var new_icon = {};
-	new_icon[custom_url] = custom_icon;
-	var temp_object = $.extend(icon_object, new_icon);
-
-	//Remove the empty URL entry before storing JSON object back to localStorage
-	if ((/^\s*$/).test(custom_icon)) {
-		delete temp_object[custom_url];
-	}
-
-	localStorage.setItem("thumbnail_urls", JSON.stringify(temp_object));
-	createSpeedDial(getStartingFolder());
 }
 
 $(document).ready(function() {
@@ -262,6 +246,7 @@ $(document).ready(function() {
 
 		if (target.length > 0) {
 			updateBookmark(target, title, url);
+			updateCustomIcon(target);
 		} else {
 			addBookmark(title, url);
 		}

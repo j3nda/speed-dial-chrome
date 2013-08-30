@@ -61,6 +61,30 @@ function updateBookmark(id, title, url) {
 	}
 }
 
+function updateCustomIcon(target) {
+	var icon_object = JSON.parse(localStorage.getItem("thumbnail_urls"));
+	var old_entry_url = $("#" + target).find(".bookmark").prop("href");
+	var url = $(".url").val();
+	var custom_icon = $(".icon").val();
+	
+	//Creates a new key:value pair and merges it into JSON from localStorage
+	var new_icon = {};
+	new_icon[url] = custom_icon;
+	var temp_object = $.extend(icon_object, new_icon);
+
+	//Makes sure custom thumbnail URL changes along with the dials URL
+	if (url !== old_entry_url) {
+		delete temp_object[old_entry_url];
+	}
+	//Removes empty URL entries from localStorag
+	if ((/^\s*$/).test(custom_icon)) {
+		delete temp_object[url];
+	}
+
+	localStorage.setItem("thumbnail_urls", JSON.stringify(temp_object));
+	createSpeedDial(getStartingFolder());
+}
+
 function updateBookmarksOrder() {
 	$("#new_entry").appendTo($("#dial")); // Keep the new entry button at the end of the dial
 	$(".entry").not("#new_entry").each(function(index) {
