@@ -1,7 +1,5 @@
 function addNewEntryButton() {
-	entryHtml =	'<div class="entry" id="new_entry">' +
-						'<div>&nbsp;</div>' +
-					'</div>';
+	var entryHtml = '<div class="entry" id="new_entry">' + '<div></div>' + '</div>';
 
 	$("#dial").append(entryHtml);
 
@@ -26,24 +24,31 @@ function addSpeedDialEntry(bookmark) {
 
 		entry.find('.remove').click(function(event) {
 			event.preventDefault();
-
 			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
 			}
 		});
 
+		//If custom icon exists, center it
+		if (localStorage.getObject('thumbnail_urls')[bookmark.url]) {
+			entry.find('.image').css({
+				'background-size': 'contain',
+				'background-position': 'center'
+			});
+		}
+
 		scaleSpeedDialEntry(entry);
-		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
-	}
-	else if (bookmark.hasOwnProperty('children') && localStorage['show_subfolder_icons']=='true') {
-		entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
+
+		$("#new_entry").appendTo($('#dial')); // Keep the new entry button at the end of the dial
+	} else if (bookmark.hasOwnProperty('children') && localStorage['show_subfolder_icons'] == 'true') {
+		var entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
 						'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 							'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
 							'<table class="details">' +
 								'<tr>' +
-									'<td class="edit" title="Edit">&nbsp;</td>' +
+									'<td class="edit" title="Edit"></td>' +
 									'<td class="title"><div>' + bookmark.title + '</div></td>' +
-									'<td class="remove" title="Remove">&nbsp;</td>' +
+									'<td class="remove" title="Remove"></td>' +
 								'</tr>' +
 							'</div>' +
 						'</a>' +
@@ -52,8 +57,7 @@ function addSpeedDialEntry(bookmark) {
 		entry = $('#' + bookmark.id);
 
 		scaleSpeedDialEntry(entry);
-		$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
-
+		$("#new_entry").appendTo($('#dial')); // Keep the new entry button at the end of the dial
 	}
 }
 
@@ -71,10 +75,9 @@ function calculateSpeedDialSize() {
 	var entryWidth = parseInt(adjustedDialWidth / dialColumns - borderWidth);
 	if (entryWidth < minEntryWidth) {
 		entryWidth = minEntryWidth;
-		adjustedDialWidth = parseInt(adjustedDialWidth / (minEntryWidth+borderWidth)) * (minEntryWidth+borderWidth);
+		adjustedDialWidth = parseInt(adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
 	}
-	var entryHeight = parseInt(entryWidth * 0.75);  // height = 3/4 width
-
+	var entryHeight = parseInt(entryWidth * 0.75); // height = 3/4 width
 	$('#dial').css('width', adjustedDialWidth);
 	$('#entry_height').val(entryHeight);
 	$('#entry_width').val(entryWidth);
@@ -92,7 +95,11 @@ function createSpeedDial(folderId) {
 	clearSpeedDial();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
-		var folder = {'folderId': folderId, 'folderName': node[0].title, 'folderNode': node[0]};
+		var folder = {
+			'folderId': folderId,
+			'folderName': node[0].title,
+			'folderNode': node[0]
+		};
 
 		calculateSpeedDialSize();
 		addNewEntryButton();
@@ -101,7 +108,7 @@ function createSpeedDial(folderId) {
 		loadSetting($('#new_entry'), localStorage['show_new_entry']);
 		loadSetting($('#folder_list'), localStorage['show_folder_list']);
 
-		for ( var index in folder.folderNode.children) {
+		for (var index in folder.folderNode.children) {
 			addSpeedDialEntry(folder.folderNode.children[index]);
 		}
 
@@ -111,35 +118,46 @@ function createSpeedDial(folderId) {
 			// containment parent - dont let the user drag a bookmark out of the container
 			// tolerance pointer - move the dragged bookmark to the spot under the cursor
 			// items "> div:not(.new_entry)" - drag all objects on the top level exept for new_entry
-			$("#dial").sortable({distance:20, forcePlaceholderSize: true, containment: "parent",tolerance: "pointer",items: "> div:not(#new_entry)", stop:function(evebt,ui) {updateBookmarksOrder()} });
+			$("#dial").sortable({
+				distance: 20,
+				forcePlaceholderSize: true,
+				containment: "parent",
+				tolerance: "pointer",
+				items: "> div:not(#new_entry)",
+				stop: function(evebt, ui) {
+					updateBookmarksOrder()
+				}
+			});
 		}
 	});
 }
 
 // Gets the HTML of the entry to be inserted into the dial
 function getEntryHtml(bookmark) {
-	entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
-						'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '" >' +
-							'<div class="imgwrapper"><img src="'+ getThumbnailUrl(bookmark.url) + '" /></div>' +
-							'<table class="details">' +
-								'<tr>' +
-									'<td class="edit" title="Edit">&nbsp;<span class="foundicon-edit"></span></td>' +
-									'<td class="title"><div>' + bookmark.title + '</div></td>' +
-									'<td class="remove" title="Remove"><div class="foundicon-remove"></div>&nbsp;</td>' +
-								'</tr>' +
-							'</div>' +
-						'</a>' +
-					'</div>';
-
+	var entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
+					'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '" >' +
+						'<div class="imgwrapper"><div class="image" style="background-image:url(' + getThumbnailUrl(bookmark.url) + ')" /></div>' +
+						'<table class="details">' +
+							'<tr>' +
+								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
+								'<td class="title"><div>' + bookmark.title + '</div></td>' +
+								'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td>' +
+							'</tr>' +
+						'</div>' +
+					'</a>' +
+				'</div>';
 	return entryHtml;
 }
 
 function getThumbnailUrl(url) {
-	if (localStorage['force_http'] == 'true') {
-		url = url.replace('https', 'http');
+	if (localStorage.getObject('thumbnail_urls')[url]) {
+		return localStorage.getObject('thumbnail_urls')[url];
+	} else {
+		if (localStorage['force_http'] == 'true') {
+			url = url.replace('https', 'http');
+		}
+		return localStorage['immediatenet_url'].replace('[URL]', url);
 	}
-
-	return localStorage['thumbnail_url'].replace('[URL]', url);
 }
 
 // Removes a bookmark entry from the speed dial
@@ -172,9 +190,11 @@ function scaleSpeedDialEntry(entry) {
 
 function showBookmarkEntryForm(heading, title, url, target) {
 	var form = $('#bookmark_form');
+
 	form.find('h1').text(heading);
 	form.find('.title').val(title);
 	form.find('.url').val(url);
+	form.find('.icon').val(localStorage.getObject('thumbnail_urls')[url]);
 	form.find('.target').val(target);
 	form.reveal({
 		animation: 'none'
@@ -186,16 +206,25 @@ function showBookmarkEntryForm(heading, title, url, target) {
 function updateSpeedDialEntry(bookmark) {
 	var entry = $('#' + bookmark.id);
 
-	entry.find('img').prop('src', getThumbnailUrl(bookmark.url));
 	entry.find('.bookmark').prop('href', bookmark.url);
 	entry.find('.bookmark').prop('title', bookmark.title);
 	entry.find('.title').text(bookmark.title);
 
-	entry.find('.edit').unbind('click');
-	entry.find('.edit').click(function() {
-		openReveal('Edit Bookmark: ' + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
-		return false;
-	});
+	//localStorage update code here
+	var icons = localStorage.getObject('thumbnail_urls');
+	var custom_url = $(".url").val();
+	var custom_icon = $(".icon").val();
+	var data = {};
+	data[custom_url] = custom_icon;
+	var temp_object = $.extend(icons, data);
+
+	//Remove the entry with only whitespace before storing back to localStorage
+	if ((/^\s*$/).test(custom_icon)) {
+		delete temp_object[custom_url];
+	}
+
+	localStorage.setObject('thumbnail_urls', temp_object);
+	createSpeedDial(getStartingFolder());
 }
 
 $(document).ready(function() {
@@ -209,7 +238,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#bookmark_form button').click(function () {
+	$('#bookmark_form button').click(function() {
 		var target = $('#bookmark_form .target').val();
 		var title = $('#bookmark_form .title').val();
 		var url = $('#bookmark_form .url').val();
@@ -222,7 +251,7 @@ $(document).ready(function() {
 	});
 
 	$("#folder_list").bind('change', function() {
-		window.location.hash = $("#folder_list option:selected").val() ;
+		window.location.hash = $("#folder_list option:selected").val();
 	});
 
 	$(window).resize(function() {
@@ -234,7 +263,7 @@ $(document).ready(function() {
 	});
 
 	// Change the current dial if the page hash changes
-	$(window).bind("hashchange",function(event) {
+	$(window).bind("hashchange", function(event) {
 		setCurrentFolder(getStartingFolder());
 	});
 });
@@ -243,4 +272,11 @@ $(document).ready(function() {
 function setCurrentFolder(folder_id) {
 	createSpeedDial(folder_id);
 	document.getElementById("folder_list").value = folder_id;
+}
+
+Storage.prototype.setObject = function(key, value) {
+	this.setItem(key, JSON.stringify(value));
+}
+Storage.prototype.getObject = function(key) {
+	return JSON.parse(this.getItem(key));
 }

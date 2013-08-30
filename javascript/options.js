@@ -10,7 +10,7 @@ function restoreOptions() {
 	$('#show_new_entry').prop('checked', (localStorage["show_new_entry"] == 'true'));
 	$('#show_folder_list').prop('checked', (localStorage["show_folder_list"] == 'true'));
 	$('#show_subfolder_icons').prop('checked', (localStorage["show_subfolder_icons"] == 'true'));
-	$('#thumbnail_url').val(localStorage["thumbnail_url"]);
+	$('#immediatenet_url').val(localStorage["immediatenet_url"]);
 }
 
 // Saves value of checkbox to local storage
@@ -30,7 +30,7 @@ function saveOptions() {
 	saveCheckbox('show_new_entry');
 	saveCheckbox('show_folder_list');
 	saveCheckbox('show_subfolder_icons');
-	localStorage["thumbnail_url"] = $('#thumbnail_url').val();
+	localStorage["immediatenet_url"] = $('#immediatenet_url').val();
 
 	window.location = "newtab.html";
 }

@@ -26,8 +26,10 @@ function buildBookmarkHash(title, url) {
 	if (url.indexOf("http") !== 0) {
 		url = 'http://' + url;
 	}
-
-	return {'title': title, 'url': url};
+	return {
+		'title': title,
+		'url': url
+	};
 }
 
 // Deletes a bookmarks and removes it from the speed dial
@@ -50,11 +52,13 @@ function updateBookmark(id, title, url) {
 }
 
 function updateBookmarksOrder() {
-	$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
-
+	$("#new_entry").appendTo($('#dial')); // Keep the new entry button at the end of the dial
 	$(".entry").not("#new_entry").each(function(index) {
 		if (parseInt($(this).prop('index')) != index) {
-			chrome.bookmarks.move($(this).prop('id'), {'parentId': $("#dial").prop('folder'), 'index': index});
+			chrome.bookmarks.move($(this).prop('id'), {
+				'parentId': $("#dial").prop('folder'),
+				'index': index
+			});
 			$(this).prop('index', index);
 		}
 	});

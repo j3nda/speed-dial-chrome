@@ -22,7 +22,7 @@ function generateFolderList() {
 				var hasBookmarks = false;
 
 				if (node.path === undefined || node.parentId == "0") {
-					node.path = "";  // Root element, so it has no parent and we don't need to show the path
+					node.path = ""; // Root element, so it has no parent and we don't need to show the path
 				}
 
 				node.path += node.title;
@@ -44,16 +44,16 @@ function generateFolderList() {
 			node = openList.pop();
 		}
 
-		folderList.sort(function (a, b) {
+		folderList.sort(function(a, b) {
 			var aName = a.path.toLowerCase();
 			var bName = b.path.toLowerCase();
 			return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
 		});
 
-		var folder_id  = getStartingFolder();
+		var folder_id = getStartingFolder();
 
 		for (var item in folderList) {
-			selected = (folderList[item].id == folder_id) ? ' selected="selected"' : '';
+			var selected = (folderList[item].id == folder_id) ? ' selected="selected"' : '';
 			$("#folder_list").append('<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>');
 		}
 	});
@@ -68,7 +68,7 @@ function getStartingFolder() {
 
 		try {
 			chrome.bookmarks.get(folder_id, function() {});
-		} catch(e) {
+		} catch (e) {
 			folder_id = '1';
 		}
 	}
@@ -93,7 +93,8 @@ function initialise() {
 	defaultStorage('show_new_entry', 'true');
 	defaultStorage('show_folder_list', 'true');
 	defaultStorage('show_subfolder_icons', 'false');
-	defaultStorage('thumbnail_url', 'http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]');
+	defaultStorage('thumbnail_urls', '{}');
+	defaultStorage('immediatenet_url', 'http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]');
 	$('body').css('background', localStorage["background_color"]);
 }
 
