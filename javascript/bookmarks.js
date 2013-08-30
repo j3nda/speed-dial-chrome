@@ -53,9 +53,9 @@ function updateBookmarksOrder() {
 	$("#new_entry").appendTo($('#dial'));  // Keep the new entry button at the end of the dial
 
 	$(".entry").not("#new_entry").each(function(index) {
-		if (parseInt($(this).attr('index')) != index) {
-			chrome.bookmarks.move($(this).attr('id'), {'parentId': $("#dial").attr('folder'), 'index': index});
-			$(this).attr('index', index);
+		if (parseInt($(this).prop('index')) != index) {
+			chrome.bookmarks.move($(this).prop('id'), {'parentId': $("#dial").prop('folder'), 'index': index});
+			$(this).prop('index', index);
 		}
 	});
 }

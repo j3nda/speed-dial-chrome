@@ -1,5 +1,5 @@
 function addNewEntryButton() {
-	entryHtml =	'<div class="entry"  id="new_entry">' +
+	entryHtml =	'<div class="entry" id="new_entry">' +
 						'<div>&nbsp;</div>' +
 					'</div>';
 
@@ -97,7 +97,7 @@ function createSpeedDial(folderId) {
 		calculateSpeedDialSize();
 		addNewEntryButton();
 
-		$("#dial").attr('folder', folderId);
+		$("#dial").prop('folder', folderId);
 		loadSetting($('#new_entry'), localStorage['show_new_entry']);
 		loadSetting($('#folder_list'), localStorage['show_folder_list']);
 
@@ -157,8 +157,8 @@ function scaleSpeedDialEntry(entry) {
 	entry.css('height', entryHeight);
 	entry.css('width', entryWidth);
 
-	if (entry.attr('id') !== 'new_entry') {
-		var title = entry.find('.bookmark').attr('title');
+	if (entry.prop('id') !== 'new_entry') {
+		var title = entry.find('.bookmark').prop('title');
 		var titleLimit = entryWidth / 10;
 
 		if (title.length > titleLimit) {
@@ -177,8 +177,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find('.url').val(url);
 	form.find('.target').val(target);
 	form.reveal({
-		animation: 'fade',
-		animationspeed: 100
+		animation: 'none'
 	});
 
 	form.find('.title').focus();
@@ -187,9 +186,9 @@ function showBookmarkEntryForm(heading, title, url, target) {
 function updateSpeedDialEntry(bookmark) {
 	var entry = $('#' + bookmark.id);
 
-	entry.find('img').attr('src', getThumbnailUrl(bookmark.url));
-	entry.find('.bookmark').attr('href', bookmark.url);
-	entry.find('.bookmark').attr('title', bookmark.title);
+	entry.find('img').prop('src', getThumbnailUrl(bookmark.url));
+	entry.find('.bookmark').prop('href', bookmark.url);
+	entry.find('.bookmark').prop('title', bookmark.title);
 	entry.find('.title').text(bookmark.title);
 
 	entry.find('.edit').unbind('click');

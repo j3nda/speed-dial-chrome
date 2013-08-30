@@ -6,7 +6,6 @@
 		position: fixed;
 		height: 100%;
 		width: 100%;
-		background: #000;
 		background: rgba(0,0,0,.8);
 		z-index: 100;
 		display: none;
@@ -24,27 +23,16 @@
 		position: absolute;
 		z-index: 101;
 		padding: 30px 40px 34px;
-		-moz-border-radius: 5px;
-		-webkit-border-radius: 5px;
 		border-radius: 5px;
-		-moz-box-shadow: 0 0 10px rgba(0,0,0,.4);
-		-webkit-box-shadow: 0 0 10px rgba(0,0,0,.4);
-		-box-shadow: 0 0 10px rgba(0,0,0,.4);
 		}
 
-	.reveal-modal.small 		{ width: 200px; margin-left: -140px;}
-	.reveal-modal.medium 		{ width: 400px; margin-left: -240px;}
-	.reveal-modal.large 		{ width: 600px; margin-left: -340px;}
-	.reveal-modal.xlarge 		{ width: 800px; margin-left: -440px;}
-
 	.reveal-modal .close {
-		font-size: 22px;
-		line-height: .5;
+		font-size: 2.5em;
+		line-height: 0.3em;
 		position: absolute;
-		top: 8px;
-		right: 11px;
+		top: 0.3em;
+		right: 0.3em;
 		color: #aaa;
-		text-shadow: 0 -1px 1px rbga(0,0,0,.6);
 		font-weight: bold;
 		cursor: pointer;
 		}
@@ -59,7 +47,7 @@
 	<div id="myModal" class="reveal-modal">
 		<h2>Awesome. I have it.</h2>
 		<p class="lead">Your couch.  I it's mine.</p>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultrices aliquet placerat. Duis pulvinar orci et nisi euismod vitae tempus lorem consectetur. Duis at magna quis turpis mattis venenatis eget id diam. </p>
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </p>
 		<a class="close-reveal-modal">&#215;</a>
 	</div>
 

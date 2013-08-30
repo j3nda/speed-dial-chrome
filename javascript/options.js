@@ -4,12 +4,12 @@ function restoreOptions() {
 	$('#default_folder_id').val(localStorage["default_folder_id"]);
 	$('#dial_columns').val(localStorage["dial_columns"]);
 	$('#dial_width').val(localStorage["dial_width"]);
-	$('#force_http').attr('checked', (localStorage["force_http"] == 'true'));
-	$('#drag_and_drop').attr('checked', (localStorage["drag_and_drop"] == 'true'));
-	$('#show_advanced').attr('checked', (localStorage["show_advanced"] == 'true'));
-	$('#show_new_entry').attr('checked', (localStorage["show_new_entry"] == 'true'));
-	$('#show_folder_list').attr('checked', (localStorage["show_folder_list"] == 'true'));
-	$('#show_subfolder_icons').attr('checked', (localStorage["show_subfolder_icons"] == 'true'));
+	$('#force_http').prop('checked', (localStorage["force_http"] == 'true'));
+	$('#drag_and_drop').prop('checked', (localStorage["drag_and_drop"] == 'true'));
+	$('#show_advanced').prop('checked', (localStorage["show_advanced"] == 'true'));
+	$('#show_new_entry').prop('checked', (localStorage["show_new_entry"] == 'true'));
+	$('#show_folder_list').prop('checked', (localStorage["show_folder_list"] == 'true'));
+	$('#show_subfolder_icons').prop('checked', (localStorage["show_subfolder_icons"] == 'true'));
 	$('#thumbnail_url').val(localStorage["thumbnail_url"]);
 }
 

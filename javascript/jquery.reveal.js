@@ -17,9 +17,9 @@
  Listener for data-reveal-id attributes
 ----------------------------*/
 
-	$('a[data-reveal-id]').live('click', function(e) {
+	$(document).on('click', 'a[data-reveal-id]', function(e) {
 		e.preventDefault();
-		var modalLocation = $(this).attr('data-reveal-id');
+		var modalLocation = $(this).prop('data-reveal-id');
 		$('#'+modalLocation).reveal($(this).data());
 	});
 
@@ -30,15 +30,15 @@
     $.fn.reveal = function(options) {
 
 
-        var defaults = {
+        var defaults = {  
 	    	animation: 'fadeAndPop', //fade, fadeAndPop, none
 		    animationspeed: 300, //how fast animtions are
 		    closeonbackgroundclick: true, //if you click background will modal close?
 		    dismissmodalclass: 'close-reveal-modal' //the class of a button or element that will close an open modal
-    	};
+    	}; 
 
         //Extend dem' options
-        var options = $.extend({}, defaults, options);
+        var options = $.extend({}, defaults, options); 
 
         return this.each(function() {
 
@@ -81,7 +81,7 @@
 						modal.delay(options.animationspeed/2).animate({
 							"opacity" : 1
 						}, options.animationspeed,unlockModal());
-					}
+					} 
 					if(options.animation == "none") {
 						modal.css({'visibility' : 'visible', 'top':$(document).scrollTop()+topMeasure});
 						modalBG.css({"display":"block"});
@@ -125,7 +125,7 @@
 /*---------------------------
  Open and add Closing Listeners
 ----------------------------*/
-        	//Open Modal Immediately
+       	//Open Modal Immediately
     	modal.trigger('reveal:open')
 
 			//Close Modal Listeners
@@ -147,14 +147,13 @@
 /*---------------------------
  Animations Locks
 ----------------------------*/
-			function unlockModal() {
+			function unlockModal() { 
 				locked = false;
 			}
 			function lockModal() {
 				locked = true;
 			}
-
+			
         });//each call
     }//orbit plugin call
 })(jQuery);
-
