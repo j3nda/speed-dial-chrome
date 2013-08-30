@@ -50,16 +50,6 @@ div {
 	color: #444;
 }
 
-
-.bookmark img {
-	display: block;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	clear: both;
-	float: left;
-	width: 100%;
-}
-
 .bookmark .imgwrapper {
 	overflow: hidden;
 }
@@ -114,18 +104,7 @@ div {
 	opacity: 0.25;
 }
 
-.entry .foldericon {
-	font-size: 8em;
-	text-decoration: none;
-}
-
-
-#new_entry {
-	display: none;
-}
-
 #new_entry div {
-	background: url('/images/add.png') 50% 50% no-repeat;
 	background-color: #aaa;
 	border-radius: 5px;
 	display: block;
@@ -136,6 +115,10 @@ div {
 	border: 1px solid #888;
 	margin: -1px;
 	box-shadow: 0 0 5px #444;
+}
+
+.foundicon-folder, .foundicon-plus {
+	position: relative;
 }
 
 #bookmark_form h1 {

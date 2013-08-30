@@ -18,29 +18,23 @@ function generateFolderList() {
 		var node = openList.pop();
 
 		while (node !== null && node !== undefined) {
-			if (!node.hasOwnProperty('url')) {
+			if (!node.hasOwnProperty("url")) {
 				var hasBookmarks = false;
 
-				if (node.path === undefined || node.parentId == "0") {
+				if (node.path === undefined || node.parentId === "0") {
 					node.path = ""; // Root element, so it has no parent and we don't need to show the path
 				}
 
 				node.path += node.title;
-
 				for (var child in node.children) {
-					if (node.children[child].hasOwnProperty('url')) {
+					if (node.children[child].hasOwnProperty("url")) {
 						hasBookmarks = true;
 					}
-
-					node.children[child].path = node.path + '/';
+					node.children[child].path = node.path + "/";
 					openList.push(node.children[child]);
 				}
-
-				if (hasBookmarks) {
-					folderList.push(node);
-				}
+				folderList.push(node);
 			}
-
 			node = openList.pop();
 		}
 
@@ -52,16 +46,22 @@ function generateFolderList() {
 
 		var folder_id = getStartingFolder();
 
+		$("#folder_list").replaceWith('<select id="folder_list"></select>');
+
 		for (var item in folderList) {
-			var selected = (folderList[item].id == folder_id) ? ' selected="selected"' : '';
+			var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
 			$("#folder_list").append('<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>');
 		}
+
+		$("#folder_list").bind("change", function() {
+			window.location.hash = $("#folder_list option:selected").val();
+		});
 	});
 }
 
 function getStartingFolder() {
-	var folder_id = '1';
-	var dfolder_id = localStorage['default_folder_id'];
+	var folder_id = "1";
+	var dfolder_id = localStorage["default_folder_id"];
 
 	if (dfolder_id !== undefined || dfolder_id > 1) {
 		folder_id = dfolder_id;
@@ -69,7 +69,7 @@ function getStartingFolder() {
 		try {
 			chrome.bookmarks.get(folder_id, function() {});
 		} catch (e) {
-			folder_id = '1';
+			folder_id = "1";
 		}
 	}
 
@@ -81,25 +81,38 @@ function getStartingFolder() {
 	return folder_id;
 }
 
+// Draws the new Dial and changes the selector menu
+function setCurrentFolder(folder_id) {
+	createSpeedDial(folder_id);
+	document.getElementById("folder_list").value = folder_id;
+}
+
+Storage.prototype.setObject = function(key, value) {
+	this.setItem(key, JSON.stringify(value));
+}
+Storage.prototype.getObject = function(key) {
+	return JSON.parse(this.getItem(key));
+}
+
 // Initialisation routines for all pages
 function initialise() {
-	defaultStorage('background_color', '#ccc');
-	defaultStorage('default_folder_id', 1);
-	defaultStorage('dial_columns', 6);
-	defaultStorage('dial_width', 70);
-	defaultStorage('force_http', 'true');
-	defaultStorage('drag_and_drop', 'true');
-	defaultStorage('show_advanced', 'false');
-	defaultStorage('show_new_entry', 'true');
-	defaultStorage('show_folder_list', 'true');
-	defaultStorage('show_subfolder_icons', 'false');
-	defaultStorage('thumbnail_urls', '{}');
-	defaultStorage('immediatenet_url', 'http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]');
-	$('body').css('background', localStorage["background_color"]);
+	defaultStorage("background_color", "#ccc");
+	defaultStorage("default_folder_id", 1);
+	defaultStorage("dial_columns", 6);
+	defaultStorage("dial_width", 70);
+	defaultStorage("force_http", "true");
+	defaultStorage("drag_and_drop", "true");
+	defaultStorage("show_advanced", "false");
+	defaultStorage("show_new_entry", "true");
+	defaultStorage("show_folder_list", "true");
+	defaultStorage("show_subfolder_icons", "false");
+	defaultStorage("thumbnail_urls", "{}");
+	defaultStorage("immediatenet_url", "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]");
+	$("body").css("background", localStorage["background_color"]);
 }
 
 function loadSetting(element, setting) {
-	if (setting == 'true') {
+	if (setting === "true") {
 		element.show();
 	} else {
 		element.hide();
