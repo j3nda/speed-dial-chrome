@@ -23,6 +23,8 @@ function addSpeedDialEntry(bookmark) {
 			event.preventDefault();
 			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
+				var old_url = entry.find(".bookmark").prop("href");
+				updateCustomIcon("", old_url);
 			}
 		});
 
@@ -166,6 +168,29 @@ function getThumbnailUrl(url) {
 	}
 }
 
+function updateCustomIcon(url, old_url) {
+	var icon_object = JSON.parse(localStorage.getItem("thumbnail_urls"));
+	var custom_icon = $(".icon").val();
+
+	//Creates a new key:value pair and merges it into JSON from localStorage
+	var new_icon = {};
+	new_icon[url] = custom_icon;
+	var temp_object = $.extend(icon_object, new_icon);
+
+	//Makes sure thumbnail URL changes along with the bookmark URL
+	if (url !== old_url) {
+		delete temp_object[old_url];
+	}
+	//Removes empty URL entries from localStorag
+	if (custom_icon.trim().length === 0 || url.trim().length === 0) {
+		delete temp_object[url];
+		delete temp_object[old_url];
+	}
+
+	localStorage.setItem("thumbnail_urls", JSON.stringify(temp_object));
+	createSpeedDial(getStartingFolder());
+}
+
 // Removes a bookmark entry from the speed dial
 function removeSpeedDialEntry(id) {
 	$("#" + id).remove();
@@ -246,7 +271,6 @@ $(document).ready(function() {
 
 		if (target.length > 0) {
 			updateBookmark(target, title, url);
-			updateCustomIcon(target);
 		} else {
 			addBookmark(title, url);
 		}

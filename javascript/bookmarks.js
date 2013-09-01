@@ -7,7 +7,7 @@ function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 
 	if (hash !== undefined) {
-		hash.parentId = $("#folder_list :selected").val();
+		hash.parentId = $("#folder_list option:selected").val();
 
 		chrome.bookmarks.create(hash, function(result) {
 			addSpeedDialEntry(result);
@@ -23,15 +23,24 @@ function buildBookmarkHash(title, url) {
 	if (title.length === 0) {
 		return undefined;
 	}
-
 	// Chrome won't create bookmarks without HTTP
-	if (url.indexOf("http") !== 0 && url.length !== 0) {
+	if (isValidUrl(url)) {
+		url = url;
+	} else if (url.length !== 0) {
 		url = "http://" + url;
 	}
-	return {
-		"title": title,
-		"url": url
-	};
+
+	return { "title": title, "url": url };
+}
+
+function isValidUrl(url) {
+	//The regex used in AngularJS to validate a URL + chrome internal pages & extension url & on-disk files
+	var URL_REGEXP = /^(http|https|ftp|file|chrome|chrome-extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
+	if (URL_REGEXP.test(url)) {
+		return true;
+	} else { 
+		return false;
+	}
 }
 
 // Deletes a bookmarks and removes it from the speed dial
@@ -51,38 +60,22 @@ function removeFolder(id) {
 
 function updateBookmark(id, title, url) {
 	var hash = buildBookmarkHash(title, url);
+	var old_url = $("#" + id).find(".bookmark").prop("href");
+	//Actually make sure the URL being modified is valid instead of always
+	//prepending http:// to it creating new valid+invalid bookmarks
+	if (url.length !== 0 && !isValidUrl(url)) {
+		hash = undefined;
+	}
 
 	if (hash !== undefined) {
 		chrome.bookmarks.update(id, hash, function(result) {
 			updateSpeedDialEntry(result);
 		});
+		updateCustomIcon(url, old_url);
 	} else {
-		alert("Editing an existing Bookmark requires both a Title and a URL");
+		alert("Editing an existing Bookmark requires both a Title and a valid URL in Chrome\n\n" +
+		"For example, valid URL's start with: \n - http:// \n - https:// \n - ftp://");
 	}
-}
-
-function updateCustomIcon(target) {
-	var icon_object = JSON.parse(localStorage.getItem("thumbnail_urls"));
-	var old_entry_url = $("#" + target).find(".bookmark").prop("href");
-	var url = $(".url").val();
-	var custom_icon = $(".icon").val();
-	
-	//Creates a new key:value pair and merges it into JSON from localStorage
-	var new_icon = {};
-	new_icon[url] = custom_icon;
-	var temp_object = $.extend(icon_object, new_icon);
-
-	//Makes sure custom thumbnail URL changes along with the dials URL
-	if (url !== old_entry_url) {
-		delete temp_object[old_entry_url];
-	}
-	//Removes empty URL entries from localStorag
-	if ((/^\s*$/).test(custom_icon)) {
-		delete temp_object[url];
-	}
-
-	localStorage.setItem("thumbnail_urls", JSON.stringify(temp_object));
-	createSpeedDial(getStartingFolder());
 }
 
 function updateBookmarksOrder() {
