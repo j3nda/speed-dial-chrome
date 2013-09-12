@@ -50,19 +50,16 @@ div {
 	color: #444;
 }
 
-
-.bookmark img {
-	background: #fff;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	clear: both;
-	float: left;
-	width: 100%;
-}
-
 .bookmark .imgwrapper {
 	overflow: hidden;
+}
 
+.image {
+    height: inherit;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 }
 
 .details {
@@ -76,16 +73,16 @@ div {
 	height: 20px;
 	line-height: 20px;
 	margin: 0;
-	opacity: 0.4;
+	opacity: 0.6;
 	padding: 0;
 	text-align: center;
 }
 
 .details .edit, .details .remove {
 	opacity: 0.0;
-	width: 20px;
+	width: 1em;
 	position : relative;
-	top: .1em;
+	top: 0.1em;
 }
 
 .entry:hover .details .edit:hover, .entry:hover .details .remove:hover {
@@ -94,7 +91,8 @@ div {
 
 .details .title {
 	color: #000;
-	font-size: 0.8em;
+	font-size: 1em;
+	font-weight: bold;
 	overflow: hidden;
 }
 
@@ -106,18 +104,7 @@ div {
 	opacity: 0.25;
 }
 
-.entry .foldericon {
-	font-size: 8em;
-	text-decoration: none;
-}
-
-
-#new_entry {
-	display: none;
-}
-
 #new_entry div {
-	background: url('/images/add.png') 50% 50% no-repeat;
 	background-color: #aaa;
 	border-radius: 5px;
 	display: block;
@@ -130,6 +117,10 @@ div {
 	box-shadow: 0 0 5px #444;
 }
 
+.foundicon-folder, .foundicon-plus {
+	position: relative;
+}
+
 #bookmark_form h1 {
 	font-size: 1.4em;
 }
@@ -138,7 +129,8 @@ div {
 	display: inline-block;
 	padding: 0 5px;
 	text-align: right;
-	width: 50;
+	width: 110px;
+	margin-left: -20px;
 }
 
 #bookmark_form input {
@@ -162,7 +154,7 @@ div {
 
 #options a {
 	display: block;
-	font-size: 60px;
+	font-size: 5em;
 	height: 100%;
 	margin: 0;
 	padding: 0;
