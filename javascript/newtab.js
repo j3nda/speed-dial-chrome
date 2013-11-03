@@ -125,15 +125,16 @@ function createSpeedDial(folderId) {
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
-			$('#dial').dragswap({
-			    element: '.entry', // the child element you are targeting
-			    overClass: 'over', // class when element goes over another element
+			$("#dial").dragswap({
+			    element: ".entry", // the child element you are targeting
+			    overClass: "over", // class when element goes over another element
 			    dropAnimation: true, // do you want to detect animation end?
-			    exclude: '#new_entry',
+			    exclude: "#new_entry",
 			    dropComplete: function(){ 
 			    	updateBookmarksOrder(); 
 			    }
-			});		}
+			});
+		}
 	});
 }
 

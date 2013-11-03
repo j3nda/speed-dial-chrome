@@ -41,9 +41,7 @@ function generateFolderList() {
 
 		var folder_id = getStartingFolder();
 
-		document.getElementById("folder_list").innerHTML = '<select id="folder_list"></select>';
-
-		var html = "";
+		var html = '';
 		var item = folderList.length;
 		while (item--) {
 			var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
