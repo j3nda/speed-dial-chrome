@@ -52,7 +52,7 @@ function generateFolderList() {
 		document.getElementById("folder_list").innerHTML = html;
 
 		$("#folder_list").bind("change", function() {
-			window.location.hash = $("#folder_list option:selected").val();
+			window.location.hash = $("#folder_list").val();
 		});
 	});
 }
@@ -103,7 +103,7 @@ function createDefaults() {
 }
 
 // Initialisation routines for all pages
-function initialise() {
+function initialize() {
 	if (localStorage.length === 0) {
 		createDefaults();
 	}

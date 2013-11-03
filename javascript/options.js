@@ -22,9 +22,9 @@ function saveCheckbox(name) {
 // Write selected options back to local storage
 function saveOptions() {
 	localStorage.setItem("background_color", $("#background_color").val());
-	localStorage.setItem("default_folder_id", $("#folder_list option:selected").val());
-	localStorage.setItem("dial_columns", $("#dial_columns option:selected").val());
-	localStorage.setItem("dial_width", $("#dial_width option:selected").val());
+	localStorage.setItem("default_folder_id", $("#folder_list").val());
+	localStorage.setItem("dial_columns", $("#dial_columns").val());
+	localStorage.setItem("dial_width", $("#dial_width").val());
 	saveCheckbox("drag_and_drop");
 	saveCheckbox("force_http");
 	saveCheckbox("show_advanced");
@@ -39,7 +39,7 @@ function saveOptions() {
 }
 
 $(document).ready(function() {
-	initialise();
+	initialize();
 	restoreOptions();
 	generateFolderList();
 

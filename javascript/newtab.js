@@ -211,9 +211,12 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find(".target").val(target);
 
 	//Selector to hide URL & custom icon fields when editing a folder name
-	$("h1:contains('Edit Folder')").parent().find("p:eq(1),p:eq(2)").hide();
+	if (!$("h1").text().indexOf("Edit Folder")){
+		$("h1").parent().find("p").eq(1).hide();
+		$("h1").parent().find("p").eq(2).hide();
+	}
 	//Selector to hide the cusom icon field adding new entries
-	$("h1:contains('New Bookmark or Folder')").parent().find("p:eq(2)").hide();
+	if (!$("h1").text().indexOf("New")) { $("h1").parent().find("p").eq(2).hide() }
 
 	form.reveal({
 		animation: "none"
@@ -233,7 +236,7 @@ function updateSpeedDialEntry(bookmark) {
 }
 
 $(document).ready(function() {
-	initialise();
+	initialize();
 	generateFolderList();
 	createSpeedDial(getStartingFolder());
 

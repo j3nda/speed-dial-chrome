@@ -7,7 +7,7 @@ function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 
 	if (hash !== undefined) {
-		hash.parentId = $("#folder_list option:selected").val();
+		hash.parentId = $("#folder_list").val();
 
 		chrome.bookmarks.create(hash, function(result) {
 			addSpeedDialEntry(result);
