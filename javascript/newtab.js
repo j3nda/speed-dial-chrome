@@ -1,20 +1,25 @@
 function addNewEntryButton() {
-	var entryHtml = '<div class="entry" id="new_entry"><div><i class="foundicon-plus"></i></div></div>';
-
-	$("#dial").append(entryHtml);
+	$("#dial").append('<div class="entry" id="new_entry"><div><i class="foundicon-plus"></i></div></div>');
 	$("#new_entry").click(function() {
 		showBookmarkEntryForm("New Bookmark or Folder", "", "", "");
 	});
-
 	scaleSpeedDialEntry($("#new_entry"));
 }
 
 function addSpeedDialEntry(bookmark) {
-	var entry = null;
-
 	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
-		$("#dial").append(getEntryHtml(bookmark));
-		entry = $("#" + bookmark.id);
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
+							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
+								'<div class="imgwrapper"><div class="image" style="background-image:url(' + getThumbnailUrl(bookmark.url) + ')"></div></div>' +
+								'<table class="details"><tbody><tr>' +
+								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
+								'<td class="title">' + bookmark.title + '</td>' +
+								'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td>' +
+								'</tr></tbody></table>' +
+							'</a>' +
+						'</div>');
+
+		var entry = $("#" + bookmark.id);
 		entry.find(".edit").click(function(event) {
 			event.preventDefault();
 			showBookmarkEntryForm("Edit Bookmark: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
@@ -29,7 +34,7 @@ function addSpeedDialEntry(bookmark) {
 		});
 
 		//If custom icon for the URL exists, evaluates to true & centers it on the dial
-		if (JSON.parse(localStorage.getItem("thumbnail_urls"))[bookmark.url]) {
+		if (JSON.parse(localStorage.getItem("icon_urls"))[bookmark.url]) {
 			entry.find(".image").css({
 				"background-size": "contain",
 				"background-position": "center"
@@ -37,21 +42,19 @@ function addSpeedDialEntry(bookmark) {
 		}
 
 		scaleSpeedDialEntry(entry);
-		$("#new_entry").appendTo($("#dial")); // Keep the new entry button at the end of the dial
-		} else if (bookmark.hasOwnProperty("children") && localStorage["show_subfolder_icons"] === "true") {
-		var entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
-						'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
-							'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
-							'<table class="details">' +
-							'<tr>' +
-							'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
-							'<td class="title"><div>' + bookmark.title + '</div></td>' +
-							'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td>' +
-							'</tr>' +
-							'</table>' +
-						'</a>' +
-					'</div>';
-		$("#dial").append(entryHtml);
+		$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
+		} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
+			$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
+								'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
+									'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
+									'<table class="details"><tr>' +
+										'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
+										'<td class="title"><div>' + bookmark.title + '</div></td>' +
+										'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td></tr>' +
+									'</table>' +
+								'</a>' +
+							'</div>');
+
 		entry = $("#" + bookmark.id);
 		entry.find(".edit").click(function(event) {
 			event.preventDefault();
@@ -63,29 +66,30 @@ function addSpeedDialEntry(bookmark) {
 				removeFolder(bookmark.id);
 			}
 		});
+		entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
 
 		scaleSpeedDialEntry(entry);
-		$("#new_entry").appendTo($("#dial")); // Keep the new entry button at the end of the dial
+		$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
 	}
 }
 
 // Figures out how big the dial and its elements should be
 // Needs to be called before the dial and entries are created
 function calculateSpeedDialSize() {
-	var dialColumns = parseInt(localStorage["dial_columns"]);
-	var dialWidth = parseInt(localStorage["dial_width"]);
+	var dialColumns = localStorage.getItem("dial_columns");
+	var dialWidth = localStorage.getItem("dial_width");
 
 	var borderWidth = 14;
 	var minEntryWidth = 120 - borderWidth;
-	var adjustedDialWidth = parseInt($(window).width() * 0.01 * dialWidth);
+	var adjustedDialWidth = $(window).width() * 0.01 * dialWidth;
 
-	var entryWidth = parseInt(adjustedDialWidth / dialColumns - borderWidth);
+	var entryWidth = adjustedDialWidth / dialColumns - borderWidth;
 	if (entryWidth < minEntryWidth) {
 		entryWidth = minEntryWidth;
-		adjustedDialWidth = parseInt(adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
+		adjustedDialWidth = (adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
 	}
-	var entryHeight = parseInt(entryWidth * 0.75); // height = 3/4 width
-	$("#dial").css("width", adjustedDialWidth);
+	var entryHeight = Math.floor(entryWidth*0.75); // height = 3/4 width
+	$("#dial").css("width", adjustedDialWidth +"px");
 	$("#entry_height").val(entryHeight);
 	$("#entry_width").val(entryWidth);
 }
@@ -100,7 +104,6 @@ function clearSpeedDial() {
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
 	clearSpeedDial();
-
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		var folder = {
 			"folderId": folderId,
@@ -112,64 +115,45 @@ function createSpeedDial(folderId) {
 		addNewEntryButton();
 
 		$("#dial").prop("folder", folderId);
-		loadSetting($("#new_entry"), localStorage["show_new_entry"]);
-		loadSetting($("#folder_list"), localStorage["show_folder_list"]);
+		loadSetting($("#new_entry"), localStorage.getItem("show_new_entry"));
+		loadSetting($("#folder_list"), localStorage.getItem("show_folder_list"));
 
-		for (var index in folder.folderNode.children) {
+		var index = 0, length = folder.folderNode.children.length;
+		while (index < length) {
 			addSpeedDialEntry(folder.folderNode.children[index]);
+			index++;
 		}
 
-		if (localStorage["drag_and_drop"] === "true") {
+		if (localStorage.getItem("drag_and_drop") === "true") {
 			// distance 20 - dont drag the bookmark until the cursor has moved 20 pixels
 			// forcePlaceHolderSize true - make a placeholder between the bookmarks when dragging
-			// containment parent - dont let the user drag a bookmark out of the container
-			// tolerance pointer - move the dragged bookmark to the spot under the cursor
 			// items "> div:not(.new_entry)" - drag all objects on the top level exept for new_entry
 			$("#dial").sortable({
 				distance: 20,
 				forcePlaceholderSize: true,
-				containment: "parent",
-				tolerance: "pointer",
-				items: "> div:not(#new_entry)",
-				stop: function(evebt, ui) {
-					updateBookmarksOrder()
+				containment: "document",
+				items: "div.entry:not(#new_entry)",
+				stop: function() {
+					updateBookmarksOrder();
 				}
 			});
 		}
 	});
 }
 
-// Gets the HTML of the entry to be inserted into the dial
-function getEntryHtml(bookmark) {
-	var entryHtml =	'<div class="entry" id="' + bookmark.id + '">' +
-					'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '" >' +
-						'<div class="imgwrapper"><div class="image" style="background-image:url(' + getThumbnailUrl(bookmark.url) + ')" /></div>' +
-						'<table class="details">' +
-						'<tr>' +
-						'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
-						'<td class="title"><div>' + bookmark.title + '</div></td>' +
-						'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td>' +
-						'</tr>' +
-						'</table>' +
-						'</div>' +
-					'</a>' +
-					'</div>';
-	return entryHtml;
-}
-
 function getThumbnailUrl(url) {
-	if (JSON.parse(localStorage.getItem("thumbnail_urls"))[url]) {
-		return JSON.parse(localStorage.getItem("thumbnail_urls"))[url];
+	if (JSON.parse(localStorage.getItem("icon_urls"))[url]) {
+		return JSON.parse(localStorage.getItem("icon_urls"))[url];
 	} else {
-		if (localStorage["force_http"] === "true") {
+		if (localStorage.getItem("force_http") === "true") {
 			url = url.replace("https", "http");
 		}
-		return localStorage["immediatenet_url"].replace("[URL]", url);
+		return localStorage.getItem("immediatenet_url").replace("[URL]", url);
 	}
 }
 
 function updateCustomIcon(url, old_url) {
-	var icon_object = JSON.parse(localStorage.getItem("thumbnail_urls"));
+	var icon_object = JSON.parse(localStorage.getItem("icon_urls"));
 	var custom_icon = $(".icon").val();
 
 	//Creates a new key:value pair and merges it into JSON from localStorage
@@ -187,7 +171,7 @@ function updateCustomIcon(url, old_url) {
 		delete temp_object[old_url];
 	}
 
-	localStorage.setItem("thumbnail_urls", JSON.stringify(temp_object));
+	localStorage.setItem("icon_urls", JSON.stringify(temp_object));
 	createSpeedDial(getStartingFolder());
 }
 
@@ -198,12 +182,10 @@ function removeSpeedDialEntry(id) {
 
 // Scales a single speed dial entry to the specified size
 function scaleSpeedDialEntry(entry) {
-	var captionHeight = 20;
 	var entryHeight = $("#entry_height").val();
 	var entryWidth = $("#entry_width").val();
 
-	entry.css("height", entryHeight);
-	entry.css("width", entryWidth);
+	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
 
 	if (entry.prop("id") !== "new_entry") {
 		var title = entry.find(".bookmark").prop("title");
@@ -211,14 +193,12 @@ function scaleSpeedDialEntry(entry) {
 		if (title.length > titleLimit) {
 			title = title.substr(0, titleLimit - 3) + "...";
 		}
-		entry.find(".imgwrapper").css("height", entryHeight - captionHeight);
+		entry.find(".imgwrapper").css("height", entryHeight - 20 +"px");
 		entry.find(".title").text(title);
 	}
 
-	entry.find(".foundicon-folder").css("font-size", entryWidth * 0.5);
-	entry.find(".foundicon-folder").css("top", entryWidth * 0.05);
-	entry.find(".foundicon-plus").css("font-size", entryWidth * 0.3);
-	entry.find(".foundicon-plus").css("top", entryWidth * 0.18);
+	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5 +"px", "top": entryWidth*0.05 +"px" });
+	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3 +"px", "top": entryWidth*0.18 +"px" });
 }
 
 function showBookmarkEntryForm(heading, title, url, target) {
@@ -227,7 +207,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find("h1").text(heading);
 	form.find(".title").val(title);
 	form.find(".url").val(url);
-	form.find(".icon").val(JSON.parse(localStorage.getItem("thumbnail_urls"))[url]);
+	form.find(".icon").val(JSON.parse(localStorage.getItem("icon_urls"))[url]);
 	form.find(".target").val(target);
 
 	//Selector to hide URL & custom icon fields when editing a folder name
@@ -239,8 +219,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 		animation: "none"
 	});
 	form.find(".title").focus();
-
-	$(".close-reveal-modal").click(function(event) {
+	$(".close-reveal-modal").click(function() {
 		$("p").show();
 	});
 }
@@ -278,13 +257,13 @@ $(document).ready(function() {
 
 	$(window).resize(function() {
 		calculateSpeedDialSize();
-		$(".entry").each(function(index) {
+		$(".entry").each(function() {
 			scaleSpeedDialEntry($(this));
 		});
 	});
 
 	// Change the current dial if the page hash changes
-	$(window).bind("hashchange", function(event) {
+	$(window).bind("hashchange", function() {
 		setCurrentFolder(getStartingFolder());
 	});
 });
