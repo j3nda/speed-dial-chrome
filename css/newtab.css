@@ -168,3 +168,15 @@ div {
 #folder select {
 	margin: 20px 0 10px 0;
 }
+
+.drop {
+	-webkit-animation: drop 0.3s;
+	animation: drop 0.3s;
+}
+
+@keyframes drop {
+	from, to {
+		background: #ffff00;
+		color: #fff;
+	}
+}

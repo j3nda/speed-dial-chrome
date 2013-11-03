@@ -125,19 +125,15 @@ function createSpeedDial(folderId) {
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
-			// distance 20 - dont drag the bookmark until the cursor has moved 20 pixels
-			// forcePlaceHolderSize true - make a placeholder between the bookmarks when dragging
-			// items "> div:not(.new_entry)" - drag all objects on the top level exept for new_entry
-			$("#dial").sortable({
-				distance: 20,
-				forcePlaceholderSize: true,
-				containment: "document",
-				items: "div.entry:not(#new_entry)",
-				stop: function() {
-					updateBookmarksOrder();
-				}
-			});
-		}
+			$('#dial').dragswap({
+			    element: '.entry', // the child element you are targeting
+			    overClass: 'over', // class when element goes over another element
+			    dropAnimation: true, // do you want to detect animation end?
+			    exclude: '#new_entry',
+			    dropComplete: function(){ 
+			    	updateBookmarksOrder(); 
+			    }
+			});		}
 	});
 }
 
