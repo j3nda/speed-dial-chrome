@@ -169,12 +169,19 @@ div {
 	margin: 20px 0 10px 0;
 }
 
-.drop {
+.ondrop {
 	-webkit-animation: drop 0.3s;
 	animation: drop 0.3s;
 }
 
-@keyframes drop {
+@-webkit-keyframes ondrop {
+	from, to {
+		background: #ffff00;
+		color: #fff;
+	}
+}
+
+@keyframes ondrop {
 	from, to {
 		background: #ffff00;
 		color: #fff;
