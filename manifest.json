@@ -12,5 +12,5 @@
 	 "options_page": "options.html",
 	 "permissions": [ "bookmarks" ],
 	 "update_url": "http://clients2.google.com/service/update2/crx",
-	 "version": "2.2.0"
+	 "version": "2.3.0"
 }
