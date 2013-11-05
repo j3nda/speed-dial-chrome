@@ -5,10 +5,9 @@
 		<title>Speed Dial Options</title>
 
 		<link rel="icon" type="image/png" href="icon16.png" />
-
 		<link type="text/css" rel="stylesheet" href="css/options.css" />
 
-		<script type="text/javascript" src="javascript/jquery.min.js"></script>
+		<script type="text/javascript" src="javascript/zepto.min.js"></script>
 		<script type="text/javascript" src="javascript/common.js"></script>
 		<script type="text/javascript" src="javascript/options.js"></script>
 	</head>
@@ -18,73 +17,80 @@
 			<h1>Display Options</h1>
 
 			<table class="form">
-				<tr>
-					<td class="field">Number of columns</td>
-					<td class="value">
-						<select id="dial_columns">
-							<option value="2">2 Columns</option>
-							<option value="3">3 Columns</option>
-							<option value="4">4 Columns</option>
-							<option value="5">5 Columns</option>
-							<option value="6">6 Columns</option>
-							<option value="7">7 Columns</option>
-							<option value="8">8 Columns</option>
-							<option value="9">9 Columns</option>
-							<option value="10">10 Columns</option>
-						</select>
-					</td>
-				</tr>
+				<tbody>
+					<tr>
+						<td class="field">Number of columns</td>
+						<td class="value">
+							<select id="dial_columns">
+								<option value="2">2 Columns</option>
+								<option value="3">3 Columns</option>
+								<option value="4">4 Columns</option>
+								<option value="5">5 Columns</option>
+								<option value="6">6 Columns</option>
+								<option value="7">7 Columns</option>
+								<option value="8">8 Columns</option>
+								<option value="9">9 Columns</option>
+								<option value="10">10 Columns</option>
+							</select>
+						</td>
+					</tr>
 
-				<tr>
-					<td class="field">Dial width</td>
-					<td class="value">
-						<select id="dial_width">
-							<option value="40">40%</option>
-							<option value="50">50%</option>
-							<option value="60">60%</option>
-							<option value="70">70%</option>
-							<option value="80">80%</option>
-							<option value="90">90%</option>
-							<option value="100">100%</option>
-						</select>
-					</td>
-				</tr>
+					<tr>
+						<td class="field">Dial width</td>
+						<td class="value">
+							<select id="dial_width">
+								<option value="40">40%</option>
+								<option value="50">50%</option>
+								<option value="60">60%</option>
+								<option value="70">70%</option>
+								<option value="80">80%</option>
+								<option value="90">90%</option>
+								<option value="100">100%</option>
+							</select>
+						</td>
+					</tr>
 
-				<tr>
-					<td class="field"><label for="background_color">Background color</label></td>
-					<td class="value"><input type="color" id="background_color"/></td>
-				</tr>
+					<tr>
+						<td class="field"><label for="background_color">Background color</label></td>
+						<td class="value"><input type="color" id="background_color"/></td>
+					</tr>
 
-				<tr>
-					<td class="field"><label for="show_new_entry">Show [+] button</label></td>
-					<td class="value"><input type="checkbox" id="show_new_entry" value="true" /></td>
-				</tr>
+					<tr>
+						<td class="field"><label for="show_new_entry">Show [+] button</label></td>
+						<td class="value"><input type="checkbox" id="show_new_entry" value="true" /></td>
+					</tr>
 
-				<tr>
-					<td class="field"><label for="show_folder_list">Show folder selector</label></td>
-					<td class="value"><input type="checkbox" id="show_folder_list" value="true" /></td>
-				</tr>
+					<tr>
+						<td class="field"><label for="show_folder_list">Show folder selector</label></td>
+						<td class="value"><input type="checkbox" id="show_folder_list" value="true" /></td>
+					</tr>
 
-				<tr>
-					<td class="field"><label for="drag_and_drop">Enable drag & drop</label></td>
-					<td class="value"><input type="checkbox" id="drag_and_drop" value="true" /></td>
-				</tr>
+					<tr>
+						<td class="field"><label for="drag_and_drop">Enable drag & drop</label></td>
+						<td class="value"><input type="checkbox" id="drag_and_drop" value="true" /></td>
+					</tr>
 
-				<tr>
-					<td class="field"><label for="show_subfolder_icons">Show sub-folder icons</label></td>
-					<td class="value"><input type="checkbox" id="show_subfolder_icons" value="true" /></td>
-				</tr>
+					<tr>
+						<td class="field"><label for="show_subfolder_icons">Show sub-folder icons</label></td>
+						<td class="value"><input type="checkbox" id="show_subfolder_icons" value="true" /></td>
+					</tr>
 
-				<tr>
-					<td class="field">Default folder</td>
-					<td class="value"><select id="folder_list"></select></td>
-				</tr>
+					<tr class="folder_color_row">
+						<td class="field"><label for="folder_color">Color of folder icons</label></td>
+						<td class="value"><input type="color" id="folder_color" ></td>
+					</tr>
+
+					<tr>
+						<td class="field">Default folder</td>
+						<td class="value"><select id="folder_list"></select></td>
+					</tr>
+				</tbody>
 			</table>
 
 			<p><input type="checkbox" id="show_advanced" value="true" /><label for="show_advanced"> Show Advanced Settings</label></p>
 
 			<div id="advanced">
-				<h1>Advanced Options</h2>
+				<h1>Advanced Options</h1>
 
 				<p>Incorrect application of these settings can break the speed dial.</p>
 
@@ -98,7 +104,15 @@
 						<td class="field">Thumbnailing service</td>
 						<td class="value">
 							<p>[URL] token will be replaced by the speed dial URL</p>
-							<input type="text" id="immediatenet_url" class="text" />
+							<input type="text" id="thumbnailing_service" class="text" />
+						</td>
+					</tr>
+					<tr>
+						<td class="field"><label for="thumbnail_json">Custom Icon JSON Settings</label></td>
+						<td class="value">
+							<p>This raw JSON string must be valid! <br>
+							This shows your custom icon settings so you can copy & paste between computers</p>
+							<textarea id="thumbnail_json" rows="4" cols="50" ></textarea>
 						</td>
 					</tr>
 				</table>

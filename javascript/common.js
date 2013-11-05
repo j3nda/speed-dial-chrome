@@ -1,7 +1,7 @@
 // Create and default a localStorage parameter if it doesn't already exist
 function defaultStorage(name, value) {
-	if (localStorage[name] === null || localStorage[name] === undefined) {
-		localStorage[name] = value;
+	if (localStorage.getItem(name) === null || localStorage.getItem(name) === undefined) {
+		localStorage.setItem(name, value);
 	}
 }
 
@@ -11,27 +11,24 @@ function generateFolderList() {
 	var openList = [];
 
 	chrome.bookmarks.getTree(function(rootNode) {
-		for (var index in rootNode[0].children) {
+		var index = rootNode[0].children.length;
+		while (index--) {
 			openList.push(rootNode[0].children[index]);
 		}
 
 		var node = openList.pop();
-
 		while (node !== null && node !== undefined) {
 			if (!node.hasOwnProperty("url")) {
-				var hasBookmarks = false;
-
 				if (node.path === undefined || node.parentId === "0") {
 					node.path = ""; // Root element, so it has no parent and we don't need to show the path
 				}
-
 				node.path += node.title;
-				for (var child in node.children) {
-					if (node.children[child].hasOwnProperty("url")) {
-						hasBookmarks = true;
+				var child = node.children.length;
+				while (child--) {
+					if (!node.children[child].hasOwnProperty("url")) {
+						node.children[child].path = node.path + "/";
+						openList.push(node.children[child]);
 					}
-					node.children[child].path = node.path + "/";
-					openList.push(node.children[child]);
 				}
 				folderList.push(node);
 			}
@@ -39,69 +36,75 @@ function generateFolderList() {
 		}
 
 		folderList.sort(function(a, b) {
-			var aName = a.path.toLowerCase();
-			var bName = b.path.toLowerCase();
-			return ((aName < bName) ? -1 : ((aName > bName) ? 1 : 0));
-		});
+			return a.path.localeCompare(b.path)
+		}).reverse();
 
 		var folder_id = getStartingFolder();
 
-		$("#folder_list").replaceWith('<select id="folder_list"></select>');
-
-		for (var item in folderList) {
+		var html = '';
+		var item = folderList.length;
+		while (item--) {
 			var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
-			$("#folder_list").append('<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>');
+			html += '<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
 		}
+		document.getElementById("folder_list").innerHTML = html;
 
 		$("#folder_list").bind("change", function() {
-			window.location.hash = $("#folder_list option:selected").val();
+			window.location.hash = $("#folder_list").val();
 		});
 	});
 }
 
 function getStartingFolder() {
-	var folder_id = "1";
-	var dfolder_id = localStorage["default_folder_id"];
+	var folderId = "1";
+	var defaultFolderId = localStorage.getItem("default_folder_id");
 
-	if (dfolder_id !== undefined || dfolder_id > 1) {
-		folder_id = dfolder_id;
+	if (defaultFolderId !== undefined || defaultFolderId > 1) {
+		folderId = defaultFolderId;
 
 		try {
-			chrome.bookmarks.get(folder_id, function() {});
+			chrome.bookmarks.get(folderId, function() {});
 		} catch (e) {
-			folder_id = "1";
+			folderId = "1";
 		}
 	}
 
 	// Allow the url to specify the folder as well
 	if (window.location.hash !== "") {
-		folder_id = window.location.hash.substring(1);
+		folderId = window.location.hash.substring(1);
 	}
 
-	return folder_id;
+	return folderId;
 }
 
 // Draws the new Dial and changes the selector menu
-function setCurrentFolder(folder_id) {
-	createSpeedDial(folder_id);
-	document.getElementById("folder_list").value = folder_id;
+function setCurrentFolder(folderId) {
+	createSpeedDial(folderId);
+	$("folder_list").value = folderId;
 }
 
-// Initialisation routines for all pages
-function initialise() {
+// Create default localStorage values if they don't already exist
+function createDefaults() {
 	defaultStorage("background_color", "#ccc");
 	defaultStorage("default_folder_id", 1);
 	defaultStorage("dial_columns", 6);
 	defaultStorage("dial_width", 70);
-	defaultStorage("force_http", "true");
 	defaultStorage("drag_and_drop", "true");
+	defaultStorage("folder_color", "#888");
+	defaultStorage("force_http", "true");
+	defaultStorage("icon_urls", "{}");
+	defaultStorage("thumbnailing_service", "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]");
 	defaultStorage("show_advanced", "false");
 	defaultStorage("show_new_entry", "true");
 	defaultStorage("show_folder_list", "true");
 	defaultStorage("show_subfolder_icons", "false");
-	defaultStorage("thumbnail_urls", "{}");
-	defaultStorage("immediatenet_url", "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]");
-	$("body").css("background", localStorage["background_color"]);
+}
+
+// Initialisation routines for all pages
+function initialize() {
+	createDefaults();
+
+	$("body").css("background", localStorage.getItem("background_color"));
 }
 
 function loadSetting(element, setting) {

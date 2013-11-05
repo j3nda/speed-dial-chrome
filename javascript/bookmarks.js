@@ -7,7 +7,7 @@ function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 
 	if (hash !== undefined) {
-		hash.parentId = $("#folder_list option:selected").val();
+		hash.parentId = $("#folder_list").val();
 
 		chrome.bookmarks.create(hash, function(result) {
 			addSpeedDialEntry(result);
@@ -62,7 +62,7 @@ function updateBookmark(id, title, url) {
 	var hash = buildBookmarkHash(title, url);
 	var old_url = $("#" + id).find(".bookmark").prop("href");
 	//Actually make sure the URL being modified is valid instead of always
-	//prepending http:// to it creating new valid+invalid bookmarks
+	//prepending http:// to it creating new valid+invalid bookmark
 	if (url.length !== 0 && !isValidUrl(url)) {
 		hash = undefined;
 	}
@@ -79,14 +79,11 @@ function updateBookmark(id, title, url) {
 }
 
 function updateBookmarksOrder() {
-	$("#new_entry").appendTo($("#dial")); // Keep the new entry button at the end of the dial
 	$(".entry").not("#new_entry").each(function(index) {
-		if (parseInt($(this).prop("index")) !== index) {
-			chrome.bookmarks.move($(this).prop("id"), {
-				"parentId": $("#dial").prop("folder"),
-				"index": index
-			});
-			$(this).prop("index", index);
-		}
+		chrome.bookmarks.move($(this).prop("id"), {
+			"parentId": $("#dial").prop("folder"),
+			"index": index
+		});
 	});
+	$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
 }
