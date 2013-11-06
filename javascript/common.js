@@ -41,13 +41,12 @@ function generateFolderList() {
 
 		var folder_id = getStartingFolder();
 
-		var html = '';
-		var item = folderList.length;
+		var folderListHtml = "", item = folderList.length;
 		while (item--) {
 			var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
-			html += '<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
+			folderListHtml += '<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
 		}
-		document.getElementById("folder_list").innerHTML = html;
+		document.getElementById("folder_list").innerHTML = folderListHtml;
 
 		$("#folder_list").bind("change", function() {
 			window.location.hash = $("#folder_list").val();
@@ -80,7 +79,7 @@ function getStartingFolder() {
 // Draws the new Dial and changes the selector menu
 function setCurrentFolder(folderId) {
 	createSpeedDial(folderId);
-	$("folder_list").value = folderId;
+	$("#folder_list").val(folderId)
 }
 
 // Create default localStorage values if they don't already exist
@@ -103,7 +102,6 @@ function createDefaults() {
 // Initialisation routines for all pages
 function initialize() {
 	createDefaults();
-
 	$("body").css("background", localStorage.getItem("background_color"));
 }
 

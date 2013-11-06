@@ -7,7 +7,7 @@ function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 
 	if (hash !== undefined) {
-		hash.parentId = $("#folder_list").val();
+		hash.parentId = window.location.hash.substring(1);
 
 		chrome.bookmarks.create(hash, function(result) {
 			addSpeedDialEntry(result);
@@ -46,14 +46,14 @@ function isValidUrl(url) {
 // Deletes a bookmarks and removes it from the speed dial
 function removeBookmark(id) {
 	chrome.bookmarks.remove(id, function() {
-		removeSpeedDialEntry(id);
+		$("#" + id).remove();
 	});
 }
 
 // Deletes an entire folder tree and removes it from the speed dial
 function removeFolder(id) {
 	chrome.bookmarks.removeTree(id, function() {
-		removeSpeedDialEntry(id);
+		$("#" + id).remove();
 		generateFolderList();
 	});
 }

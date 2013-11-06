@@ -5,6 +5,7 @@ function restoreOptions() {
 	$("#dial_columns").val(localStorage.getItem("dial_columns"));
 	$("#dial_width").val(localStorage.getItem("dial_width"));
 	$("#force_http").prop("checked", (localStorage.getItem("force_http") === "true"));
+	$("#enable_sync").prop("checked", (localStorage.getItem("enable_sync") === "true"));
 	$("#drag_and_drop").prop("checked", (localStorage.getItem("drag_and_drop") === "true"));
 	$("#show_advanced").prop("checked", (localStorage.getItem("show_advanced") === "true"));
 	$("#show_new_entry").prop("checked", (localStorage.getItem("show_new_entry") === "true"));
@@ -30,11 +31,16 @@ function saveOptions() {
 	localStorage.setItem("thumbnailing_service", $("#thumbnailing_service").val());
 
 	saveCheckbox("drag_and_drop");
+	saveCheckbox("enable_sync");
 	saveCheckbox("force_http");
 	saveCheckbox("show_advanced");
 	saveCheckbox("show_new_entry");
 	saveCheckbox("show_folder_list");
 	saveCheckbox("show_subfolder_icons");
+
+	if (localStorage.getItem("enable_sync") === "true") {
+		syncToStorage();
+	}
 
 	window.location = "newtab.html";
 }
