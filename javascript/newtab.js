@@ -126,10 +126,6 @@ function createSpeedDial(folderId) {
 					dropAnimation: true, // do you want to detect animation end?
 					exclude: "#new_entry",
 					dropComplete: function(){
-						var sortArray = $('#dial').dragswap('toArray');
-						console.log(sortArray);
-						var sortJSON  = $('#dial').dragswap('toJSON');
-						console.log(sortArray);
 						updateBookmarksOrder();
 						$(".moving , .over").removeClass("moving over");
 					}
