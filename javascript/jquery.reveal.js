@@ -10,20 +10,6 @@
 (function($) {
 
 /*---------------------------
- Defaults for Reveal
-----------------------------*/
-
-/*---------------------------
- Listener for data-reveal-id attributes
-----------------------------*/
-
-	$(document).on('click', 'a[data-reveal-id]', function(e) {
-		e.preventDefault();
-		var modalLocation = $(this).prop('data-reveal-id');
-		$('#' + modalLocation).reveal($(this).data());
-	});
-
-/*---------------------------
  Extend and Execute
 ----------------------------*/
 
@@ -65,9 +51,9 @@
  Open & Close Animations
 ----------------------------*/
 			//Entrance Animations
-			modal.bind('reveal:open', function() {
-				modalBG.unbind('click.modalEvent');
-				$('.' + options.dismissmodalclass).unbind('click.modalEvent');
+			modal.on('reveal:open', function() {
+				modalBG.off('click.modalEvent');
+				$('.' + options.dismissmodalclass).off('click.modalEvent');
 				if (!locked) {
 					lockModal();
 					if (options.animation == "fadeAndPop") {
@@ -104,11 +90,11 @@
 						unlockModal()
 					}
 				}
-				modal.unbind('reveal:open');
+				modal.off('reveal:open');
 			});
 
 			//Closing Animation
-			modal.bind('reveal:close', function() {
+			modal.on('reveal:close', function() {
 				if (!locked) {
 					lockModal();
 					if (options.animation == "fadeAndPop") {
@@ -148,7 +134,7 @@
 						});
 					}
 				}
-				modal.unbind('reveal:close');
+				modal.off('reveal:close');
 			});
 
 /*---------------------------
@@ -158,7 +144,7 @@
 			modal.trigger('reveal:open')
 
 			//Close Modal Listeners
-			var closeButton = $('.' + options.dismissmodalclass).bind('click.modalEvent', function() {
+			var closeButton = $('.' + options.dismissmodalclass).on('click.modalEvent', function() {
 				modal.trigger('reveal:close')
 			});
 
@@ -166,7 +152,7 @@
 				modalBG.css({
 					"cursor": "pointer"
 				})
-				modalBG.bind('click.modalEvent', function() {
+				modalBG.on('click.modalEvent', function() {
 					modal.trigger('reveal:close')
 				});
 			}

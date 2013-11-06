@@ -20,7 +20,7 @@ h1 {
 
 div#advanced {
 	display: none;
-	margin-top: 50px;
+	margin-top: 3.5em;
 }
 
 div#content {
@@ -30,12 +30,12 @@ div#content {
 	margin: 0 auto;
 	padding: 30px;
 	text-align: center;
-	width: 880px;
+	width: 55em;
 }
 
 table.form {
 	border-spacing: 0;
-	margin: 30px auto;
+	margin: 2em auto;
 	padding: 0;
 	width: 100%;
 }
@@ -74,13 +74,18 @@ table.form {
 
 input#save {
 	text-align: center;
-	width: 150px;
+	width: 10em;
+	height: 2em;
+	font-size: 100%;
+}
+
+input#cancel {
+	text-align: center;
+	width: 10em;
+	height: 2em;
+	font-size: 100%;
 }
 
 input.text {
-	width: 400px;
-}
-
-select {
-	width: 200px;
+	width: 30em;
 }

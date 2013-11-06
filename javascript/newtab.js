@@ -258,7 +258,7 @@ $(document).ready(function() {
 	});
 
 	// Change the current dial if the page hash changes
-	$(window).bind("hashchange", function(folderId) {
+	$(window).on("hashchange", function(folderId) {
 		setCurrentFolder(getStartingFolder());
 	});
 });

@@ -48,7 +48,7 @@ function generateFolderList() {
 		}
 		document.getElementById("folder_list").innerHTML = folderListHtml;
 
-		$("#folder_list").bind("change", function() {
+		$("#folder_list").on("change", function() {
 			window.location.hash = $("#folder_list").val();
 		});
 	});

@@ -50,11 +50,15 @@ $(document).ready(function() {
 	restoreOptions();
 	generateFolderList();
 
-	$("#save").bind("click", function() {
+	$("#save").on("click", function() {
 		saveOptions();
 	});
 
-	$("#background_color").bind("change", function() {
+	$("#cancel").on("click", function() {
+		window.location = "newtab.html";
+	});
+
+	$("#background_color").on("change", function() {
 		$("body").css("background-color", $("#background_color").val());
 	});
 
@@ -63,11 +67,11 @@ $(document).ready(function() {
 	} else {
 		$(".folder_color_row").hide();
 	}
-	$("#show_subfolder_icons").bind("click", function() {
+	$("#show_subfolder_icons").on("click", function() {
 		$(".folder_color_row").toggle();
 	});
 
-	$("#show_advanced").bind("change", function() {
+	$("#show_advanced").on("change", function() {
 		if ($(this).prop("checked")) {
 			$("#advanced").show();
 		} else {
