@@ -171,32 +171,19 @@ div {
 
 .over {
 	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-	box-shadow: 0 5px 10px rgba(0,0,0,0.2);
 	-webkit-transform: scale(1.1);
-	transform: scale(1.1);
 }
 
 .moving {
 	-webkit-transform: scale(0.9);
-	transform: scale(0.9);
 	opacity: 0.3;
 }
 
 .drop {
 	-webkit-animation: drop 0.3s;
-	animation: drop 0.3s;
 }
 
 @-webkit-keyframes drop {
-	from, to {
-		background: #ffff00;
-		color: #fff;
-	}
-}
-
-@keyframes drop {
-	from, to {
-		background: #ffff00;
-		color: #fff;
-	}
+	0%  {background: #ffff00; color: #fff;}
+	100%{background: #ffff00; color: #fff;}
 }

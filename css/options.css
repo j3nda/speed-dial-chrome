@@ -72,6 +72,10 @@ table.form {
 			padding: 3px 0;
 		}
 
+#folder_list {
+	width: 80%;
+}
+
 input#save {
 	text-align: center;
 	width: 10em;
