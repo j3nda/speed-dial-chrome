@@ -84,12 +84,12 @@ function setCurrentFolder(folderId) {
 
 // Create default localStorage values if they don't already exist
 function createDefaults() {
-	defaultStorage("background_color", "#ccc");
+	defaultStorage("background_color", "#cccccc");
 	defaultStorage("default_folder_id", 1);
 	defaultStorage("dial_columns", 6);
 	defaultStorage("dial_width", 70);
 	defaultStorage("drag_and_drop", "true");
-	defaultStorage("folder_color", "#888");
+	defaultStorage("folder_color", "#888888");
 	defaultStorage("force_http", "true");
 	defaultStorage("icon_urls", "{}");
 	defaultStorage("thumbnailing_service", "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]");

@@ -58,12 +58,14 @@ $(document).ready(function() {
 		window.location = "newtab.html";
 	});
 
+	$("#background_color").val(localStorage.getItem("background_color"));
 	$("#background_color").on("change", function() {
 		$("body").css("background-color", $("#background_color").val());
 	});
 
 	if ($("#show_subfolder_icons").prop("checked")) {
 		$(".folder_color_row").show();
+		$("#folder_color").val(localStorage.getItem("folder_color"));
 	} else {
 		$(".folder_color_row").hide();
 	}
@@ -87,6 +89,15 @@ $(document).ready(function() {
 			alert("Settings saved!");
 		}
 	});
+
+	$("#reset_to_default").on("click", function() {
+		if (confirm("Are you sure you want to reset ALL values you have changed back to their defaults?")) {
+			localStorage.clear();
+			createDefaults();
+			location.reload();
+		}
+	});
+
 
 	loadSetting($("#advanced"), localStorage.getItem("show_advanced"));
 });
