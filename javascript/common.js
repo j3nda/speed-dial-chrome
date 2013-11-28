@@ -104,11 +104,3 @@ function initialize() {
 	createDefaults();
 	$("body").css("background", localStorage.getItem("background_color"));
 }
-
-function loadSetting(element, setting) {
-	if (setting === "true") {
-		element.show();
-	} else {
-		element.hide();
-	}
-}

@@ -50,11 +50,11 @@ $(document).ready(function() {
 	restoreOptions();
 	generateFolderList();
 
-	$("#save").on("click", function() {
+	$("#save").click(function() {
 		saveOptions();
 	});
 
-	$("#cancel").on("click", function() {
+	$("#cancel").click(function() {
 		window.location = "newtab.html";
 	});
 
@@ -63,42 +63,33 @@ $(document).ready(function() {
 		$("body").css("background-color", $("#background_color").val());
 	});
 
-	if ($("#show_subfolder_icons").prop("checked")) {
-		$(".folder_color_row").show();
-		$("#folder_color").val(localStorage.getItem("folder_color"));
-	} else {
+	if (localStorage.getItem("show_subfolder_icons") === "false") {
 		$(".folder_color_row").hide();
 	}
-	$("#show_subfolder_icons").on("click", function() {
+	$("#show_subfolder_icons").click(function() {
 		$(".folder_color_row").toggle();
 	});
 
-	$("#show_advanced").on("change", function() {
-		if ($(this).prop("checked")) {
-			$("#advanced").show();
-		} else {
-			$("#advanced").hide();
-		}
+	if (localStorage.getItem("show_advanced") === "true") {
+		$("#advanced").show();
+	}
+	$("#show_advanced").click(function() {
+		$("#advanced").toggle();
 	});
 
 	$("textarea").val(localStorage.getItem("icon_urls"));
-	$("textarea").keydown(function (event) {
-		var keypressed = event.keyCode || event.which;
-		if (keypressed === 13) {
+	$("textarea").keydown(function (e) {
+		if (e.which === 13) {
 			saveOptions();
 			alert("Settings saved!");
 		}
 	});
 
-	$("#reset_to_default").on("click", function() {
+	$("#reset_to_default").click(function() {
 		if (confirm("Are you sure you want to reset ALL values you have changed back to their defaults?")) {
 			localStorage.clear();
 			createDefaults();
 			location.reload();
 		}
 	});
-
-
-	loadSetting($("#advanced"), localStorage.getItem("show_advanced"));
 });
-

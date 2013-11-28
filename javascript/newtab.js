@@ -1,5 +1,5 @@
 function addNewEntryButton() {
-	$("#dial").append('<div class="entry" id="new_entry"><div><i class="foundicon-plus"></i></div></div>');
+	$("#dial").append('<div class="entry" id="new_entry" title="Add New"><div><i class="foundicon-plus"></i></div></div>');
 	$("#new_entry").click(function() {
 		showBookmarkEntryForm("New Bookmark or Folder", "", "", "");
 	});
@@ -42,7 +42,7 @@ function addSpeedDialEntry(bookmark) {
 		}
 
 		scaleSpeedDialEntry(entry);
-		$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
+
 		} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
 			$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 								'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
@@ -55,21 +55,20 @@ function addSpeedDialEntry(bookmark) {
 								'</a>' +
 							'</div>');
 
-		entry = $("#" + bookmark.id);
-		entry.find(".edit").click(function(event) {
-			event.preventDefault();
-			showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
-		});
-		entry.find(".remove").click(function(event) {
-			event.preventDefault();
-			if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
-				removeFolder(bookmark.id);
-			}
-		});
-		entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
+			entry = $("#" + bookmark.id);
+			entry.find(".edit").click(function(event) {
+				event.preventDefault();
+				showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
+			});
+			entry.find(".remove").click(function(event) {
+				event.preventDefault();
+				if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
+					removeFolder(bookmark.id);
+				}
+			});
+			entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
 
-		scaleSpeedDialEntry(entry);
-		$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
+			scaleSpeedDialEntry(entry);
 	}
 }
 
@@ -97,9 +96,7 @@ function calculateSpeedDialSize() {
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
 	// Removes all entries under the current view before displaying new folderId
-	$(".entry").each(function() {
-		$(this).remove();
-	});
+	$("#dial").empty();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		var folder = {
@@ -109,26 +106,32 @@ function createSpeedDial(folderId) {
 		};
 
 		calculateSpeedDialSize();
-		addNewEntryButton();
-
 		$("#dial").prop("folder", folderId);
-		loadSetting($("#new_entry"), localStorage.getItem("show_new_entry"));
-		loadSetting($("#folder_list"), localStorage.getItem("show_folder_list"));
 
+		if (localStorage.getItem("show_folder_list") === "false") {
+			$("#folder").remove();
+		}
+
+		// Loop over bookmarks in folder and add to the dial
 		for (var i = 0; i < folder.folderNode.children.length; i++) {
 			addSpeedDialEntry(folder.folderNode.children[i]);
 		}
 
+		if (localStorage.getItem("show_new_entry") === "true") {
+			addNewEntryButton();
+			$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
+		}
+
 		if (localStorage.getItem("drag_and_drop") === "true") {
 			$("#dial").dragswap({
-					element: ".entry", // the child element you are targeting
-					overClass: "over", // class when element goes over another element
-					dropAnimation: true, // do you want to detect animation end?
-					exclude: "#new_entry",
-					dropComplete: function(){
-						updateBookmarksOrder();
-						$(".moving , .over").removeClass("moving over");
-					}
+				element: ".entry", // the child element you are targeting
+				overClass: "over", // class when element goes over another element
+				dropAnimation: true, // do you want to detect animation end?
+				exclude: "#new_entry",
+				dropComplete: function(){
+					updateBookmarksOrder();
+					$(".moving , .over").removeClass("moving over");
+				}
 			});
 		}
 	});
@@ -232,7 +235,7 @@ $(document).ready(function() {
 	generateFolderList();
 	createSpeedDial(getStartingFolder());
 
-	$("#bookmark_form .title, #bookmark_form .url").keyup(function(e) {
+	$("#bookmark_form .title, #bookmark_form .url, #bookmark_form .icon").keyup(function(e) {
 		if (e.which === 13) {
 			$("#bookmark_form button").trigger("click");
 		}
