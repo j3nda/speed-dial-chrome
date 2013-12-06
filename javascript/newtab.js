@@ -28,7 +28,7 @@ function addSpeedDialEntry(bookmark) {
 			event.preventDefault();
 			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
-				var old_url = entry.find(".bookmark").prop("href");
+				var old_url = entry.find(".bookmark").attr("href");
 				updateCustomIcon("", old_url);
 			}
 		});
@@ -80,7 +80,7 @@ function calculateSpeedDialSize() {
 
 	var borderWidth = 14;
 	var minEntryWidth = 120 - borderWidth;
-	var adjustedDialWidth = $(window).width() * 0.01 * dialWidth;
+	var adjustedDialWidth = window.innerWidth * 0.01 * dialWidth;
 
 	var entryWidth = adjustedDialWidth / dialColumns - borderWidth;
 	if (entryWidth < minEntryWidth) {
@@ -105,35 +105,34 @@ function createSpeedDial(folderId) {
 			"folderNode": node[0]
 		};
 
+		$("#dial").attr("folder", folderId);
+		generateFolderList();
 		calculateSpeedDialSize();
-		$("#dial").prop("folder", folderId);
-
-		if (localStorage.getItem("show_folder_list") === "false") {
-			$("#folder").remove();
-		}
 
 		// Loop over bookmarks in folder and add to the dial
 		for (var i = 0; i < folder.folderNode.children.length; i++) {
 			addSpeedDialEntry(folder.folderNode.children[i]);
 		}
 
+		// Only adds the + button to the dom if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
 			addNewEntryButton();
-			$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
-			$("#dial").dragswap({
-				element: ".entry", // the child element you are targeting
-				overClass: "over", // class when element goes over another element
-				dropAnimation: true, // do you want to detect animation end?
-				exclude: "#new_entry",
-				dropComplete: function(){
-					updateBookmarksOrder();
-					$(".moving , .over").removeClass("moving over");
+			$("#dial").sortable({
+				distance: 20,
+				forcePlaceholderSize: true,
+				cursor: "move",
+				containment: "document",
+				tolerance: "pointer",
+				items: "> div:not(#new_entry)",
+				stop: function() {
+					updateBookmarksOrder()
 				}
 			});
 		}
+		alignVertical();
 	});
 }
 
@@ -155,8 +154,8 @@ function scaleSpeedDialEntry(entry) {
 
 	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
 
-	if (entry.prop("id") !== "new_entry") {
-		var title = entry.find(".bookmark").prop("title");
+	if (entry.attr("id") !== "new_entry") {
+		var title = entry.find(".bookmark").attr("title");
 		var titleLimit = entryWidth / 10;
 		if (title.length > titleLimit) {
 			title = title.substr(0, titleLimit - 3) + "...";
@@ -186,9 +185,8 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	//Selector to hide the cusom icon field adding new entries
 	if (!$("h1").text().indexOf("New")) { $("h1").parent().find("p").eq(2).hide() }
 
-	form.reveal({
-		animation: "none"
-	});
+	form.reveal({ animation: "none" });
+
 	form.find(".title").focus();
 	$(".close-reveal-modal").click(function() {
 		$("p").show();
@@ -225,14 +223,21 @@ function updateCustomIcon(url, old_url) {
 function updateSpeedDialEntry(bookmark) {
 	var entry = $("#" + bookmark.id);
 
-	entry.find(".bookmark").prop("href", bookmark.url);
-	entry.find(".bookmark").prop("title", bookmark.title);
+	entry.find(".bookmark").attr("href", bookmark.url);
+	entry.find(".bookmark").attr("title", bookmark.title);
 	entry.find(".title").text(bookmark.title);
 }
 
-$(document).ready(function() {
+function alignVertical() {
+	if (localStorage.getItem("show_folder_list") === "true") {
+		$("#dial").css("padding", (Math.floor(($(window).height() - $("#dial").height())/2)-60) + "px 0px 0px");
+	} else {
+		$("#dial").css("padding", (Math.floor($(window).height() - $("#dial").height() - 20)/2) + "px 0px 0px");
+	}
+}
+
+document.addEventListener("DOMContentLoaded", function() {
 	initialize();
-	generateFolderList();
 	createSpeedDial(getStartingFolder());
 
 	$("#bookmark_form .title, #bookmark_form .url, #bookmark_form .icon").keyup(function(e) {
@@ -253,11 +258,12 @@ $(document).ready(function() {
 		}
 	});
 
-	$(window).resize(function() {
+	$(window).on("resize", function() {
 		calculateSpeedDialSize();
 		$(".entry").each(function() {
 			scaleSpeedDialEntry($(this));
 		});
+		alignVertical();
 	});
 
 	// Change the current dial if the page hash changes

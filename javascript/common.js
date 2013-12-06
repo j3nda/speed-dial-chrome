@@ -7,51 +7,53 @@ function defaultStorage(name, value) {
 
 // Generates a list of all folders under chrome bookmarks
 function generateFolderList() {
-	var folderList = [];
-	var openList = [];
+	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname == "/options.html") {
+		var folderList = [];
+		var openList = [];
 
-	chrome.bookmarks.getTree(function(rootNode) {
-		var index = rootNode[0].children.length;
-		while (index--) {
-			openList.push(rootNode[0].children[index]);
-		}
-
-		var node = openList.pop();
-		while (node !== null && node !== undefined) {
-			if (!node.hasOwnProperty("url")) {
-				if (node.path === undefined || node.parentId === "0") {
-					node.path = ""; // Root element, so it has no parent and we don't need to show the path
-				}
-				node.path += node.title;
-				var child = node.children.length;
-				while (child--) {
-					if (!node.children[child].hasOwnProperty("url")) {
-						node.children[child].path = node.path + "/";
-						openList.push(node.children[child]);
-					}
-				}
-				folderList.push(node);
+		chrome.bookmarks.getTree(function(rootNode) {
+			var index = rootNode[0].children.length;
+			while (index--) {
+				openList.push(rootNode[0].children[index]);
 			}
-			node = openList.pop();
-		}
 
-		folderList.sort(function(a, b) {
-			return a.path.localeCompare(b.path)
-		}).reverse();
+			var node = openList.pop();
+			while (node !== null && node !== undefined) {
+				if (!node.hasOwnProperty("url")) {
+					if (node.path === undefined || node.parentId === "0") {
+						node.path = ""; // Root element, so it has no parent and we don't need to show the path
+					}
+					node.path += node.title;
+					var child = node.children.length;
+					while (child--) {
+						if (!node.children[child].hasOwnProperty("url")) {
+							node.children[child].path = node.path + "/";
+							openList.push(node.children[child]);
+						}
+					}
+					folderList.push(node);
+				}
+				node = openList.pop();
+			}
 
-		var folder_id = getStartingFolder();
+			folderList.sort(function(a, b) {
+				return a.path.localeCompare(b.path)
+			}).reverse();
 
-		var folderListHtml = "", item = folderList.length;
-		while (item--) {
-			var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
-			folderListHtml += '<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
-		}
-		document.getElementById("folder_list").innerHTML = folderListHtml;
+			var folder_id = getStartingFolder();
 
-		$("#folder_list").on("change", function() {
-			window.location.hash = $("#folder_list").val();
+			var folderListHtml = "", item = folderList.length;
+			while (item--) {
+				var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
+				folderListHtml += '<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
+			}
+			document.getElementById("folder").innerHTML = '<select id="folder_list">' + folderListHtml + '</select>';
+
+			$("#folder_list").on("change", function() {
+				window.location.hash = $("#folder_list").val();
+			});
 		});
-	});
+	}
 }
 
 function getStartingFolder() {
@@ -60,7 +62,6 @@ function getStartingFolder() {
 
 	if (defaultFolderId !== undefined || defaultFolderId > 1) {
 		folderId = defaultFolderId;
-
 		try {
 			chrome.bookmarks.get(folderId, function() {});
 		} catch (e) {

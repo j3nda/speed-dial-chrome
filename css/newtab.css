@@ -6,40 +6,29 @@ body {
 	margin: 0;
 }
 
-div {
-	margin: 0;
-	padding: 0;
-}
-
 #content {
-	float: left;
 	text-align: center;
-	width: 100%;
 }
 
 #dial {
 	display: inline-block;
-	margin: 10px auto 0 auto;
 }
 
-#dial .entry {
-	background: none;
-	border-radius: 10px;
+.entry {
+	border-radius: 6px;
 	float: left;
 	padding: 7px;
 }
 
-#dial .entry:hover {
+.entry:hover {
 	background: rgba(53, 191, 256, 0.5);
 }
 
-.entry .bookmark {
+.bookmark {
 	background: #fff;
 	border-radius: 5px;
 	border: 1px solid #888;
 	margin: -1px;
-	box-shadow: 0 0 5px #444;
-	color: #888;
 	float: left;
 	height: 100%;
 	width: 100%;
@@ -48,10 +37,6 @@ div {
 
 .entry .bookmark:hover {
 	color: #444;
-}
-
-.bookmark .imgwrapper {
-	overflow: hidden;
 }
 
 .image {
@@ -64,25 +49,20 @@ div {
 
 .details {
 	border-collapse: collapse;
-	clear: both;
-	float: left;
 	width: 100%;
 }
 
-.details td {
-	height: 20px;
-	line-height: 20px;
-	margin: 0;
+td {
 	opacity: 0.6;
-	padding: 0;
-	text-align: center;
 }
 
-.details .edit, .details .remove {
+.edit, .remove {
 	opacity: 0.0;
 	width: 1em;
-	position : relative;
-	top: 0.1em;
+}
+
+.entry:hover .details .edit, .entry:hover .details .remove {
+	opacity: 0.25;
 }
 
 .entry:hover .details .edit:hover, .entry:hover .details .remove:hover {
@@ -96,13 +76,10 @@ div {
 	overflow: hidden;
 }
 
-.entry:hover .details .title {
-	opacity: 0.8;
+.entry:hover .title {
+	opacity: 0.9;
 }
 
-.entry:hover .details .edit, .entry:hover .details .remove {
-	opacity: 0.25;
-}
 
 #new_entry div {
 	background-color: #aaa;

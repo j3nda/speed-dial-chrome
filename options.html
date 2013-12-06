@@ -3,20 +3,13 @@
 
 	<head>
 		<title>Speed Dial Options</title>
-
 		<link rel="icon" type="image/png" href="icon16.png" />
 		<link type="text/css" rel="stylesheet" href="css/options.css" />
-
-		<script type="text/javascript" src="javascript/zepto.min.js"></script>
-		<script type="text/javascript" src="javascript/common.js"></script>
-		<script type="text/javascript" src="javascript/options.js"></script>
-		<script type="text/javascript" src="javascript/eventPage.js"></script>
 	</head>
 
 	<body>
 		<div id="content">
 			<h1>Display Options</h1>
-
 			<table class="form">
 				<tbody>
 					<tr>
@@ -53,63 +46,61 @@
 
 					<tr>
 						<td class="field"><label for="background_color">Background color</label></td>
-						<td class="value"><input type="color" id="background_color"/></td>
+						<td class="value"><input type="color" id="background_color"></td>
 					</tr>
 
 					<tr>
 						<td class="field"><label for="show_new_entry">Show [+] button</label></td>
-						<td class="value"><input type="checkbox" id="show_new_entry" value="true" /></td>
+						<td class="value"><input type="checkbox" id="show_new_entry"></td>
 					</tr>
 
 					<tr>
 						<td class="field"><label for="show_folder_list">Show folder selector</label></td>
-						<td class="value"><input type="checkbox" id="show_folder_list" value="true" /></td>
+						<td class="value"><input type="checkbox" id="show_folder_list"></td>
 					</tr>
 
 					<tr>
 						<td class="field"><label for="drag_and_drop">Enable drag & drop</label></td>
-						<td class="value"><input type="checkbox" id="drag_and_drop" value="true" /></td>
+						<td class="value"><input type="checkbox" id="drag_and_drop"></td>
 					</tr>
 
 					<tr>
 						<td class="field"><label for="show_subfolder_icons">Show sub-folder icons</label></td>
-						<td class="value"><input type="checkbox" id="show_subfolder_icons" value="true" /></td>
+						<td class="value"><input type="checkbox" id="show_subfolder_icons"></td>
 					</tr>
 
 					<tr class="folder_color_row">
 						<td class="field"><label for="folder_color">Color of folder icons</label></td>
-						<td class="value"><input type="color" id="folder_color" ></td>
+						<td class="value"><input type="color" id="folder_color"></td>
 					</tr>
 
 					<tr>
 						<td class="field">Default folder</td>
-						<td class="value"><select id="folder_list"></select></td>
+						<td class="value"><div id="folder"></div></td>
 					</tr>
 
 					<tr>
 						<td class="field"><label for="enable_sync">Enable synchronization</label></td>
-						<td class="value"><input type="checkbox" id="enable_sync" value="true" /></td>
+						<td class="value"><input type="checkbox" id="enable_sync"></td>
 					</tr>
 				</tbody>
 			</table>
 
-			<p><input type="checkbox" id="show_advanced" value="true" /><label for="show_advanced"> Show Advanced Settings</label></p>
+			<p><input type="checkbox" id="show_advanced"><label for="show_advanced"> Show Advanced Settings</label></p>
 
 			<div id="advanced">
 				<h1>Advanced Options</h1>
-
 				<p>Incorrect application of these settings can break the speed dial.</p>
-
 				<table class="form">
 					<tr>
 						<td class="field"><label for="force_http">Force HTTPS to HTTP</label></td>
-						<td class="value"><input type="checkbox" id="force_http" value="true" /></td>
+						<td class="value"><input type="checkbox" id="force_http"></td>
 					</tr>
 					<tr>
 						<td class="field">Thumbnailing service</td>
 						<td class="value">
 							<p>[URL] token will be replaced by the speed dial URL</p>
-							<input type="text" id="thumbnailing_service" class="text" />
+							<input type="text" id="thumbnailing_service" class="text">
 						</td>
 					</tr>
 					<tr>
@@ -122,16 +113,19 @@
 					</tr>
 					<tr>
 						<td class="field"><label for="reset_to_default">Reset ALL Settings to default values</label></td>
-						<td class="value"><input type="button" id="reset_to_default" value="Reset" /></td>
+						<td class="value"><input type="button" id="reset_to_default" value="Reset"></td>
 					</tr>
 				</table>
 			</div>
 
-			<input type="button" id="save" value="Save" />
-			<input type="button" id="cancel" value="Cancel" />
+			<input type="button" id="save" value="Save">
+			<input type="button" id="cancel" value="Cancel">
 		</div>
 
+		<script type="text/javascript" src="javascript/jquery.min.js"></script>
+		<script type="text/javascript" src="javascript/common.js"></script>
+		<script type="text/javascript" src="javascript/options.js"></script>
+		<script type="text/javascript" src="javascript/eventPage.js"></script>
 	</body>
 
 </html>
-

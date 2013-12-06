@@ -177,4 +177,4 @@
 
 		}); //each call
 	} //orbit plugin call
-})(Zepto);
+})(jQuery);

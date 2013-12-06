@@ -4,20 +4,20 @@ function restoreOptions() {
 	$("#default_folder_id").val(localStorage.getItem("default_folder_id"));
 	$("#dial_columns").val(localStorage.getItem("dial_columns"));
 	$("#dial_width").val(localStorage.getItem("dial_width"));
-	$("#force_http").prop("checked", (localStorage.getItem("force_http") === "true"));
-	$("#enable_sync").prop("checked", (localStorage.getItem("enable_sync") === "true"));
-	$("#drag_and_drop").prop("checked", (localStorage.getItem("drag_and_drop") === "true"));
-	$("#show_advanced").prop("checked", (localStorage.getItem("show_advanced") === "true"));
-	$("#show_new_entry").prop("checked", (localStorage.getItem("show_new_entry") === "true"));
-	$("#show_folder_list").prop("checked", (localStorage.getItem("show_folder_list") === "true"));
-	$("#show_subfolder_icons").prop("checked", (localStorage.getItem("show_subfolder_icons") === "true"));
+	$("#force_http")[0].checked = localStorage.getItem("force_http") === "true";
+	$("#enable_sync")[0].checked = localStorage.getItem("enable_sync") === "true";
+	$("#drag_and_drop")[0].checked = localStorage.getItem("drag_and_drop") === "true";
+	$("#show_advanced")[0].checked = localStorage.getItem("show_advanced") === "true";
+	$("#show_new_entry")[0].checked = localStorage.getItem("show_new_entry") === "true";
+	$("#show_folder_list")[0].checked = localStorage.getItem("show_folder_list") === "true";
+	$("#show_subfolder_icons")[0].checked = localStorage.getItem("show_subfolder_icons") === "true";
 	$("#folder_color").val(localStorage.getItem("folder_color"));
 	$("#thumbnailing_service").val(localStorage.getItem("thumbnailing_service"));
 }
 
 // Saves value of checkbox to local storage
 function saveCheckbox(name) {
-	localStorage.setItem(name, ($("#" + name).prop("checked") ? "true" : "false"));
+	localStorage.setItem(name, ($("#" + name)[0].checked ? "true" : "false"));
 }
 
 // Write selected options back to local storage
@@ -45,7 +45,7 @@ function saveOptions() {
 	window.location = "newtab.html";
 }
 
-$(document).ready(function() {
+document.addEventListener("DOMContentLoaded", function() {
 	initialize();
 	restoreOptions();
 	generateFolderList();
@@ -53,10 +53,16 @@ $(document).ready(function() {
 	$("#save").click(function() {
 		saveOptions();
 	});
-
 	$("#cancel").click(function() {
 		window.location = "newtab.html";
 	});
+
+	// If the Esc key is pressed go back to the new tab page
+	$("html").keyup(function(e) {
+		if (e.which === 27) {
+			window.location = "newtab.html";
+		}
+	});	
 
 	$("#background_color").val(localStorage.getItem("background_color"));
 	$("#background_color").on("change", function() {
@@ -89,7 +95,7 @@ $(document).ready(function() {
 		if (confirm("Are you sure you want to reset ALL values you have changed back to their defaults?")) {
 			localStorage.clear();
 			createDefaults();
-			location.reload();
+			window.location.reload();
 		}
 	});
 });

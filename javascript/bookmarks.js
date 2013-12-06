@@ -5,10 +5,9 @@
 // Adds a new bookmark to chrome, and displays it on the speed dial
 function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
-
 	if (hash !== undefined) {
-		hash.parentId = window.location.hash.substring(1);
-
+		// hash.parentId needs to be set to the default folder to add new entries to the default folder
+		hash.parentId = window.location.hash.substring(1) || localStorage.getItem("default_folder_id");
 		chrome.bookmarks.create(hash, function(result) {
 			addSpeedDialEntry(result);
 			generateFolderList();
@@ -60,7 +59,7 @@ function removeFolder(id) {
 
 function updateBookmark(id, title, url) {
 	var hash = buildBookmarkHash(title, url);
-	var old_url = $("#" + id).find(".bookmark").prop("href");
+	var old_url = $("#" + id).find(".bookmark").attr("href");
 	//Actually make sure the URL being modified is valid instead of always
 	//prepending http:// to it creating new valid+invalid bookmark
 	if (url.length !== 0 && !isValidUrl(url)) {
@@ -80,10 +79,9 @@ function updateBookmark(id, title, url) {
 
 function updateBookmarksOrder() {
 	$(".entry").not("#new_entry").each(function(index) {
-		chrome.bookmarks.move($(this).prop("id"), {
-			"parentId": $("#dial").prop("folder"),
+		chrome.bookmarks.move($(this).attr("id"), {
+			"parentId": $("#dial").attr("folder"),
 			"index": index
 		});
 	});
-	$("#new_entry").insertAfter($("#dial").children().last()); // Keep the new entry button at the end of the dial
 }
