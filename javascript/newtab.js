@@ -6,10 +6,10 @@ function addNewEntryButton() {
 	scaleSpeedDialEntry($("#new_entry"));
 }
 
-function addSpeedDialEntry(bookmark) {
+function addSpeedDialEntry(bookmark, index) {
 	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
 		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
-							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
+							'<a class="bookmark" id="index_' + index + '" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
 								'<div class="imgwrapper"><div class="image" style="background-image:url(' + getThumbnailUrl(bookmark.url) + ')"></div></div>' +
 								'<table class="details"><tbody><tr>' +
 								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
@@ -45,7 +45,7 @@ function addSpeedDialEntry(bookmark) {
 
 		} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
 			$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
-								'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
+								'<a class="bookmark" id="index_' + index + '" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 									'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
 									'<table class="details"><tbody><tr>' +
 										'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
@@ -111,7 +111,7 @@ function createSpeedDial(folderId) {
 
 		// Loop over bookmarks in folder and add to the dial
 		for (var i = 0; i < folder.folderNode.children.length; i++) {
-			addSpeedDialEntry(folder.folderNode.children[i]);
+			addSpeedDialEntry(folder.folderNode.children[i], i+1);
 		}
 
 		// Only adds the + button to the dom if enabled
@@ -255,6 +255,16 @@ document.addEventListener("DOMContentLoaded", function() {
 			updateBookmark(target, title, url);
 		} else {
 			addBookmark(title, url);
+		}
+	});
+
+	// Navigates to the entry corresponding to the single digit number between 1-9
+	$(window).on("keypress", function(e) {
+		var key = String.fromCharCode(e.which);
+		if (key >= 1 && key <= 9) {
+			if ($("#index_" + key).length !== 0) {
+				window.location = $("#index_" + key).attr("href");
+			}
 		}
 	});
 

@@ -1,5 +1,3 @@
 - Thumbnails - better solution ...like in FVD Speed Dial
 - Thumbnails - updater
 - Translations
-- Shortcuts - Ctrl + number to open shortcuts (requested)
-- Allow in incognito mode (requested)
