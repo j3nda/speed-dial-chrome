@@ -8,8 +8,8 @@ function addNewEntryButton() {
 
 function addSpeedDialEntry(bookmark, index) {
 	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
-		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
-							'<a class="bookmark" id="index_' + index + '" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
+							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
 								'<div class="imgwrapper"><div class="image" style="background-image:url(' + getThumbnailUrl(bookmark.url) + ')"></div></div>' +
 								'<table class="details"><tbody><tr>' +
 								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
@@ -44,8 +44,8 @@ function addSpeedDialEntry(bookmark, index) {
 		scaleSpeedDialEntry(entry);
 
 		} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
-			$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
-								'<a class="bookmark" id="index_' + index + '" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
+			$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
+								'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 									'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
 									'<table class="details"><tbody><tr>' +
 										'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
@@ -183,14 +183,12 @@ function showBookmarkEntryForm(heading, title, url, target) {
 		$("h1").parent().find("p").eq(2).hide();
 	}
 	//Selector to hide the cusom icon field adding new entries
-	if (!$("h1").text().indexOf("New")) { $("h1").parent().find("p").eq(2).hide() }
+	if (!$("h1").text().indexOf("New")) {
+		$("h1").parent().find("p").eq(2).hide()
+	}
 
-	form.reveal({ animation: "none" });
-
+	form.reveal();
 	form.find(".title").focus();
-	$(".close-reveal-modal").click(function() {
-		$("p").show();
-	});
 }
 
 function updateCustomIcon(url, old_url) {
@@ -260,10 +258,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Navigates to the entry corresponding to the single digit number between 1-9
 	$(window).on("keypress", function(e) {
-		var key = String.fromCharCode(e.which);
-		if (key >= 1 && key <= 9) {
-			if ($("#index_" + key).length !== 0) {
-				window.location = $("#index_" + key).attr("href");
+		// Prevents navigation while typing numbers in #bookmark_form input fields
+		if (document.activeElement.type !== "text") {
+			var key = String.fromCharCode(e.which);
+			if (key >= 1 && key <= 9) {
+				if ($('.entry[index="' + key + '"]').length !== 0) {
+					window.location = $('.entry[index="' + key + '"]').find(".bookmark").attr("href");
+				}
 			}
 		}
 	});

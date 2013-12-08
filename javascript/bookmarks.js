@@ -81,5 +81,6 @@ function updateBookmarksOrder() {
 			"parentId": $("#dial").attr("folder"),
 			"index": index
 		});
+		$(this).attr("index", index+1);
 	});
 }

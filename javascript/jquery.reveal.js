@@ -17,7 +17,7 @@
 
 
 		var defaults = {
-			animation: 'fadeAndPop',
+			animation: 'none',
 			//fade, fadeAndPop, none
 			animationspeed: 300,
 			//how fast animtions are
@@ -56,29 +56,6 @@
 				$('.' + options.dismissmodalclass).off('click.modalEvent');
 				if (!locked) {
 					lockModal();
-					if (options.animation == "fadeAndPop") {
-						modal.css({
-							'top': $(document).scrollTop() - topOffset,
-							'opacity': 0,
-							'visibility': 'visible'
-						});
-						modalBG.fadeIn(options.animationspeed / 2);
-						modal.delay(options.animationspeed / 2).animate({
-							"top": $(document).scrollTop() + topMeasure + 'px',
-							"opacity": 1
-						}, options.animationspeed, unlockModal());
-					}
-					if (options.animation == "fade") {
-						modal.css({
-							'opacity': 0,
-							'visibility': 'visible',
-							'top': $(document).scrollTop() + topMeasure
-						});
-						modalBG.fadeIn(options.animationspeed / 2);
-						modal.delay(options.animationspeed / 2).animate({
-							"opacity": 1
-						}, options.animationspeed, unlockModal());
-					}
 					if (options.animation == "none") {
 						modal.css({
 							'visibility': 'visible',
@@ -97,33 +74,6 @@
 			modal.on('reveal:close', function() {
 				if (!locked) {
 					lockModal();
-					if (options.animation == "fadeAndPop") {
-						modalBG.delay(options.animationspeed).fadeOut(options.animationspeed);
-						modal.animate({
-							"top": $(document).scrollTop() - topOffset + 'px',
-							"opacity": 0
-						}, options.animationspeed / 2, function() {
-							modal.css({
-								'top': topMeasure,
-								'opacity': 1,
-								'visibility': 'hidden'
-							});
-							unlockModal();
-						});
-					}
-					if (options.animation == "fade") {
-						modalBG.delay(options.animationspeed).fadeOut(options.animationspeed);
-						modal.animate({
-							"opacity": 0
-						}, options.animationspeed, function() {
-							modal.css({
-								'opacity': 1,
-								'visibility': 'hidden',
-								'top': topMeasure
-							});
-							unlockModal();
-						});
-					}
 					if (options.animation == "none") {
 						modal.css({
 							'visibility': 'hidden',
@@ -153,7 +103,8 @@
 					"cursor": "pointer"
 				})
 				modalBG.on('click.modalEvent', function() {
-					modal.trigger('reveal:close')
+					modal.trigger('reveal:close');
+					$("p").show();
 				});
 			}
 			$('body').keyup(function(e) {
