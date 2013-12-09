@@ -80,17 +80,15 @@ function calculateSpeedDialSize() {
 
 	var borderWidth = 14;
 	var minEntryWidth = 120 - borderWidth;
-	var adjustedDialWidth = window.innerWidth * 0.01 * dialWidth;
+	var adjustedDialWidth = window.innerWidth * 0.01 * dialWidth |0;
 
 	var entryWidth = adjustedDialWidth / dialColumns - borderWidth;
 	if (entryWidth < minEntryWidth) {
 		entryWidth = minEntryWidth;
 		adjustedDialWidth = (adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
 	}
-	var entryHeight = entryWidth*0.75; // height = 3/4 width
 	$("#dial").css("width", adjustedDialWidth|0 +"px");
-	$("#entry_height").val(entryHeight|0);
-	$("#entry_width").val(entryWidth|0);
+	$("#dial").attr("entry-width", entryWidth|0)
 }
 
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
@@ -149,10 +147,10 @@ function getThumbnailUrl(url) {
 
 // Scales a single speed dial entry to the specified size
 function scaleSpeedDialEntry(entry) {
-	var entryHeight = document.getElementById("entry_height").value;
-	var entryWidth = document.getElementById("entry_width").value;
+	var entryWidth = $("#dial").attr("entry-width");
+	var entryHeight = entryWidth*0.74|0;
 
-	entry.css({"height": entryHeight|0 +"px", "width": entryWidth|0 +"px"});
+	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
 
 	if (entry.attr("id") !== "new_entry") {
 		var title = entry.find(".bookmark").attr("title");
@@ -228,9 +226,9 @@ function updateSpeedDialEntry(bookmark) {
 
 function alignVertical() {
 	if (localStorage.getItem("show_folder_list") === "true") {
-		$("#dial").css("padding", (($(window).height() - $("#dial").height())/2)-60 |0  + "px 0px 0px");
+		$("#dial").css("padding-top", ((window.innerHeight - $("#dial").height())/2)-50|0  + "px");
 	} else {
-		$("#dial").css("padding", ($(window).height() - $("#dial").height() -20) /2 |0 + "px 0px 0px");
+		$("#dial").css("padding-top",  (window.innerHeight - $("#dial").height())/2|0 + "px");
 	}
 }
 
