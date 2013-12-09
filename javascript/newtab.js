@@ -87,10 +87,10 @@ function calculateSpeedDialSize() {
 		entryWidth = minEntryWidth;
 		adjustedDialWidth = (adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
 	}
-	var entryHeight = Math.floor(entryWidth*0.75); // height = 3/4 width
-	$("#dial").css("width", adjustedDialWidth +"px");
-	$("#entry_height").val(entryHeight);
-	$("#entry_width").val(entryWidth);
+	var entryHeight = entryWidth*0.75; // height = 3/4 width
+	$("#dial").css("width", adjustedDialWidth|0 +"px");
+	$("#entry_height").val(entryHeight|0);
+	$("#entry_width").val(entryWidth|0);
 }
 
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
@@ -152,7 +152,7 @@ function scaleSpeedDialEntry(entry) {
 	var entryHeight = document.getElementById("entry_height").value;
 	var entryWidth = document.getElementById("entry_width").value;
 
-	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
+	entry.css({"height": entryHeight|0 +"px", "width": entryWidth|0 +"px"});
 
 	if (entry.attr("id") !== "new_entry") {
 		var title = entry.find(".bookmark").attr("title");
@@ -164,8 +164,8 @@ function scaleSpeedDialEntry(entry) {
 		entry.find(".title").text(title);
 	}
 
-	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5 +"px", "top": entryWidth*0.05 +"px" });
-	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3 +"px", "top": entryWidth*0.18 +"px" });
+	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0 +"px", "top": entryWidth*0.05|0 +"px" });
+	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3|0 +"px", "top": entryWidth*0.18|0 +"px" });
 }
 
 function showBookmarkEntryForm(heading, title, url, target) {
@@ -228,9 +228,9 @@ function updateSpeedDialEntry(bookmark) {
 
 function alignVertical() {
 	if (localStorage.getItem("show_folder_list") === "true") {
-		$("#dial").css("padding", (Math.floor(($(window).height() - $("#dial").height())/2)-60) + "px 0px 0px");
+		$("#dial").css("padding", (($(window).height() - $("#dial").height())/2)-60 |0  + "px 0px 0px");
 	} else {
-		$("#dial").css("padding", (Math.floor($(window).height() - $("#dial").height() - 20)/2) + "px 0px 0px");
+		$("#dial").css("padding", ($(window).height() - $("#dial").height() -20) /2 |0 + "px 0px 0px");
 	}
 }
 
