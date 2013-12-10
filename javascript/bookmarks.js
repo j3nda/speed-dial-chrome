@@ -43,14 +43,17 @@ function isValidUrl(url) {
 // Deletes a bookmarks and removes it from the speed dial
 function removeBookmark(id) {
 	chrome.bookmarks.remove(id, function() {
-		createSpeedDial(getStartingFolder());
+		$("#" + id).remove();
+		alignVertical();
 	});
 }
 
 // Deletes an entire folder tree and removes it from the speed dial
 function removeFolder(id) {
 	chrome.bookmarks.removeTree(id, function() {
-		createSpeedDial(getStartingFolder());
+		$("#" + id).remove();
+		generateFolderList();
+		alignVertical();
 	});
 }
 

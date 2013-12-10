@@ -112,9 +112,14 @@ function createSpeedDial(folderId) {
 			addSpeedDialEntry(folder.folderNode.children[i], i+1);
 		}
 
-		// Only adds the + button to the dom if enabled
+		// Adds the + button to the dom only if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
 			addNewEntryButton();
+		}
+
+		// Show the options gear icon only if enabled
+		if (localStorage.getItem("show_options_gear") === "true") {
+			$("#content").append('<div id="options"><a class="foundicon-settings" href="options.html" title="Options"></a></div>');
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
@@ -173,7 +178,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find(".title").val(title);
 	form.find(".url").val(url);
 	form.find(".icon").val(JSON.parse(localStorage.getItem("icon_urls"))[url]);
-	form.find(".target").val(target);
+	form.attr("target", target);
 
 	//Selector to hide URL & custom icon fields when editing a folder name
 	if (!$("h1").text().indexOf("Edit Folder")){
@@ -243,7 +248,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	$("#bookmark_form button").click(function() {
-		var target = $("#bookmark_form .target").val();
+		var target = $("#bookmark_form").attr("target");
 		var title = $("#bookmark_form .title").val();
 		var url = $("#bookmark_form .url").val();
 
@@ -264,6 +269,10 @@ document.addEventListener("DOMContentLoaded", function() {
 					window.location = $('.entry[index="' + key + '"]').find(".bookmark").attr("href");
 				}
 			}
+			// Navigates to options page when letter "o"(options) or "s"(settings) is pressed.
+			if (key === "o" || key === "s") {
+				window.location = "options.html";
+			}
 		}
 	});
 
@@ -276,7 +285,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	// Change the current dial if the page hash changes
-	$(window).on("hashchange", function(folderId) {
+	$(window).on("hashchange", function() {
 		setCurrentFolder(getStartingFolder());
 	});
 });

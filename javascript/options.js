@@ -1,17 +1,18 @@
 // Repopulate form with previously selected options
 function restoreOptions() {
-	$("#background_color").val(localStorage.getItem("background_color"));
-	$("#default_folder_id").val(localStorage.getItem("default_folder_id"));
 	$("#dial_columns").val(localStorage.getItem("dial_columns"));
 	$("#dial_width").val(localStorage.getItem("dial_width"));
-	$("#force_http")[0].checked = localStorage.getItem("force_http") === "true";
-	$("#enable_sync")[0].checked = localStorage.getItem("enable_sync") === "true";
-	$("#drag_and_drop")[0].checked = localStorage.getItem("drag_and_drop") === "true";
-	$("#show_advanced")[0].checked = localStorage.getItem("show_advanced") === "true";
+	$("#default_folder_id").val(localStorage.getItem("default_folder_id"));
+	$("#background_color").val(localStorage.getItem("background_color"));
 	$("#show_new_entry")[0].checked = localStorage.getItem("show_new_entry") === "true";
 	$("#show_folder_list")[0].checked = localStorage.getItem("show_folder_list") === "true";
+	$("#drag_and_drop")[0].checked = localStorage.getItem("drag_and_drop") === "true";
+	$("#show_options_gear")[0].checked = localStorage.getItem("show_options_gear") === "true";
 	$("#show_subfolder_icons")[0].checked = localStorage.getItem("show_subfolder_icons") === "true";
 	$("#folder_color").val(localStorage.getItem("folder_color"));
+	$("#enable_sync")[0].checked = localStorage.getItem("enable_sync") === "true";
+	$("#show_advanced")[0].checked = localStorage.getItem("show_advanced") === "true";
+	$("#force_http")[0].checked = localStorage.getItem("force_http") === "true";
 	$("#thumbnailing_service").val(localStorage.getItem("thumbnailing_service"));
 }
 
@@ -36,6 +37,7 @@ function saveOptions() {
 	saveCheckbox("show_advanced");
 	saveCheckbox("show_new_entry");
 	saveCheckbox("show_folder_list");
+	saveCheckbox("show_options_gear");
 	saveCheckbox("show_subfolder_icons");
 
 	if (localStorage.getItem("enable_sync") === "true") {
@@ -67,13 +69,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	$("#background_color").val(localStorage.getItem("background_color"));
 	$("#background_color").on("change", function() {
 		$("body").css("background-color", $("#background_color").val());
-	});
-
-	if (localStorage.getItem("show_subfolder_icons") === "false") {
-		$(".folder_color_row").hide();
-	}
-	$("#show_subfolder_icons").click(function() {
-		$(".folder_color_row").toggle();
 	});
 
 	if (localStorage.getItem("show_advanced") === "true") {
