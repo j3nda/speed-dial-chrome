@@ -1,5 +1,4 @@
 body {
-	background: #CCC;
 	color: #444;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	margin: 0;
@@ -17,7 +16,7 @@ h1 {
 }
 
 #content {
-	background: #FFF;
+	background: #fff;
 	margin: 0 auto;
 	padding: 30px;
 	text-align: center;
@@ -61,15 +60,15 @@ td {
 	width: 90%;
 }
 
-#reset_to_default {
+.reset {
 	font-family: sans-serif;
-    background-color: #FF3030;
-    border-color: #FF3030;
+    background-color: #ff3030;
+    border-color: #ff3030;
 	font-size: medium;
 	font-weight: bold;
 }
 
-#reset_to_default:hover {
+.reset:hover {
 	box-shadow:0px 0px 10px #800000;
 }
 

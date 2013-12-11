@@ -1,6 +1,6 @@
 function addNewEntryButton() {
 	$("#dial").append('<div class="entry" id="new_entry" title="Add New"><div><i class="foundicon-plus"></i></div></div>');
-	$("#new_entry").click(function() {
+	$("#new_entry").on("click", function() {
 		showBookmarkEntryForm("New Bookmark or Folder", "", "", "");
 	});
 	scaleSpeedDialEntry($("#new_entry"));
@@ -20,11 +20,11 @@ function addSpeedDialEntry(bookmark, index) {
 						'</div>');
 
 		var entry = $("#" + bookmark.id);
-		entry.find(".edit").click(function(event) {
+		entry.find(".edit").on("click", function(event) {
 			event.preventDefault();
 			showBookmarkEntryForm("Edit Bookmark: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
 		});
-		entry.find(".remove").click(function(event) {
+		entry.find(".remove").on("click", function(event) {
 			event.preventDefault();
 			if (confirm("Are you sure you want to remove this bookmark?")) {
 				removeBookmark(bookmark.id);
@@ -34,7 +34,7 @@ function addSpeedDialEntry(bookmark, index) {
 		});
 
 		//If custom icon for the URL exists, evaluates to true & centers it on the dial
-		if (JSON.parse(localStorage.getItem("icon_urls"))[bookmark.url]) {
+		if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
 			entry.find(".image").css({
 				"background-size": "contain",
 				"background-position": "center"
@@ -56,11 +56,11 @@ function addSpeedDialEntry(bookmark, index) {
 							'</div>');
 
 			entry = $("#" + bookmark.id);
-			entry.find(".edit").click(function(event) {
+			entry.find(".edit").on("click", function(event) {
 				event.preventDefault();
 				showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
 			});
-			entry.find(".remove").click(function(event) {
+			entry.find(".remove").on("click", function(event) {
 				event.preventDefault();
 				if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
 					removeFolder(bookmark.id);
@@ -140,8 +140,8 @@ function createSpeedDial(folderId) {
 }
 
 function getThumbnailUrl(url) {
-	if (JSON.parse(localStorage.getItem("icon_urls"))[url]) {
-		return JSON.parse(localStorage.getItem("icon_urls"))[url];
+	if (JSON.parse(localStorage.getItem("custom_icon_data"))[url]) {
+		return JSON.parse(localStorage.getItem("custom_icon_data"))[url];
 	} else {
 		if (localStorage.getItem("force_http") === "true") {
 			url = url.replace("https", "http");
@@ -177,7 +177,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find("h1").text(heading);
 	form.find(".title").val(title);
 	form.find(".url").val(url);
-	form.find(".icon").val(JSON.parse(localStorage.getItem("icon_urls"))[url]);
+	form.find(".icon").val(JSON.parse(localStorage.getItem("custom_icon_data"))[url]);
 	form.attr("target", target);
 
 	//Selector to hide URL & custom icon fields when editing a folder name
@@ -195,7 +195,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 }
 
 function updateCustomIcon(url, old_url) {
-	var icon_object = JSON.parse(localStorage.getItem("icon_urls"));
+	var icon_object = JSON.parse(localStorage.getItem("custom_icon_data"));
 	var custom_icon = $(".icon").val();
 
 	//Creates a new key:value pair and merges it into JSON from localStorage
@@ -214,7 +214,7 @@ function updateCustomIcon(url, old_url) {
 		delete temp_object[old_url];
 	}
 
-	localStorage.setItem("icon_urls", JSON.stringify(temp_object));
+	localStorage.setItem("custom_icon_data", JSON.stringify(temp_object));
 	if (localStorage.getItem("enable_sync") === "true") {
 		syncToStorage();
 	}
@@ -241,13 +241,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	initialize();
 	createSpeedDial(getStartingFolder());
 
-	$("#bookmark_form .title, #bookmark_form .url, #bookmark_form .icon").keyup(function(e) {
+	$("#bookmark_form .title, #bookmark_form .url, #bookmark_form .icon").on("keydown", function(e) {
 		if (e.which === 13) {
 			$("#bookmark_form button").trigger("click");
 		}
 	});
 
-	$("#bookmark_form button").click(function() {
+	$("#bookmark_form button").on("click", function() {
 		var target = $("#bookmark_form").attr("target");
 		var title = $("#bookmark_form .title").val();
 		var url = $("#bookmark_form .url").val();

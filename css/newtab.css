@@ -1,5 +1,4 @@
 body {
-	background: #CCC;
 	color: #444;
 	font-family: "Trebuchet MS", Helvetica, sans-serif;
 	font-size: 0.8em;
@@ -119,7 +118,7 @@ td {
 
 #options a {
 	font-size: 5em;
-	color: #AAA;
+	color: #aaa;
 	text-decoration: none;
 }
 

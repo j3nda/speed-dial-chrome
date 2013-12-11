@@ -109,16 +109,20 @@
 						</td>
 					</tr>
 					<tr>
-						<td class="field"><label for="thumbnail_json">Custom Icon JSON Settings</label></td>
+						<td class="field"><label for="custom_icon_data">Custom Icon JSON Settings</label></td>
 						<td class="value">
 							<p>This raw JSON string must be valid! <br>
 							This shows your custom icon settings so you can copy & paste between computers</p>
-							<textarea id="thumbnail_json" rows="4" cols="50" ></textarea>
+							<textarea id="custom_icon_data" rows="4" cols="50" ></textarea>
 						</td>
 					</tr>
 					<tr>
-						<td class="field"><label for="reset_to_default">Reset ALL Settings to Default Values</label></td>
-						<td class="value"><input type="button" id="reset_to_default" value="Reset"></td>
+						<td class="field">Reset Local Settings to Default Values</td>
+						<td class="value"><input type="button" class="reset" id="reset_local_settings" value="Reset Local Values"></td>
+					</tr>
+					<tr>
+						<td class="field">Delete Synchronized Data from Server</td>
+						<td class="value"><input type="button" class="reset" id="reset_synced_settings" value="Reset Sync Data"></td>
 					</tr>
 				</table>
 			</div>

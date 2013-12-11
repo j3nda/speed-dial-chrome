@@ -83,6 +83,7 @@ function setCurrentFolder(folderId) {
 // Create default localStorage values if they don't already exist
 function createDefaults() {
 	defaultStorage("background_color", "#cccccc");
+	defaultStorage("custom_icon_data", "{}");
 	defaultStorage("default_folder_id", 1);
 	defaultStorage("dial_columns", 6);
 	defaultStorage("dial_width", 70);
@@ -90,7 +91,6 @@ function createDefaults() {
 	defaultStorage("enable_sync", "false");
 	defaultStorage("folder_color", "#888888");
 	defaultStorage("force_http", "true");
-	defaultStorage("icon_urls", "{}");
 	defaultStorage("show_advanced", "false");
 	defaultStorage("show_folder_list", "true");
 	defaultStorage("show_new_entry", "true");
