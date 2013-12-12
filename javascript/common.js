@@ -1,10 +1,3 @@
-// Create and default a localStorage parameter if it doesn't already exist
-function defaultStorage(name, value) {
-	if (localStorage.getItem(name) === null || localStorage.getItem(name) === undefined) {
-		localStorage.setItem(name, value);
-	}
-}
-
 // Generates a list of all folders under chrome bookmarks
 function generateFolderList() {
 	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname == "/options.html") {
@@ -82,21 +75,29 @@ function setCurrentFolder(folderId) {
 
 // Create default localStorage values if they don't already exist
 function createDefaults() {
-	defaultStorage("background_color", "#cccccc");
-	defaultStorage("custom_icon_data", "{}");
-	defaultStorage("default_folder_id", 1);
-	defaultStorage("dial_columns", 6);
-	defaultStorage("dial_width", 70);
-	defaultStorage("drag_and_drop", "true");
-	defaultStorage("enable_sync", "false");
-	defaultStorage("folder_color", "#888888");
-	defaultStorage("force_http", "true");
-	defaultStorage("show_advanced", "false");
-	defaultStorage("show_folder_list", "true");
-	defaultStorage("show_new_entry", "true");
-	defaultStorage("show_options_gear", "true");
-	defaultStorage("show_subfolder_icons", "true");
-	defaultStorage("thumbnailing_service", "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]");
+	var default_values = {
+		background_color : "#cccccc",
+		custom_icon_data : "{}",
+		default_folder_id : 1,
+		dial_columns : 6,
+		dial_width : 70,
+		drag_and_drop : "true",
+		enable_sync : "false",
+		folder_color : "#888888",
+		force_http : "true",
+		show_advanced : "false",
+		show_folder_list : "true",
+		show_new_entry : "true",
+		show_options_gear : "true",
+		show_subfolder_icons : "true",
+		thumbnailing_service : "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]"
+	}
+	for (var name in default_values) {
+		// Create and default a localStorage parameter if it doesn't already exist
+		if (localStorage.getItem(name) === null) {
+			localStorage.setItem(name, default_values[name]);
+		}
+	}
 }
 
 // Initialisation routines for all pages

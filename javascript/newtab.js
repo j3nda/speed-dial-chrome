@@ -10,7 +10,7 @@ function addSpeedDialEntry(bookmark, index) {
 	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
 		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
 							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
-								'<div class="imgwrapper"><div class="image" style="background-image:url(' + getThumbnailUrl(bookmark.url) + ')"></div></div>' +
+								'<div class="image"></div>' +
 								'<table class="details"><tbody><tr>' +
 								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
 								'<td class="title">' + bookmark.title + '</td>' +
@@ -20,6 +20,7 @@ function addSpeedDialEntry(bookmark, index) {
 						'</div>');
 
 		var entry = $("#" + bookmark.id);
+		entry.find(".image").css("background-image", "url(" + getThumbnailUrl(bookmark.url) + ")");
 		entry.find(".edit").on("click", function(event) {
 			event.preventDefault();
 			showBookmarkEntryForm("Edit Bookmark: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
@@ -46,7 +47,7 @@ function addSpeedDialEntry(bookmark, index) {
 		} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
 			$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
 								'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
-									'<div class="imgwrapper"><span class="foldericon foundicon-folder"></span></div>' +
+									'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
 									'<table class="details"><tbody><tr>' +
 										'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
 										'<td class="title"><div>' + bookmark.title + '</div></td>' +
@@ -163,7 +164,7 @@ function scaleSpeedDialEntry(entry) {
 		if (title.length > titleLimit) {
 			title = title.substr(0, titleLimit - 3) + "...";
 		}
-		entry.find(".imgwrapper").css("height", entryHeight - 20 +"px");
+		entry.find(".image").css("height", entryHeight - 20 +"px");
 		entry.find(".title").text(title);
 	}
 
