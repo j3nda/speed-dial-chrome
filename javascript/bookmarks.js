@@ -6,8 +6,7 @@
 function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 	if (hash !== undefined) {
-		// hash.parentId needs to be set to the default folder to add new entries to the default folder
-		hash.parentId = window.location.hash.substring(1) || localStorage.getItem("default_folder_id");
+		hash.parentId = $("#dial").attr("folder");
 		chrome.bookmarks.create(hash, function(result) {
 			createSpeedDial(getStartingFolder());
 		});

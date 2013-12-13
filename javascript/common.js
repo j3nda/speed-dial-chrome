@@ -47,17 +47,7 @@ function generateFolderList() {
 }
 
 function getStartingFolder() {
-	var folderId = "1";
-	var defaultFolderId = localStorage.getItem("default_folder_id");
-
-	if (defaultFolderId !== undefined || defaultFolderId > 1) {
-		folderId = defaultFolderId;
-		try {
-			chrome.bookmarks.get(folderId, function() {});
-		} catch (e) {
-			folderId = "1";
-		}
-	}
+	var folderId = localStorage.getItem("default_folder_id");
 
 	// Allow the url to specify the folder as well
 	if (window.location.hash !== "") {
@@ -67,30 +57,24 @@ function getStartingFolder() {
 	return folderId;
 }
 
-// Draws the new Dial and changes the selector menu
-function setCurrentFolder(folderId) {
-	createSpeedDial(folderId);
-	$("#folder_list").val(folderId);
-}
-
 // Create default localStorage values if they don't already exist
 function createDefaults() {
 	var default_values = {
-		background_color : "#cccccc",
-		custom_icon_data : "{}",
-		default_folder_id : 1,
-		dial_columns : 6,
-		dial_width : 70,
-		drag_and_drop : "true",
-		enable_sync : "false",
-		folder_color : "#888888",
-		force_http : "true",
-		show_advanced : "false",
-		show_folder_list : "true",
-		show_new_entry : "true",
-		show_options_gear : "true",
-		show_subfolder_icons : "true",
-		thumbnailing_service : "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]"
+		background_color: "#cccccc",
+		custom_icon_data: "{}",
+		default_folder_id: 1,
+		dial_columns: 6,
+		dial_width: 70,
+		drag_and_drop: "true",
+		enable_sync: "false",
+		folder_color: "#888888",
+		force_http: "true",
+		show_advanced: "false",
+		show_folder_list: "true",
+		show_new_entry: "true",
+		show_options_gear: "true",
+		show_subfolder_icons: "true",
+		thumbnailing_service: "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]"
 	}
 	for (var name in default_values) {
 		// Create and default a localStorage parameter if it doesn't already exist
@@ -103,5 +87,5 @@ function createDefaults() {
 // Initialisation routines for all pages
 function initialize() {
 	createDefaults();
-	$("body").css("background", localStorage.getItem("background_color"));
+	$("body").css("background-color", localStorage.getItem("background_color"));
 }

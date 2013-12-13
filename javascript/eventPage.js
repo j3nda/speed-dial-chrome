@@ -4,6 +4,7 @@ function restoreFromSync() {
 		Object.keys(sync_object).forEach(function(key) {
 			localStorage.setItem(key, sync_object[key]);
 		});
+		window.location.reload();
 	});
 }
 
@@ -20,6 +21,5 @@ function syncToStorage() {
 if (localStorage.getItem("enable_sync") === "true") {
 	chrome.storage.onChanged.addListener(function(changes, sync) {
 		restoreFromSync();
-		window.location.reload();
 	});
 }

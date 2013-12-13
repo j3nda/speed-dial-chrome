@@ -37,7 +37,6 @@ body {
 }
 
 .image {
-    height: inherit;
 	background-size: cover;
 	background-repeat: no-repeat;
 	border-top-left-radius: 4px;

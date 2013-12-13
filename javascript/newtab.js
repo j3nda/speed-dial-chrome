@@ -44,32 +44,32 @@ function addSpeedDialEntry(bookmark, index) {
 
 		scaleSpeedDialEntry(entry);
 
-		} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
-			$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
-								'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
-									'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
-									'<table class="details"><tbody><tr>' +
-										'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
-										'<td class="title"><div>' + bookmark.title + '</div></td>' +
-										'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td></tr></tbody>' +
-									'</table>' +
-								'</a>' +
-							'</div>');
+	} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
+							'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
+								'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
+								'<table class="details"><tbody><tr>' +
+									'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
+									'<td class="title"><div>' + bookmark.title + '</div></td>' +
+									'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td></tr></tbody>' +
+								'</table>' +
+							'</a>' +
+						'</div>');
 
-			entry = $("#" + bookmark.id);
-			entry.find(".edit").on("click", function(event) {
-				event.preventDefault();
-				showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
-			});
-			entry.find(".remove").on("click", function(event) {
-				event.preventDefault();
-				if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
-					removeFolder(bookmark.id);
-				}
-			});
-			entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
+		entry = $("#" + bookmark.id);
+		entry.find(".edit").on("click", function(event) {
+			event.preventDefault();
+			showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
+		});
+		entry.find(".remove").on("click", function(event) {
+			event.preventDefault();
+			if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
+				removeFolder(bookmark.id);
+			}
+		});
+		entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
 
-			scaleSpeedDialEntry(entry);
+		scaleSpeedDialEntry(entry);
 	}
 }
 
@@ -118,8 +118,8 @@ function createSpeedDial(folderId) {
 			addNewEntryButton();
 		}
 
-		// Show the options gear icon only if enabled
-		if (localStorage.getItem("show_options_gear") === "true") {
+		// Show the options gear icon only if enabled and doesn't already exist
+		if (localStorage.getItem("show_options_gear") === "true" && $("#options").length === 0) {
 			$("#content").append('<div id="options"><a class="foundicon-settings" href="options.html" title="Options"></a></div>');
 		}
 
@@ -154,7 +154,7 @@ function getThumbnailUrl(url) {
 // Scales a single speed dial entry to the specified size
 function scaleSpeedDialEntry(entry) {
 	var entryWidth = $("#dial").attr("entry-width");
-	var entryHeight = entryWidth*0.74|0;
+	var entryHeight = entryWidth*0.75|0;
 
 	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
 
@@ -231,6 +231,7 @@ function updateSpeedDialEntry(bookmark) {
 }
 
 function alignVertical() {
+	$("#dial").css("padding-top", "");
 	if (localStorage.getItem("show_folder_list") === "true") {
 		$("#dial").css("padding-top", ((window.innerHeight - $("#dial").height())/2)-50|0  + "px");
 	} else {
@@ -287,6 +288,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Change the current dial if the page hash changes
 	$(window).on("hashchange", function() {
-		setCurrentFolder(getStartingFolder());
+		var newFolder = getStartingFolder();
+		createSpeedDial(newFolder);
+		$("#folder_list").val(newFolder);
 	});
 });

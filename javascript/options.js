@@ -73,13 +73,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$("#enable_sync").on("click", function() {
 		if ($("#enable_sync")[0].checked) {
-			restoreFromSync();
 			chrome.storage.sync.getBytesInUse(null, function (bytes) {
 				if (bytes > 0) {
 					if (confirm("You have previously synchronized data!!\n"+
 					"Do you want to overwrite your current local settings with your previously saved remote settings?")) {
 						restoreFromSync();
-						window.location.reload();
 					}
 				}
 			});
