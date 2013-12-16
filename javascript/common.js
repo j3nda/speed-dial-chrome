@@ -10,9 +10,9 @@ function generateFolderList() {
 			openList.push(rootNode[0].children[1]);
 
 			var node = openList.pop();
-			while (node !== null && node !== undefined) {
+			while (node !== undefined) {
 				if (!node.hasOwnProperty("url")) {
-					if (node.path === undefined || node.parentId === "0") {
+					if (node.parentId === "0") {
 						node.path = ""; // Root element, so it has no parent and we don't need to show the path
 					}
 					node.path += node.title;

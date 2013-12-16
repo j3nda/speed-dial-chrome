@@ -190,7 +190,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 
 	form.reveal();
 	form.find(".title").focus();
-	form.on("reveal:close", function(){
+	form.on("reveal:close", function() {
 		$("p").show();
 	});
 }
@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		$("#folder_list").val(newFolder);
 	});
 
-	// Load the .css that refrences the .woff font file asynchronously in ajax request, halves render speed of dial
+	// Load the .css that refrences the .woff font file asynchronously in an ajax request, halves render speed of dial
 	$.ajax({ success: function() {
 		$("head").append('<link type="text/css" rel="stylesheet" href="css/general_foundicons.css" />');
 	}});
