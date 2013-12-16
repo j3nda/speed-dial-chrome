@@ -8,6 +8,7 @@ function addBookmark(title, url) {
 	if (hash !== undefined) {
 		hash.parentId = $("#dial").attr("folder");
 		chrome.bookmarks.create(hash, function(result) {
+			generateFolderList();
 			createSpeedDial(getStartingFolder());
 		});
 	} else {
@@ -42,17 +43,15 @@ function isValidUrl(url) {
 // Deletes a bookmarks and removes it from the speed dial
 function removeBookmark(id) {
 	chrome.bookmarks.remove(id, function() {
-		$("#" + id).remove();
-		alignVertical();
+		createSpeedDial(getStartingFolder());
 	});
 }
 
 // Deletes an entire folder tree and removes it from the speed dial
 function removeFolder(id) {
 	chrome.bookmarks.removeTree(id, function() {
-		$("#" + id).remove();
 		generateFolderList();
-		alignVertical();
+		createSpeedDial(getStartingFolder());
 	});
 }
 

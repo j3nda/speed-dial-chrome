@@ -20,7 +20,7 @@ function addSpeedDialEntry(bookmark, index) {
 						'</div>');
 
 		var entry = $("#" + bookmark.id);
-		entry.find(".image").css("background-image", "url(" + getThumbnailUrl(bookmark.url) + ")");
+		entry.find(".image").css("background-image", "url(" + getThumbnailUrl(bookmark) + ")");
 		entry.find(".edit").on("click", function(event) {
 			event.preventDefault();
 			showBookmarkEntryForm("Edit Bookmark: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
@@ -94,8 +94,9 @@ function calculateSpeedDialSize() {
 
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
-	// Removes all entries under the current view before displaying new folderId
-	$("#dial").empty();
+	// Removes all entries under the current view and sets the new folderId
+	$("#dial").attr("folder", folderId).html("");
+	calculateSpeedDialSize();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		var folder = {
@@ -103,10 +104,6 @@ function createSpeedDial(folderId) {
 			"folderName": node[0].title,
 			"folderNode": node[0]
 		};
-
-		$("#dial").attr("folder", folderId);
-		generateFolderList();
-		calculateSpeedDialSize();
 
 		// Loop over bookmarks in folder and add to the dial
 		for (var i = 0; i < folder.folderNode.children.length; i++) {
@@ -140,14 +137,14 @@ function createSpeedDial(folderId) {
 	});
 }
 
-function getThumbnailUrl(url) {
-	if (JSON.parse(localStorage.getItem("custom_icon_data"))[url]) {
-		return JSON.parse(localStorage.getItem("custom_icon_data"))[url];
+function getThumbnailUrl(bookmark) {
+	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
+		return JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url];
 	} else {
 		if (localStorage.getItem("force_http") === "true") {
-			url = url.replace("https", "http");
+			bookmark.url = bookmark.url.replace("https", "http");
 		}
-		return localStorage.getItem("thumbnailing_service").replace("[URL]", url);
+		return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
 	}
 }
 
@@ -158,14 +155,14 @@ function scaleSpeedDialEntry(entry) {
 
 	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
 
-	if (entry.attr("id") !== "new_entry") {
+	if (entry[0].id !== "new_entry") {
 		var title = entry.find(".bookmark").attr("title");
 		var titleLimit = entryWidth / 10;
 		if (title.length > titleLimit) {
 			title = title.substr(0, titleLimit - 3) + "...";
 		}
-		entry.find(".image").css("height", entryHeight - 20 +"px");
 		entry.find(".title").text(title);
+		entry.find(".image").css("height", entryHeight - 20 +"px");
 	}
 
 	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0 +"px", "top": entryWidth*0.05|0 +"px" });
@@ -181,18 +178,21 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find(".icon").val(JSON.parse(localStorage.getItem("custom_icon_data"))[url]);
 	form.attr("target", target);
 
-	//Selector to hide URL & custom icon fields when editing a folder name
+	// Selectors to hide URL & custom icon fields when editing a folder name
 	if (!$("h1").text().indexOf("Edit Folder")){
-		$("h1").parent().find("p").eq(1).hide();
-		$("h1").parent().find("p").eq(2).hide();
+		form.find("p").eq(1).hide();
+		form.find("p").eq(2).hide();
 	}
-	//Selector to hide the cusom icon field adding new entries
+	// Selectors to hide the cusom icon field when adding a new entry
 	if (!$("h1").text().indexOf("New")) {
-		$("h1").parent().find("p").eq(2).hide()
+		form.find("p").eq(2).hide()
 	}
 
 	form.reveal();
 	form.find(".title").focus();
+	form.on("reveal:close", function(){
+		$("p").show();
+	});
 }
 
 function updateCustomIcon(url, old_url) {
@@ -292,4 +292,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		createSpeedDial(newFolder);
 		$("#folder_list").val(newFolder);
 	});
+
+	// Load the .css that refrences the .woff font file asynchronously in ajax request, halves render speed of dial
+	$.ajax({ success: function() {
+		$("head").append('<link type="text/css" rel="stylesheet" href="css/general_foundicons.css" />');
+	}});
 });

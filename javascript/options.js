@@ -1,8 +1,8 @@
 // Repopulate form with previously selected options
 function restoreOptions() {
 	$("#background_color").val(localStorage.getItem("background_color"));
-	$("#custom_icon_data").val(localStorage.getItem("custom_icon_data"))
-	$("#default_folder_id").val(localStorage.getItem("default_folder_id"));
+	$("#custom_icon_data").val(localStorage.getItem("custom_icon_data"));
+	$("#folder_list").val(localStorage.getItem("default_folder_id"));
 	$("#dial_columns").val(localStorage.getItem("dial_columns"));
 	$("#dial_width").val(localStorage.getItem("dial_width"));
 	$("#drag_and_drop")[0].checked = localStorage.getItem("drag_and_drop") === "true";
@@ -20,7 +20,7 @@ function restoreOptions() {
 // Write selected options back to local storage
 function saveOptions() {
 	localStorage.setItem("background_color", $("#background_color").val());
-	localStorage.setItem("custom_icon_data", JSON.stringify(JSON.parse($("textarea").val())));
+	localStorage.setItem("custom_icon_data", JSON.stringify(JSON.parse($("#custom_icon_data").val())));
 	localStorage.setItem("default_folder_id", $("#folder_list").val());
 	localStorage.setItem("dial_columns", $("#dial_columns").val());
 	localStorage.setItem("dial_width", $("#dial_width").val());
@@ -45,7 +45,6 @@ function saveOptions() {
 document.addEventListener("DOMContentLoaded", function() {
 	initialize();
 	restoreOptions();
-	generateFolderList();
 
 	$("#save").on("click", function() {
 		try { // Just validate and make sure everything is good to save
@@ -64,15 +63,14 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (e.which === 27) {
 			window.location = "newtab.html";
 		}
-	});	
+	});
 
-	$("#background_color").val(localStorage.getItem("background_color"));
 	$("#background_color").on("change", function() {
 		$("body").css("background-color", $("#background_color").val());
 	});
 
 	$("#enable_sync").on("click", function() {
-		if ($("#enable_sync")[0].checked) {
+		if (this.checked) {
 			chrome.storage.sync.getBytesInUse(null, function (bytes) {
 				if (bytes > 0) {
 					if (confirm("You have previously synchronized data!!\n"+
@@ -88,7 +86,11 @@ document.addEventListener("DOMContentLoaded", function() {
 		$("#advanced").show();
 	}
 	$("#show_advanced").on("click", function() {
-		$("#advanced").toggle();
+		if (this.checked) {
+			$("#advanced").show();
+		} else {
+			$("#advanced").hide();
+		}
 	});
 
 	$("#custom_icon_data").on("keydown", function (e) {

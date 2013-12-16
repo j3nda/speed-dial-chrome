@@ -127,6 +127,7 @@ td {
 	text-shadow: 0px 0px 10px rgba(53, 191, 255, 0.6);
 }
 
-#folder select {
+#folder_list {
+	display: none;
 	margin: 20px 0 10px 0;
 }

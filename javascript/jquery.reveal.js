@@ -104,7 +104,6 @@
 				})
 				modalBG.on('click.modalEvent', function() {
 					modal.trigger('reveal:close');
-					$("p").show();
 				});
 			}
 			$('body').on("keyup", function(e) {

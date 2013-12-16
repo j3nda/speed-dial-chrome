@@ -10,17 +10,19 @@ h1 {
 	width: 50%;
 }
 
-#advanced {
-	display: none;
-	margin-top: 3.5em;
-}
-
 #content {
+	min-width: 40em;
+	max-width: 55em;
 	background: #fff;
 	margin: 0 auto;
 	padding: 30px;
 	text-align: center;
-	width: 55em;
+	width: 65%;
+}
+
+#advanced {
+	display: none;
+	margin-top: 3.5em;
 }
 
 .form {
@@ -57,7 +59,7 @@ td {
 }
 
 #thumbnailing_service {
-	width: 90%;
+	width: 80%;
 }
 
 .reset {

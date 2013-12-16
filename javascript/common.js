@@ -1,6 +1,6 @@
 // Generates a list of all folders under chrome bookmarks
 function generateFolderList() {
-	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname == "/options.html") {
+	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname === "/options.html") {
 		var folderList = [];
 		var openList = [];
 
@@ -33,11 +33,11 @@ function generateFolderList() {
 
 			var folder_id = getStartingFolder();
 			var folderListHtml = "";
+
 			for (var item in folderList) {
-				var selected = (folderList[item].id === folder_id) ? ' selected="selected"' : '';
-				folderListHtml += '<option' + selected + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
+				folderListHtml += '<option' + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
 			}
-			$("#folder").html('<select id="folder_list">' + folderListHtml + '</select>');
+			$("#folder_list").html(folderListHtml).val(folder_id).show();
 
 			$("#folder_list").on("change", function() {
 				window.location.hash = $("#folder_list").val();
@@ -86,6 +86,7 @@ function createDefaults() {
 
 // Initialisation routines for all pages
 function initialize() {
+	document.body.style.backgroundColor = localStorage.getItem("background_color");
 	createDefaults();
-	$("body").css("background-color", localStorage.getItem("background_color"));
+	generateFolderList();
 }
