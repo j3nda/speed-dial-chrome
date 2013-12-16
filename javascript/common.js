@@ -86,7 +86,7 @@ function createDefaults() {
 
 // Initialisation routines for all pages
 function initialize() {
-	document.body.style.backgroundColor = localStorage.getItem("background_color");
 	createDefaults();
+	document.body.style.backgroundColor = localStorage.getItem("background_color");
 	generateFolderList();
 }
