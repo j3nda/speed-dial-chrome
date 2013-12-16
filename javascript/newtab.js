@@ -8,7 +8,7 @@ function addNewEntryButton() {
 
 function addSpeedDialEntry(bookmark) {
 	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
-		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + ($(".entry").length+1) + '">' +
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
 								'<div class="image"></div>' +
 								'<table class="details"><tbody><tr>' +
@@ -45,7 +45,7 @@ function addSpeedDialEntry(bookmark) {
 		scaleSpeedDialEntry(entry);
 
 	} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
-		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + ($(".entry").length+1) + '">' +
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 							'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 								'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
 								'<table class="details"><tbody><tr>' +
@@ -267,8 +267,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (document.activeElement.type !== "text") {
 			var key = String.fromCharCode(e.which);
 			if (key >= 1 && key <= 9) {
-				if ($('.entry[index="' + key + '"]').length !== 0) {
-					window.location = $('.entry[index="' + key + '"]').find(".bookmark").attr("href");
+				if ($('.bookmark').eq(key-1).size() !== 0) {
+					window.location = $('.bookmark').eq(key-1).attr("href");
 				}
 			}
 			// Navigates to options page when letter "o"(options) or "s"(settings) is pressed.
