@@ -6,9 +6,9 @@ function addNewEntryButton() {
 	scaleSpeedDialEntry($("#new_entry"));
 }
 
-function addSpeedDialEntry(bookmark, index) {
+function addSpeedDialEntry(bookmark) {
 	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
-		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + ($(".entry").length+1) + '">' +
 							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
 								'<div class="image"></div>' +
 								'<table class="details"><tbody><tr>' +
@@ -45,7 +45,7 @@ function addSpeedDialEntry(bookmark, index) {
 		scaleSpeedDialEntry(entry);
 
 	} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
-		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + index + '">' +
+		$("#dial").append('<div class="entry" id="' + bookmark.id + '" index="' + ($(".entry").length+1) + '">' +
 							'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 								'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
 								'<table class="details"><tbody><tr>' +
@@ -107,7 +107,7 @@ function createSpeedDial(folderId) {
 
 		// Loop over bookmarks in folder and add to the dial
 		for (var i = 0; i < folder.folderNode.children.length; i++) {
-			addSpeedDialEntry(folder.folderNode.children[i], i+1);
+			addSpeedDialEntry(folder.folderNode.children[i]);
 		}
 
 		// Adds the + button to the dom only if enabled
