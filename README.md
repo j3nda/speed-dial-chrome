@@ -23,6 +23,7 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 2.4.0: More comprehensive settings, shortcuts for opening dials, performance enhancements (by Eric)
 - 2.3.0: Sync across computers, various speed and performance improvements (by Eric)
 - 2.2.0: Custom icons for thumbs, performance improvements (by Eric)
 - 2.1.1: Option to select a background colour (by Eric)
