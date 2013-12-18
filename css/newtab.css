@@ -14,17 +14,18 @@ body {
 }
 
 .entry {
-	border-radius: 10px;
 	float: left;
 	padding: 7px;
 }
 
 .entry:hover {
 	background: rgba(53, 191, 256, 0.5);
+	border-radius: 10px;
 }
 
 .bookmark {
 	background: #fff;
+	box-shadow: 2px 2px 2px #aaa;
 	border-radius: 5px;
 	float: left;
 	height: 100%;
@@ -39,8 +40,8 @@ body {
 .image {
 	background-size: cover;
 	background-repeat: no-repeat;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 
 .details {
@@ -67,7 +68,7 @@ td {
 
 .details .title {
 	vertical-align: baseline;
-	color: #000;
+	color: #222;
 	font-size: 1em;
 	font-weight: bold;
 }
@@ -107,7 +108,7 @@ td {
 #bookmark_form button {
 	width: 10em;
 	height: 2em;
-	font-size: 110%;	
+	font-size: 110%;
 }
 
 #options {
