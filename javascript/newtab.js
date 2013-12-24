@@ -7,7 +7,7 @@ function addNewEntryButton() {
 }
 
 function addSpeedDialEntry(bookmark) {
-	if (bookmark.url !== undefined) {
+	if (bookmark["url"] !== undefined) {
 		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
 								'<div class="image"></div>' +
@@ -42,7 +42,7 @@ function addSpeedDialEntry(bookmark) {
 		scaleSpeedDialEntry(entry);
 	}
 
-	if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
+	if (bookmark["children"] !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
 		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 							'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 								'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +

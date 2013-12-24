@@ -11,13 +11,13 @@ function generateFolderList() {
 
 			var node = openList.pop();
 			while (node !== undefined) {
-				if (!node.hasOwnProperty("url")) {
+				if (node["children"] !== undefined) {
 					if (node.parentId === "0") {
 						node.path = ""; // Root element, so it has no parent and we don't need to show the path
 					}
 					node.path += node.title;
 					for (var child in node.children) {
-						if (!node.children[child].hasOwnProperty("url")) {
+						if (node.children[child]["children"] !== undefined) {
 							node.children[child].path = node.path + "/";
 							openList.push(node.children[child]);
 						}
@@ -33,9 +33,9 @@ function generateFolderList() {
 
 			var folder_id = getStartingFolder();
 			var folderListHtml = "";
-			Object.keys(folderList).forEach(function(item) {
+			for (var item in folderList) {
 				folderListHtml += '<option' + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
-			});
+			}
 			$("#folder_list").html(folderListHtml).val(folder_id).show();
 
 			$("#folder_list").on("change", function() {
