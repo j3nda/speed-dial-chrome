@@ -33,10 +33,9 @@ function generateFolderList() {
 
 			var folder_id = getStartingFolder();
 			var folderListHtml = "";
-
-			for (var item in folderList) {
+			Object.keys(folderList).forEach(function(item) {
 				folderListHtml += '<option' + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
-			}
+			});
 			$("#folder_list").html(folderListHtml).val(folder_id).show();
 
 			$("#folder_list").on("change", function() {
@@ -48,12 +47,10 @@ function generateFolderList() {
 
 function getStartingFolder() {
 	var folderId = localStorage.getItem("default_folder_id");
-
 	// Allow the url to specify the folder as well
 	if (window.location.hash !== "") {
 		folderId = window.location.hash.substring(1);
 	}
-
 	return folderId;
 }
 
@@ -75,7 +72,8 @@ function createDefaults() {
 		show_options_gear: "true",
 		show_subfolder_icons: "true",
 		thumbnailing_service: "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]"
-	}
+	};
+
 	for (var name in default_values) {
 		// Create and default a localStorage parameter if it doesn't already exist
 		if (localStorage.getItem(name) === null) {

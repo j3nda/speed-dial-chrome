@@ -12,7 +12,7 @@ function restoreFromSync() {
 function syncToStorage() {
 	var settings_object = {};
 	Object.keys(localStorage).forEach(function(key) {
-		settings_object[key] = localStorage[key]
+		settings_object[key] = localStorage[key];
 	});
 	chrome.storage.sync.set(settings_object);
 }

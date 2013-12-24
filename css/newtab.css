@@ -130,5 +130,7 @@ td {
 
 #folder_list {
 	display: none;
-	margin: 20px 0 10px 0;
+	margin: 20px auto 10px auto;
+	min-width: 20em;
+	max-width: 30%;
 }

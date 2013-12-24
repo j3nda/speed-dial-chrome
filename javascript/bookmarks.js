@@ -7,7 +7,7 @@ function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 	if (hash !== undefined) {
 		hash.parentId = $("#dial").attr("folder");
-		chrome.bookmarks.create(hash, function(result) {
+		chrome.bookmarks.create(hash, function() {
 			generateFolderList();
 			createSpeedDial(getStartingFolder());
 		});
@@ -79,7 +79,7 @@ function updateBookmark(id, title, url) {
 
 function updateBookmarksOrder() {
 	$(".entry").not("#new_entry").each(function(index) {
-		chrome.bookmarks.move($(this).attr("id"), {
+		chrome.bookmarks.move(this.id, {
 			"parentId": $("#dial").attr("folder"),
 			"index": index
 		});

@@ -7,7 +7,7 @@ function addNewEntryButton() {
 }
 
 function addSpeedDialEntry(bookmark) {
-	if (bookmark.hasOwnProperty("title") && bookmark.hasOwnProperty("url")) {
+	if (bookmark.url !== undefined) {
 		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 							'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
 								'<div class="image"></div>' +
@@ -36,15 +36,13 @@ function addSpeedDialEntry(bookmark) {
 
 		//If custom icon for the URL exists, evaluates to true & centers it on the dial
 		if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
-			entry.find(".image").css({
-				"background-size": "contain",
-				"background-position": "center"
-			});
+			entry.find(".image").css({ "background-size": "contain", "background-position": "center" });
 		}
 
 		scaleSpeedDialEntry(entry);
+	}
 
-	} else if (bookmark.hasOwnProperty("children") && localStorage.getItem("show_subfolder_icons") === "true") {
+	if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
 		$("#dial").append('<div class="entry" id="' + bookmark.id + '">' +
 							'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
 								'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
@@ -56,7 +54,7 @@ function addSpeedDialEntry(bookmark) {
 							'</a>' +
 						'</div>');
 
-		entry = $("#" + bookmark.id);
+		var entry = $("#" + bookmark.id);
 		entry.find(".edit").on("click", function(event) {
 			event.preventDefault();
 			showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
@@ -81,7 +79,7 @@ function calculateSpeedDialSize() {
 
 	var borderWidth = 14;
 	var minEntryWidth = 120 - borderWidth;
-	var adjustedDialWidth = window.innerWidth * 0.01 * dialWidth |0;
+	var adjustedDialWidth = window.innerWidth * (dialWidth / 100);
 
 	var entryWidth = adjustedDialWidth / dialColumns - borderWidth;
 	if (entryWidth < minEntryWidth) {
@@ -95,20 +93,15 @@ function calculateSpeedDialSize() {
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
 	// Removes all entries under the current view and sets the new folderId
-	$("#dial").attr("folder", folderId).html("");
+	$("#dial").attr("folder", folderId).empty();
+
 	calculateSpeedDialSize();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
-		var folder = {
-			"folderId": folderId,
-			"folderName": node[0].title,
-			"folderNode": node[0]
-		};
-
 		// Loop over bookmarks in folder and add to the dial
-		for (var i = 0; i < folder.folderNode.children.length; i++) {
-			addSpeedDialEntry(folder.folderNode.children[i]);
-		}
+		Object.keys(node[0].children).forEach(function(dial) {
+			addSpeedDialEntry(node[0].children[dial]);
+		});
 
 		// Adds the + button to the dom only if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
@@ -127,9 +120,9 @@ function createSpeedDial(folderId) {
 				cursor: "move",
 				containment: "document",
 				tolerance: "pointer",
-				items: "> div:not(#new_entry)",
-				stop: function() {
-					updateBookmarksOrder()
+				items: ".entry:not(#new_entry)",
+				stop: function(event, ui) {
+					updateBookmarksOrder();
 				}
 			});
 		}
@@ -185,7 +178,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	}
 	// Selectors to hide the cusom icon field when adding a new entry
 	if (!$("h1").text().indexOf("New")) {
-		form.find("p").eq(2).hide()
+		form.find("p").eq(2).hide();
 	}
 
 	form.reveal();
@@ -197,25 +190,23 @@ function showBookmarkEntryForm(heading, title, url, target) {
 
 function updateCustomIcon(url, old_url) {
 	var icon_object = JSON.parse(localStorage.getItem("custom_icon_data"));
-	var custom_icon = $(".icon").val();
+	var icon_url = $(".icon").val();
 
-	//Creates a new key:value pair and merges it into JSON from localStorage
-	var new_icon = {};
-	new_icon[url] = custom_icon;
-	var temp_object = $.extend(icon_object, new_icon);
+	// Creates a new key:value pair and inserts it into temporary object
+	icon_object[url] = icon_url;
 
-	//Makes sure thumbnail URL changes along with the bookmark URL
+	// Makes sure thumbnail URL changes along with the bookmark URL
 	if (url !== old_url) {
-		delete temp_object[old_url];
+		delete icon_object[old_url];
 	}
 
-	//Removes empty URL entries from localStorag
-	if (custom_icon.trim().length === 0 || url.trim().length === 0) {
-		delete temp_object[url];
-		delete temp_object[old_url];
+	// Cleans out empty URL entries from localStorage
+	if (icon_url.trim().length === 0 || url.trim().length === 0) {
+		delete icon_object[url];
+		delete icon_object[old_url];
 	}
 
-	localStorage.setItem("custom_icon_data", JSON.stringify(temp_object));
+	localStorage.setItem("custom_icon_data", JSON.stringify(icon_object));
 	if (localStorage.getItem("enable_sync") === "true") {
 		syncToStorage();
 	}
@@ -224,7 +215,6 @@ function updateCustomIcon(url, old_url) {
 
 function updateSpeedDialEntry(bookmark) {
 	var entry = $("#" + bookmark.id);
-
 	entry.find(".bookmark").attr("href", bookmark.url);
 	entry.find(".bookmark").attr("title", bookmark.title);
 	entry.find(".title").text(bookmark.title);
