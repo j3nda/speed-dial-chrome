@@ -19,7 +19,7 @@ function syncToStorage() {
 
 // Listen for sync events and update from synchronized data
 if (localStorage.getItem("enable_sync") === "true") {
-	chrome.storage.onChanged.addListener(function(changes, sync) {
+	chrome.storage.onChanged.addListener(function() {
 		restoreFromSync();
 	});
 }

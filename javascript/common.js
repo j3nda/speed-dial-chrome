@@ -1,22 +1,21 @@
 // Generates a list of all folders under chrome bookmarks
 function generateFolderList() {
 	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname === "/options.html") {
-		var folderList = [];
-		var openList = [];
+		var folderList = [], openList = [];
 
 		chrome.bookmarks.getTree(function(rootNode) {
 			// Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
 			openList.push(rootNode[0].children[0]);
 			openList.push(rootNode[0].children[1]);
 
-			while (node = openList.pop()) {
-				if (node["children"] !== undefined) {
+			while ((node = openList.pop()) !== undefined) {
+				if (node.children !== undefined) {
 					if (node.parentId === "0") {
 						node.path = ""; // Root elements have no parent so we shouldn't show their path
 					}
 					node.path += node.title;
-					while (child = node.children.pop()) {
-						if (child["children"] !== undefined) {
+					while ((child = node.children.pop()) !== undefined) {
+						if (child.children !== undefined) {
 							child.path = node.path + "/";
 							openList.push(child);
 						}
@@ -31,7 +30,7 @@ function generateFolderList() {
 
 			var folder_id = getStartingFolder();
 			var folderListHtml = "";
-			while (item = folderList.shift()) {
+			while ((item = folderList.shift()) !== undefined) {
 				folderListHtml += '<option' + ' value="' + item.id + '">' + item.path + '</option>';
 			}
 			$("#folder_list").html(folderListHtml).val(folder_id).show();
