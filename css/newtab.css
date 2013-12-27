@@ -71,6 +71,9 @@ td {
 	color: #222;
 	font-size: 1em;
 	font-weight: bold;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .entry:hover .title {

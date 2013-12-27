@@ -9,22 +9,20 @@ function generateFolderList() {
 			openList.push(rootNode[0].children[0]);
 			openList.push(rootNode[0].children[1]);
 
-			var node = openList.pop();
-			while (node !== undefined) {
+			while (node = openList.pop()) {
 				if (node["children"] !== undefined) {
 					if (node.parentId === "0") {
-						node.path = ""; // Root element, so it has no parent and we don't need to show the path
+						node.path = ""; // Root elements have no parent so we shouldn't show their path
 					}
 					node.path += node.title;
-					for (var child in node.children) {
-						if (node.children[child]["children"] !== undefined) {
-							node.children[child].path = node.path + "/";
-							openList.push(node.children[child]);
+					while (child = node.children.pop()) {
+						if (child["children"] !== undefined) {
+							child.path = node.path + "/";
+							openList.push(child);
 						}
 					}
 					folderList.push(node);
 				}
-				node = openList.pop();
 			}
 
 			folderList.sort(function(a, b) {
@@ -33,8 +31,8 @@ function generateFolderList() {
 
 			var folder_id = getStartingFolder();
 			var folderListHtml = "";
-			for (var item in folderList) {
-				folderListHtml += '<option' + ' value="' + folderList[item].id + '">' + folderList[item].path + '</option>';
+			while (item = folderList.shift()) {
+				folderListHtml += '<option' + ' value="' + item.id + '">' + item.path + '</option>';
 			}
 			$("#folder_list").html(folderListHtml).val(folder_id).show();
 
@@ -59,9 +57,9 @@ function createDefaults() {
 	var default_values = {
 		background_color: "#cccccc",
 		custom_icon_data: "{}",
-		default_folder_id: 1,
-		dial_columns: 6,
-		dial_width: 70,
+		default_folder_id: "1",
+		dial_columns: "6",
+		dial_width: "70",
 		drag_and_drop: "true",
 		enable_sync: "false",
 		folder_color: "#888888",
@@ -74,8 +72,8 @@ function createDefaults() {
 		thumbnailing_service: "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]"
 	};
 
+	// Creates default localStorage values if they don't already exist
 	for (var name in default_values) {
-		// Create and default a localStorage parameter if it doesn't already exist
 		if (localStorage.getItem(name) === null) {
 			localStorage.setItem(name, default_values[name]);
 		}

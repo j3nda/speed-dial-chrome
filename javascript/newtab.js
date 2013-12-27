@@ -99,9 +99,9 @@ function createSpeedDial(folderId) {
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		// Loop over bookmarks in folder and add to the dial
-		Object.keys(node[0].children).forEach(function(dial) {
-			addSpeedDialEntry(node[0].children[dial]);
-		});
+		while (dial = node[0].children.shift()) {
+			addSpeedDialEntry(dial);
+		}
 
 		// Adds the + button to the dom only if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
@@ -147,16 +147,9 @@ function scaleSpeedDialEntry(entry) {
 	var entryHeight = entryWidth*0.75|0;
 
 	entry.css({"height": entryHeight +"px", "width": entryWidth +"px"});
-
-	if (entry[0].id !== "new_entry") {
-		var title = entry.find(".bookmark").attr("title");
-		var titleLimit = entryWidth / 10;
-		if (title.length > titleLimit) {
-			title = title.substr(0, titleLimit - 3) + "...";
-		}
-		entry.find(".title").text(title);
-		entry.find(".image").css("height", entryHeight - 20 +"px");
-	}
+	// 50 = width of edit + delete buttons(18px each) + 14 (size of fixed size boarderWidth)
+	entry.find(".title").css("max-width", entryWidth - 50 +"px"); 
+	entry.find(".image").css("height", entryHeight - 20 +"px");
 
 	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0 +"px", "top": entryWidth*0.05|0 +"px" });
 	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3|0 +"px", "top": entryWidth*0.18|0 +"px" });
