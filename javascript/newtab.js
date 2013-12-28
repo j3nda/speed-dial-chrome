@@ -28,9 +28,7 @@ function addSpeedDialEntry(bookmark) {
 		entry.find(".remove").on("click", function(event) {
 			event.preventDefault();
 			if (confirm("Are you sure you want to remove this bookmark?")) {
-				removeBookmark(bookmark.id);
-				var old_url = entry.find(".bookmark").attr("href");
-				updateCustomIcon("", old_url);
+				removeBookmark(bookmark);
 			}
 		});
 
@@ -164,25 +162,25 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.attr("target", target);
 
 	// Selectors to hide URL & custom icon fields when editing a folder name
-	if (!$("h1").text().indexOf("Edit Folder")){
+	if (!form.find("h1").text().search("Edit Folder")){
 		form.find("p").eq(1).hide();
 		form.find("p").eq(2).hide();
 	}
 	// Selectors to hide the cusom icon field when adding a new entry
-	if (!$("h1").text().indexOf("New")) {
+	if (!form.find("h1").text().search("New")) {
 		form.find("p").eq(2).hide();
 	}
 
 	form.reveal();
 	form.find(".title").focus();
 	form.on("reveal:close", function() {
-		$("p").show();
+		form.find("p").show();
 	});
 }
 
 function updateCustomIcon(url, old_url) {
 	var icon_object = JSON.parse(localStorage.getItem("custom_icon_data"));
-	var icon_url = $(".icon").val();
+	var icon_url = $("#bookmark_form .icon").val();
 
 	// Creates a new key:value pair and inserts it into temporary object
 	icon_object[url] = icon_url;

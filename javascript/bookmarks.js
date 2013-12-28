@@ -41,9 +41,10 @@ function isValidUrl(url) {
 }
 
 // Deletes a bookmarks and removes it from the speed dial
-function removeBookmark(id) {
-	chrome.bookmarks.remove(id, function() {
-		$("#" + id).remove();
+function removeBookmark(bookmark) {
+	chrome.bookmarks.remove(bookmark.id, function() {
+		$("#" + bookmark.id).remove();
+		updateCustomIcon("", bookmark.url);
 		alignVertical();
 	});
 }
