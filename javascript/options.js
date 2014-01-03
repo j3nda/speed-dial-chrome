@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	// If the Esc key is pressed go back to the new tab page
-	$("html").on("keyup", function(e) {
+	$(document.body).on("keyup", function(e) {
 		if (e.which === 27) {
 			window.location = "newtab.html";
 		}
@@ -82,8 +82,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 	});
 
-	if (localStorage.getItem("show_advanced") === "true") {
-		$("#advanced").show();
+	if (localStorage.getItem("show_advanced") === "false") {
+		$("#advanced").hide();
 	}
 	$("#show_advanced").on("click", function() {
 		if (this.checked) {

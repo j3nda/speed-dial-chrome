@@ -18,9 +18,6 @@
 
 		var defaults = {
 			animation: 'none',
-			//fade, fadeAndPop, none
-			animationspeed: 300,
-			//how fast animtions are
 			closeonbackgroundclick: true,
 			//if you click background will modal close?
 			dismissmodalclass: 'close-reveal-modal' //the class of a button or element that will close an open modal
@@ -106,7 +103,7 @@
 					modal.trigger('reveal:close');
 				});
 			}
-			$('body').on("keyup", function(e) {
+			$(document.body).on("keyup", function(e) {
 				if (e.which === 27) {
 					modal.trigger('reveal:close');
 				} // 27 is the keycode for the Escape key

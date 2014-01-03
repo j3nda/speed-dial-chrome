@@ -84,21 +84,21 @@ function calculateSpeedDialSize() {
 		entryWidth = minEntryWidth;
 		adjustedDialWidth = (adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
 	}
-	$("#dial").attr("entry-width", entryWidth|0);
-	$("#dial").css("width", adjustedDialWidth|0 +"px");
+	$("#dial").prop("entryWidth", entryWidth|0);
+	$("#dial").css("width", adjustedDialWidth|0);
 }
 
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
-	// Removes all entries under the current view and sets the new folderId
-	$("#dial").attr("folder", folderId).empty();
+	// sets the new folderId and removes all entries before populating new view
+	$("#dial").prop("folderId", folderId).find(".entry").remove();
 	calculateSpeedDialSize();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		// Loop over bookmarks in folder and add to the dial
-		while ((dial = node[0].children.shift()) !== undefined) {
+		(node[0].children).forEach(function(dial) {
 			addSpeedDialEntry(dial);
-		}
+		});
 
 		// Adds the + button to the dom only if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
@@ -106,7 +106,7 @@ function createSpeedDial(folderId) {
 		}
 
 		// Show the options gear icon only if enabled and doesn't already exist
-		if (localStorage.getItem("show_options_gear") === "true" && $("#options").length === 0) {
+		if (localStorage.getItem("show_options_gear") === "true" && !$("#options").get(0)) {
 			$("#content").append('<div id="options"><a class="foundicon-settings" href="options.html" title="Options"></a></div>');
 		}
 
@@ -140,16 +140,16 @@ function getThumbnailUrl(bookmark) {
 
 // Scales a single speed dial entry to the specified size
 function scaleSpeedDialEntry(entry) {
-	var entryWidth = $("#dial").attr("entry-width");
+	var entryWidth = $("#dial").prop("entryWidth");
 	var entryHeight = entryWidth*0.75|0;
 
-	entry.css({ "height": entryHeight +"px", "width": entryWidth +"px" });
+	entry.css({ "height": entryHeight, "width": entryWidth });
 	// 50 = width of edit + delete buttons(18px each) + 14 (size of fixed size boarderWidth)
-	entry.find(".title").css("max-width", entryWidth - 50 +"px"); 
-	entry.find(".image").css("height", entryHeight - 20 +"px");
+	entry.find(".title").css("max-width", entryWidth - 50); 
+	entry.find(".image").css("height", entryHeight - 20);
 
-	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0 +"px", "top": entryWidth*0.05|0 +"px" });
-	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3|0 +"px", "top": entryWidth*0.18|0 +"px" });
+	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0, "top": entryWidth*0.05|0 });
+	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3|0, "top": entryWidth*0.18|0 });
 }
 
 function showBookmarkEntryForm(heading, title, url, target) {
@@ -159,7 +159,7 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.find(".title").val(title);
 	form.find(".url").val(url);
 	form.find(".icon").val(JSON.parse(localStorage.getItem("custom_icon_data"))[url]);
-	form.attr("target", target);
+	form.prop("target", target);
 
 	// Selectors to hide URL & custom icon fields when editing a folder name
 	if (!form.find("h1").text().search("Edit Folder")){
@@ -204,11 +204,12 @@ function updateCustomIcon(url, old_url) {
 }
 
 function alignVertical() {
-	$("#dial").css("padding-top", "");
+	var dial = $("#dial");
+	dial.css("padding-top", "");
 	if (localStorage.getItem("show_folder_list") === "true") {
-		$("#dial").css("padding-top", ((window.innerHeight - $("#dial").height())/2)-50|0  + "px");
+		dial.css("padding-top", ((window.innerHeight - dial.height())/2)-50|0);
 	} else {
-		$("#dial").css("padding-top",  (window.innerHeight - $("#dial").height())/2|0 + "px");
+		dial.css("padding-top", (window.innerHeight - dial.height())/2|0);
 	}
 }
 
@@ -223,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	$("#bookmark_form button").on("click", function() {
-		var target = $("#bookmark_form").attr("target");
+		var target = $("#bookmark_form").prop("target");
 		var title = $("#bookmark_form .title").val();
 		var url = $("#bookmark_form .url").val();
 
@@ -235,13 +236,13 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	// Navigates to the entry corresponding to the single digit number between 1-9
-	$(window).on("keypress", function(e) {
+	$(document.body).on("keypress", function(e) {
 		// Prevents navigation while typing numbers in #bookmark_form input fields
 		if (document.activeElement.type !== "text") {
 			var key = String.fromCharCode(e.which);
 			if (key >= 1 && key <= 9) {
-				if ($('.bookmark').eq(key-1).size() !== 0) {
-					window.location = $('.bookmark').eq(key-1).attr("href");
+				if ($('.bookmark').eq(key-1).length !== 0) {
+					window.location = $('.bookmark').get(key-1).href;
 				}
 			}
 			// Navigates to options page when letter "o"(options) or "s"(settings) is pressed.

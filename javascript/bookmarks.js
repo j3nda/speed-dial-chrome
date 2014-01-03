@@ -6,7 +6,7 @@
 function addBookmark(title, url) {
 	var hash = buildBookmarkHash(title, url);
 	if (hash !== undefined) {
-		hash.parentId = $("#dial").attr("folder");
+		hash.parentId = $("#dial").prop("folderId");
 		chrome.bookmarks.create(hash, function() {
 			generateFolderList();
 			createSpeedDial(getStartingFolder());
@@ -60,7 +60,7 @@ function removeFolder(id) {
 
 function updateBookmark(id, title, url) {
 	var hash = buildBookmarkHash(title, url);
-	var old_url = $("#" + id).find(".bookmark").attr("href");
+	var old_url = $("#" + id).find(".bookmark").prop("href");
 	//Actually make sure the URL being modified is valid instead of always
 	//prepending http:// to it creating new valid+invalid bookmark
 	if (url.length !== 0 && !isValidUrl(url)) {
@@ -69,7 +69,7 @@ function updateBookmark(id, title, url) {
 
 	if (hash !== undefined) {
 		chrome.bookmarks.update(id, hash, function(result) {
-			$("#" + result.id).find(".bookmark").attr({ 
+			$("#" + result.id).find(".bookmark").prop({ 
 				"title": result.title, 
 				"href": result.url
 			});
@@ -84,7 +84,7 @@ function updateBookmark(id, title, url) {
 function updateBookmarksOrder() {
 	$(".entry").not("#new_entry").each(function(index) {
 		chrome.bookmarks.move(this.id, {
-			"parentId": $("#dial").attr("folder"),
+			"parentId": $("#dial").prop("folderId"),
 			"index": index
 		});
 	});

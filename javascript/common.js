@@ -1,7 +1,7 @@
 // Generates a list of all folders under chrome bookmarks
 function generateFolderList() {
 	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname === "/options.html") {
-		var folderList = [], openList = [];
+		var folderList = [], openList = [], node, child;
 
 		chrome.bookmarks.getTree(function(rootNode) {
 			// Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
@@ -28,15 +28,13 @@ function generateFolderList() {
 				return a.path.localeCompare(b.path);
 			});
 
-			var folder_id = getStartingFolder();
-			var folderListHtml = "";
-			while ((item = folderList.shift()) !== undefined) {
-				folderListHtml += '<option' + ' value="' + item.id + '">' + item.path + '</option>';
-			}
-			$("#folder_list").html(folderListHtml).val(folder_id).show();
-
-			$("#folder_list").on("change", function() {
-				window.location.hash = $("#folder_list").val();
+			var folderListHtml = $("<select>", { id: "folder_list" });
+			folderList.forEach(function(item) {
+				folderListHtml.append(new Option(item.path, item.id));
+			});
+			$("#folder").html(folderListHtml)
+				.find("#folder_list").val(getStartingFolder()).on("change", function() {
+					window.location.hash = $("#folder_list").val();
 			});
 		});
 	}
@@ -72,11 +70,11 @@ function createDefaults() {
 	};
 
 	// Creates default localStorage values if they don't already exist
-	for (var name in default_values) {
+	Object.keys(default_values).forEach(function(name) {
 		if (localStorage.getItem(name) === null) {
 			localStorage.setItem(name, default_values[name]);
 		}
-	}
+	});
 }
 
 // Initialisation routines for all pages
