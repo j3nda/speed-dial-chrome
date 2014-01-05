@@ -1,5 +1,5 @@
 function addNewEntryButton() {
-	$("#dial").append('<div class="entry" id="new_entry" title="Add New"><div><i class="foundicon-plus"></i></div></div>');
+	$("#dial").append('<div class="entry" id="new_entry" title="Add New"><div><span class="foundicon-plus"></span></div></div>');
 	$("#new_entry").on("click", function() {
 		showBookmarkEntryForm("New Bookmark or Folder", "", "", "new_entry");
 	});
@@ -14,7 +14,7 @@ function addSpeedDialEntry(bookmark) {
 							'<table class="details"><tbody><tr>' +
 								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
 								'<td class="title">' + bookmark.title + '</td>' +
-								'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td></tr></tbody>' +
+								'<td class="remove" title="Remove"><span class="foundicon-remove"></span></td></tr></tbody>' +
 							'</table>' +
 						'</a>' +
 					'</div>');
@@ -47,7 +47,7 @@ function addSpeedDialEntry(bookmark) {
 							'<table class="details"><tbody><tr>' +
 								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
 								'<td class="title"><div>' + bookmark.title + '</div></td>' +
-								'<td class="remove" title="Remove"><div class="foundicon-remove"></div></td></tr></tbody>' +
+								'<td class="remove" title="Remove"><span class="foundicon-remove"></span></td></tr></tbody>' +
 							'</table>' +
 						'</a>' +
 					'</div>');
@@ -155,18 +155,19 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	var form = $("#bookmark_form");
 
 	form.find("h1").text(heading);
-	form.find(".title").val(title);
-	form.find(".url").val(url);
-	form.find(".icon").val(JSON.parse(localStorage.getItem("custom_icon_data"))[url]);
+	form.find(".title").prop("value", title);
+	form.find(".url").prop("value", url);
+	// Must clear parsed .icon property before setting it, .val seemed to hide it
+	form.find(".icon").prop("value", "").prop("value", JSON.parse(localStorage.getItem("custom_icon_data"))[url]);
 	form.prop("target", target);
 
 	// Selectors to hide URL & custom icon fields when editing a folder name
-	if (!form.find("h1").text().search("Edit Folder")){
+	if (form.find("h1").text().contains("Edit Folder")){
 		form.find("p").eq(1).hide();
 		form.find("p").eq(2).hide();
 	}
 	// Selectors to hide the cusom icon field when adding a new entry
-	if (!form.find("h1").text().search("New")) {
+	if (form.find("h1").text().contains("New")) {
 		form.find("p").eq(2).hide();
 	}
 
@@ -179,21 +180,18 @@ function showBookmarkEntryForm(heading, title, url, target) {
 
 function updateCustomIcon(url, old_url) {
 	var icon_object = JSON.parse(localStorage.getItem("custom_icon_data"));
-	var icon_url = $("#bookmark_form .icon").val();
+	var icon_url = $("#bookmark_form .icon").prop("value").trim();
 
-	// Creates a new key:value pair and inserts it into temporary object
-	icon_object[url] = icon_url;
-
-	// Makes sure thumbnail URL changes along with the bookmark URL
 	if (url !== old_url) {
 		delete icon_object[old_url];
-	}
+	} // Makes sure thumbnail URL changes along with the bookmark
 
-	// Cleans out empty URL entries from localStorage
-	if (icon_url.trim().length === 0 || url.trim().length === 0) {
+	if (icon_url.length === 0 || url.trim().length === 0) {
 		delete icon_object[url];
 		delete icon_object[old_url];
-	}
+	} // Cleans out any empty entries from localStorage
+
+	icon_object[url] = icon_url;
 
 	localStorage.setItem("custom_icon_data", JSON.stringify(icon_object));
 	if (localStorage.getItem("enable_sync") === "true") {
@@ -224,8 +222,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$("#bookmark_form button").on("click", function() {
 		var target = $("#bookmark_form").prop("target");
-		var title = $("#bookmark_form .title").val();
-		var url = $("#bookmark_form .url").val();
+		var title = $("#bookmark_form .title").prop("value").trim();
+		var url = $("#bookmark_form .url").prop("value").trim();
 
 		if (target === "new_entry") {
 			addBookmark(title, url);
@@ -261,9 +259,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Change the current dial if the page hash changes
 	$(window).on("hashchange", function() {
-		var newFolder = getStartingFolder();
-		createSpeedDial(newFolder);
-		$("#folder_list").val(newFolder);
+		createSpeedDial(getStartingFolder());
 	});
 
 	// Load the .css that refrences the .woff font file asynchronously in an ajax request, halves render speed of dial

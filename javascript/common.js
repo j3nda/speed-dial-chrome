@@ -32,9 +32,10 @@ function generateFolderList() {
 			folderList.forEach(function(item) {
 				folderListHtml.append(new Option(item.path, item.id));
 			});
-			$("#folder").html(folderListHtml)
-				.find("#folder_list").val(getStartingFolder()).on("change", function() {
-					window.location.hash = $("#folder_list").val();
+			$("#folder").html(folderListHtml);
+			$("#folder_list").prop("value", getStartingFolder())
+					.on("change", function() {
+						window.location.hash = $("#folder_list").prop("value");
 			});
 		});
 	}
