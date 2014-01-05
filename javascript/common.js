@@ -28,7 +28,7 @@ function generateFolderList() {
 				return a.path.localeCompare(b.path);
 			});
 
-			var folderListHtml = $("<select>", { id: "folder_list" });
+			var folderListHtml = $("<select>").prop({ "id": "folder_list" });
 			folderList.forEach(function(item) {
 				folderListHtml.append(new Option(item.path, item.id));
 			});
