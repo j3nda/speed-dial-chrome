@@ -6,7 +6,7 @@ function addNewEntryButton() {
 	scaleSpeedDialEntry($("#new_entry"));
 }
 
-function addSpeedDialEntry(bookmark) {
+function addSpeedDialEntry(bookmark, entryArray) {
 	if (bookmark.url !== undefined) {
 		var entry = $('<div id="' + bookmark.id + '" class="entry">' +
 						'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
@@ -37,7 +37,7 @@ function addSpeedDialEntry(bookmark) {
 		}
 
 		scaleSpeedDialEntry(entry);
-		$("#dial").append(entry[0]);
+		entryArray.push(entry);
 	}
 
 	if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
@@ -65,7 +65,7 @@ function addSpeedDialEntry(bookmark) {
 		entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
 
 		scaleSpeedDialEntry(entry);
-		$("#dial").append(entry[0]);
+		entryArray.push(entry);
 	}
 }
 
@@ -95,9 +95,11 @@ function createSpeedDial(folderId) {
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		// Loop over bookmarks in folder and add to the dial
+		var entryArray = [];
 		(node[0].children).forEach(function(dial) {
-			addSpeedDialEntry(dial);
+			addSpeedDialEntry(dial, entryArray);
 		});
+		$("#dial").html(entryArray);
 
 		// Adds the + button to the dom only if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
