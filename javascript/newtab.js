@@ -1,9 +1,9 @@
-function addNewEntryButton() {
-	$("#dial").append('<div class="entry" id="new_entry" title="Add New"><div><span class="foundicon-plus"></span></div></div>');
-	$("#new_entry").on("click", function() {
+function addNewEntryButton(entryArray) {
+	var newEntry = $('<div class="entry" id="new_entry" title="Add New"><div><span class="foundicon-plus"></span></div></div>');
+	newEntry.on("click", function() {
 		showBookmarkEntryForm("New Bookmark or Folder", "", "", "new_entry");
 	});
-	scaleSpeedDialEntry($("#new_entry"));
+	entryArray.push(newEntry);
 }
 
 function addSpeedDialEntry(bookmark, entryArray) {
@@ -36,14 +36,13 @@ function addSpeedDialEntry(bookmark, entryArray) {
 			entry.find(".image").css({ "background-size": "contain", "background-position": "center" });
 		}
 
-		scaleSpeedDialEntry(entry);
 		entryArray.push(entry);
 	}
 
 	if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
 		var entry = $('<div class="entry" id="' + bookmark.id + '">' +
 						'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
-							'<div class="image"><span class="foldericon foundicon-folder"></span></div>' +
+							'<div class="image"><span class="foundicon-folder"></span></div>' +
 							'<table class="details"><tbody><tr>' +
 								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
 								'<td class="title"><div>' + bookmark.title + '</div></td>' +
@@ -62,9 +61,9 @@ function addSpeedDialEntry(bookmark, entryArray) {
 				removeFolder(bookmark.id);
 			}
 		});
+
 		entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
 
-		scaleSpeedDialEntry(entry);
 		entryArray.push(entry);
 	}
 }
@@ -99,16 +98,19 @@ function createSpeedDial(folderId) {
 		(node[0].children).forEach(function(dial) {
 			addSpeedDialEntry(dial, entryArray);
 		});
-		$("#dial").html(entryArray);
 
 		// Adds the + button to the dom only if enabled
 		if (localStorage.getItem("show_new_entry") === "true") {
-			addNewEntryButton();
+			addNewEntryButton(entryArray);
 		}
 
+		scaleSpeedDialEntries(entryArray); // scale all entries once before adding to the dial
+
+		$("#dial").html(entryArray); // Batch add all the entries to the dial at once
+
 		// Show the options gear icon only if enabled and doesn't already exist
-		if (localStorage.getItem("show_options_gear") === "true" && !$("#options").get(0)) {
-			$("#content").append('<div id="options"><a class="foundicon-settings" href="options.html" title="Options"></a></div>');
+		if (localStorage.getItem("show_options_gear") === "true" && $("#options").children().length === 0) {
+			$("#options").append($("<a>").prop({"className":"foundicon-settings", "href":"options.html", "title":"Options"}));
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
@@ -140,17 +142,19 @@ function getThumbnailUrl(bookmark) {
 }
 
 // Scales a single speed dial entry to the specified size
-function scaleSpeedDialEntry(entry) {
+function scaleSpeedDialEntries(entryArray) {
 	var entryWidth = $("#dial").prop("entryWidth");
 	var entryHeight = entryWidth*0.75|0;
 
-	entry.css({ "height": entryHeight, "width": entryWidth });
-	// 50 = width of edit + delete buttons(18px each) + 14 (size of fixed size boarderWidth)
-	entry.find(".title").css("max-width", entryWidth - 50); 
-	entry.find(".image").css("height", entryHeight - 20);
-
-	entry.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0, "top": entryWidth*0.05|0 });
-	entry.find(".foundicon-plus").css({ "font-size": entryWidth*0.3|0, "top": entryWidth*0.18|0 });
+	entryArray.forEach(function(entry) {
+		var current = $(entry);
+		current.css({ "height": entryHeight, "width": entryWidth });
+		// 50 = width of edit + delete buttons(18px each) + 14 (size of fixed size boarderWidth)
+		current.find(".title").css("max-width", entryWidth - 50);
+		current.find(".image").css("height", entryHeight - 20);
+		current.find(".foundicon-folder").css({ "font-size": entryWidth*0.5|0, "top": entryWidth*0.05|0 });
+		current.find(".foundicon-plus").css({ "font-size": entryWidth*0.3|0, "top": entryWidth*0.18|0 });
+	});
 }
 
 function showBookmarkEntryForm(heading, title, url, target) {
@@ -253,9 +257,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$(window).on("resize", function() {
 		calculateSpeedDialSize();
-		$(".entry").each(function() {
-			scaleSpeedDialEntry($(this));
-		});
+		scaleSpeedDialEntries($(".entry").toArray());
 		alignVertical();
 	});
 
