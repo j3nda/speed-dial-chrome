@@ -105,8 +105,8 @@ function createSpeedDial(folderId) {
 		}
 
 		scaleSpeedDialEntries(entryArray); // scale all entries once before adding to the dial
-
 		$("#dial").html(entryArray); // Batch add all the entries to the dial at once
+		alignVertical();
 
 		// Show the options gear icon only if enabled and doesn't already exist
 		if (localStorage.getItem("show_options_gear") === "true" && $("#options").children().length === 0) {
@@ -126,19 +126,17 @@ function createSpeedDial(folderId) {
 				}
 			});
 		}
-		alignVertical();
 	});
 }
 
 function getThumbnailUrl(bookmark) {
 	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
 		return JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url];
-	} else {
-		if (localStorage.getItem("force_http") === "true") {
-			bookmark.url = bookmark.url.replace("https", "http");
-		}
-		return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
 	}
+	if (localStorage.getItem("force_http") === "true") {
+		bookmark.url = bookmark.url.replace("https", "http");
+	}
+	return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
 }
 
 // Scales a single speed dial entry to the specified size

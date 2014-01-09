@@ -21,9 +21,7 @@ function buildBookmarkHash(title, url) {
 		return undefined;
 	}
 	// Chrome won't create bookmarks without HTTP
-	if (isValidUrl(url)) {
-		url = url;
-	} else if (url.length !== 0) {
+	if (!isValidUrl(url) && url.length !== 0) {
 		url = "http://" + url;
 	}
 
@@ -35,9 +33,8 @@ function isValidUrl(url) {
 	var URL_REGEXP = /^(http|https|ftp|file|chrome|chrome-extension):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?$/;
 	if (URL_REGEXP.test(url)) {
 		return true;
-	} else { 
-		return false;
 	}
+	return false;
 }
 
 // Deletes a bookmarks and removes it from the speed dial
