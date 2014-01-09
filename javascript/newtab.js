@@ -168,12 +168,12 @@ function showBookmarkEntryForm(heading, title, url, target) {
 	form.prop("target", target);
 
 	// Selectors to hide URL & custom icon fields when editing a folder name
-	if (form.find("h1").text().contains("Edit Folder")){
+	if (form.find("h1").text().indexOf("Edit Folder") > -1) {
 		form.find("p").eq(1).hide();
 		form.find("p").eq(2).hide();
 	}
 	// Selectors to hide the cusom icon field when adding a new entry
-	if (form.find("h1").text().contains("New")) {
+	if (form.find("h1").text().indexOf("New") > -1) {
 		form.find("p").eq(2).hide();
 	}
 
