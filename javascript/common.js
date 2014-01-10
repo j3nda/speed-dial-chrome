@@ -1,9 +1,9 @@
 // Generates a list of all folders under chrome bookmarks
 function generateFolderList() {
 	if (localStorage.getItem("show_folder_list") === "true" || window.location.pathname === "/options.html") {
-		var folderList = [], openList = [], node, child;
 
 		chrome.bookmarks.getTree(function(rootNode) {
+			var folderList = [], openList = [], node, child;
 			// Never more than 2 root nodes, push both Bookmarks Bar & Other Bookmarks into array
 			openList.push(rootNode[0].children[0]);
 			openList.push(rootNode[0].children[1]);

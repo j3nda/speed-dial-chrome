@@ -6,66 +6,64 @@ function addNewEntryButton(entryArray) {
 	entryArray.push(newEntry);
 }
 
-function addSpeedDialEntry(bookmark, entryArray) {
-	if (bookmark.url !== undefined) {
-		var entry = $('<div id="' + bookmark.id + '" class="entry">' +
-						'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
-							'<div class="image"></div>' +
-							'<table class="details"><tbody><tr>' +
-								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
-								'<td class="title">' + bookmark.title + '</td>' +
-								'<td class="remove" title="Remove"><span class="foundicon-remove"></span></td></tr></tbody>' +
-							'</table>' +
-						'</a>' +
-					'</div>');
+function addSpeedDialBookmark(bookmark, entryArray) {
+	var entry = $('<div id="' + bookmark.id + '" class="entry">' +
+					'<a class="bookmark" href="' + bookmark.url + '" title="' + bookmark.title + '">' +
+						'<div class="image"></div>' +
+						'<table class="details"><tbody><tr>' +
+							'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
+							'<td class="title">' + bookmark.title + '</td>' +
+							'<td class="remove" title="Remove"><span class="foundicon-remove"></span></td></tr></tbody>' +
+						'</table>' +
+					'</a>' +
+				'</div>');
 
-		entry.find(".image").css("background-image", "url(" + getThumbnailUrl(bookmark) + ")");
-		entry.find(".edit").on("click", function(event) {
-			event.preventDefault();
-			showBookmarkEntryForm("Edit Bookmark: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
-		});
-		entry.find(".remove").on("click", function(event) {
-			event.preventDefault();
-			if (confirm("Are you sure you want to remove this bookmark?")) {
-				removeBookmark(bookmark);
-			}
-		});
-
-		//If custom icon for the URL exists, evaluates to true & centers it on the dial
-		if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
-			entry.find(".image").css({ "background-size": "contain", "background-position": "center" });
+	entry.find(".image").css("background-image", "url(" + getThumbnailUrl(bookmark) + ")");
+	entry.find(".edit").on("click", function(event) {
+		event.preventDefault();
+		showBookmarkEntryForm("Edit Bookmark: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
+	});
+	entry.find(".remove").on("click", function(event) {
+		event.preventDefault();
+		if (confirm("Are you sure you want to remove this bookmark?")) {
+			removeBookmark(bookmark);
 		}
+	});
 
-		entryArray.push(entry);
+	//If custom icon for the URL exists, evaluates to true & centers it on the dial
+	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
+		entry.find(".image").css({ "background-size": "contain", "background-position": "center" });
 	}
 
-	if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
-		var entry = $('<div class="entry" id="' + bookmark.id + '">' +
-						'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
-							'<div class="image"><span class="foundicon-folder"></span></div>' +
-							'<table class="details"><tbody><tr>' +
-								'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
-								'<td class="title"><div>' + bookmark.title + '</div></td>' +
-								'<td class="remove" title="Remove"><span class="foundicon-remove"></span></td></tr></tbody>' +
-							'</table>' +
-						'</a>' +
-					'</div>');
+	entryArray.push(entry);
+}
 
-		entry.find(".edit").on("click", function(event) {
-			event.preventDefault();
-			showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
-		});
-		entry.find(".remove").on("click", function(event) {
-			event.preventDefault();
-			if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
-				removeFolder(bookmark.id);
-			}
-		});
+function addSpeedDialFolder(bookmark, entryArray) {
+	var entry = $('<div class="entry" id="' + bookmark.id + '">' +
+					'<a class="bookmark" href="newtab.html#' + bookmark.id + '" title="' + bookmark.title + '" >' +
+						'<div class="image"><span class="foundicon-folder"></span></div>' +
+						'<table class="details"><tbody><tr>' +
+							'<td class="edit" title="Edit"><span class="foundicon-edit"></span></td>' +
+							'<td class="title"><div>' + bookmark.title + '</div></td>' +
+							'<td class="remove" title="Remove"><span class="foundicon-remove"></span></td></tr></tbody>' +
+						'</table>' +
+					'</a>' +
+				'</div>');
 
-		entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
+	entry.find(".edit").on("click", function(event) {
+		event.preventDefault();
+		showBookmarkEntryForm("Edit Folder: " + bookmark.title, bookmark.title, bookmark.url, bookmark.id);
+	});
+	entry.find(".remove").on("click", function(event) {
+		event.preventDefault();
+		if (confirm("Are you sure you want to remove this folder including all of it's bookmarks?")) {
+			removeFolder(bookmark.id);
+		}
+	});
 
-		entryArray.push(entry);
-	}
+	entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
+
+	entryArray.push(entry);
 }
 
 // Figures out how big the dial and its elements should be
@@ -95,8 +93,13 @@ function createSpeedDial(folderId) {
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		// Loop over bookmarks in folder and add to the dial
 		var entryArray = [];
-		(node[0].children).forEach(function(dial) {
-			addSpeedDialEntry(dial, entryArray);
+		(node[0].children).forEach(function(bookmark) {
+			if (bookmark.url !== undefined) {
+				addSpeedDialBookmark(bookmark, entryArray);
+			}
+			if (bookmark.children !== undefined && localStorage.getItem("show_subfolder_icons") === "true") {
+				addSpeedDialFolder(bookmark, entryArray);
+			}
 		});
 
 		// Adds the + button to the dom only if enabled
@@ -186,6 +189,8 @@ function updateCustomIcon(url, old_url) {
 	var icon_object = JSON.parse(localStorage.getItem("custom_icon_data"));
 	var icon_url = $("#bookmark_form .icon").prop("value").trim();
 
+	icon_object[url] = icon_url;
+
 	if (url !== old_url) {
 		delete icon_object[old_url];
 	} // Makes sure thumbnail URL changes along with the bookmark
@@ -194,8 +199,6 @@ function updateCustomIcon(url, old_url) {
 		delete icon_object[url];
 		delete icon_object[old_url];
 	} // Cleans out any empty entries from localStorage
-
-	icon_object[url] = icon_url;
 
 	localStorage.setItem("custom_icon_data", JSON.stringify(icon_object));
 	if (localStorage.getItem("enable_sync") === "true") {
