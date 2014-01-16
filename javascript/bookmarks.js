@@ -66,8 +66,8 @@ function updateBookmark(id, title, url) {
 
 	if (hash !== undefined) {
 		chrome.bookmarks.update(id, hash, function(result) {
-			$("#" + result.id).find(".bookmark").prop({ 
-				"title": result.title, 
+			$("#" + result.id).find(".bookmark").prop({
+				"title": result.title,
 				"href": result.url
 			});
 		});

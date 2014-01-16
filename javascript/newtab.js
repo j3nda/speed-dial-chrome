@@ -86,8 +86,7 @@ function calculateSpeedDialSize() {
 
 /* Retrieve the bookmarks bar node and use it to generate speed dials */
 function createSpeedDial(folderId) {
-	// sets the new folderId and removes all entries before populating new view
-	$("#dial").prop("folderId", folderId).find(".entry").remove();
+	$("#dial").prop("folderId", folderId);
 	calculateSpeedDialSize();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
