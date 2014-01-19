@@ -23,17 +23,18 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 2.4.2: Performance improvements
 - 2.4.1: Minor permission and style fixes
-- 2.4.0: More comprehensive settings, shortcuts for opening dials, performance enhancements (by Eric)
-- 2.3.0: Sync across computers, various speed and performance improvements (by Eric)
-- 2.2.0: Custom icons for thumbs, performance improvements (by Eric)
-- 2.1.1: Option to select a background colour (by Eric)
+- 2.4.0: More comprehensive settings, shortcuts for opening dials, performance enhancements
+- 2.3.0: Sync across computers, various speed and performance improvements
+- 2.2.0: Custom icons for thumbs, performance improvements
+- 2.1.1: Option to select a background colour
 - 2.1.0: Drag and drop library changed. Number of minor code and interface improvements
 - 2.0.0: Large-scale code rewrite. Bookmarks can now be edited
 - 1.2.3: Miscellaneous tidy up
 - 1.2.2: Fixed a bug with the show advanced checkbox
-- 1.2.1: CSS fixes (by Jan Smid)
-- 1.2.0: Option implemented for default folder (by Jan Smid)
+- 1.2.1: CSS fixes
+- 1.2.0: Option implemented for default folder
 - 1.1.1: Added a drop down for folder selection
 - 1.1.0: Drag and drop implemented
 - 1.0.1: Minor bugfixes and performance enhancements
