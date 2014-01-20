@@ -23,6 +23,7 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 2.4.4: Vertical centering bug, general enhancements
 - 2.4.3: Resolved vertical centering bug
 - 2.4.2: Performance improvements
 - 2.4.1: Minor permission and style fixes
