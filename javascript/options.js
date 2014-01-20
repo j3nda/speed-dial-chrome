@@ -60,13 +60,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// If the Esc key is pressed go back to the new tab page
 	$(document.body).on("keyup", function(e) {
-		if (e.which === 27) {
+		if (e.which === 27) { // 27 is the character code of the escape key
 			window.location = "newtab.html";
 		}
 	});
 
 	$("#background_color").on("change", function() {
-		$("body").css("background-color", $("#background_color").prop("value"));
+		document.body.style.backgroundColor = $("#background_color").prop("value");
 	});
 
 	$("#enable_sync").on("click", function() {
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	$("#custom_icon_data").on("keydown", function (e) {
-		if (e.which === 13) {
+		if (e.which === 13) { // 13 is the character code of the return key
 			$("#save").trigger("click");
 		}
 	});

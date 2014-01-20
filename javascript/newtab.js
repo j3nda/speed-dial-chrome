@@ -66,8 +66,23 @@ function addSpeedDialFolder(bookmark, entryArray) {
 	entryArray.push(entry);
 }
 
+// Scales a single speed dial entry to the specified size
+function scaleSpeedDialEntries() {
+	var entryWidth = $("#dial").prop("entryWidth");
+	var entryHeight = entryWidth * 0.75 | 0;
+
+	// Set the values through CSS, rather than explicit individual CSS styles
+	$("#styles").html(
+		".entry { height:" + entryHeight + "px; width:" + entryWidth + "px; } " +
+		"td.title { max-width:" + (entryWidth - 50) + "px; } " +
+		".image { height:" + (entryHeight - 20) + "px; } " +
+		".foundicon-folder { font-size:" + (entryWidth * 0.5 | 0) + "px; top:" + (entryWidth * 0.05 | 0) + "px; } " +
+		".foundicon-plus { font-size:" + (entryWidth * 0.3 | 0) + "px; top:" + (entryWidth * 0.18 | 0) + "px; } "
+	);
+}
+
 // Figures out how big the dial and its elements should be
-// Needs to be called before the dial and entries are created
+// Needs to be called before the entries are created
 function calculateSpeedDialSize() {
 	var dialColumns = localStorage.getItem("dial_columns");
 	var dialWidth = localStorage.getItem("dial_width");
@@ -81,12 +96,12 @@ function calculateSpeedDialSize() {
 		entryWidth = minEntryWidth;
 		adjustedDialWidth = (adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
 	}
-	$("#dial").prop("entryWidth", entryWidth|0).css("width", adjustedDialWidth|0);
+	$("#dial").prop("entryWidth", entryWidth | 0).css("width", adjustedDialWidth | 0);
+	scaleSpeedDialEntries();
 }
 
-/* Retrieve the bookmarks bar node and use it to generate speed dials */
+// Retrieve the bookmarks bar node and use it to generate speed dials
 function createSpeedDial(folderId) {
-	$("#dial").prop("folderId", folderId);
 	calculateSpeedDialSize();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
@@ -106,13 +121,13 @@ function createSpeedDial(folderId) {
 			addNewEntryButton(entryArray);
 		}
 
-		scaleSpeedDialEntries(entryArray); // scale all entries once before adding to the dial
-		$("#dial").html(entryArray); // Batch add all the entries to the dial at once
+		// Batch add all the entries to the dial at once and set the folderId
+		$("#dial").html(entryArray).prop("folderId", folderId);
 		alignVertical();
 
 		// Show the options gear icon only if enabled and doesn't already exist
 		if (localStorage.getItem("show_options_gear") === "true" && $("#options").children().length === 0) {
-			$("#options").append($("<a>").prop({"className": "foundicon-settings", "href": "options.html", "title": "Options"}));
+			$("#options").append($("<a>").prop({ "className": "foundicon-settings", "href": "options.html", "title": "Options" }));
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
@@ -122,7 +137,6 @@ function createSpeedDial(folderId) {
 				distance: 20,
 				items: ".entry:not(#new_entry)",
 				tolerance: "pointer",
-
 				stop: function() { updateBookmarksOrder(); }
 			});
 		}
@@ -137,24 +151,6 @@ function getThumbnailUrl(bookmark) {
 		bookmark.url = bookmark.url.replace("https", "http");
 	}
 	return localStorage.getItem("thumbnailing_service").replace("[URL]", bookmark.url);
-}
-
-// Scales a single speed dial entry to the specified size
-function scaleSpeedDialEntries(entryArray) {
-	var entryWidth = $("#dial").prop("entryWidth");
-	var entryHeight = entryWidth * 0.75 | 0;
-
-	// Set the entry size through CSS, rather than explicit attributes
-	$("<style type='text/css'> .entry { height:" + entryHeight + "px; width:" + entryWidth + "px; } </style>").appendTo("head");
-
-	entryArray.forEach(function(entry) {
-		var current = $(entry);
-		// 50 = width of edit + delete buttons(18px each) + 14 (size of fixed size boarderWidth)
-		current.find(".title").css("max-width", entryWidth - 50);
-		current.find(".image").css("height", entryHeight - 20);
-		current.find(".foundicon-folder").css({ "font-size": entryWidth * 0.5 | 0, "top": entryWidth * 0.05 | 0 });
-		current.find(".foundicon-plus").css({ "font-size": entryWidth * 0.3 | 0, "top": entryWidth * 0.18 | 0 });
-	});
 }
 
 function showBookmarkEntryForm(heading, title, url, target) {
@@ -208,11 +204,10 @@ function updateCustomIcon(url, old_url) {
 
 function alignVertical() {
 	var dial = $("#dial");
-	dial.css("padding-top", "");
 	if (localStorage.getItem("show_folder_list") === "true") {
-		dial.css("padding-top", ((window.innerHeight - dial.height())/2)-50|0);
+		dial.css("padding-top", ((window.innerHeight - dial.height()) /2) -50 | 0);
 	} else {
-		dial.css("padding-top", (window.innerHeight - dial.height())/2|0);
+		dial.css("padding-top", (window.innerHeight - dial.height()) /2 | 0);
 	}
 }
 
@@ -221,7 +216,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	createSpeedDial(getStartingFolder());
 
 	$("#bookmark_form .title, #bookmark_form .url, #bookmark_form .icon").on("keydown", function(e) {
-		if (e.which === 13) {
+		if (e.which === 13) { // 13 is the character code of the return key
 			$("#bookmark_form button").trigger("click");
 		}
 	});
@@ -249,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			}
 			// Navigates to options page when letter "o" is pressed.
-			if (key === "o") {
+			if (key === "o" || key === "s") {
 				window.location = "options.html";
 			}
 		}
@@ -257,7 +252,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	$(window).on("resize", function() {
 		calculateSpeedDialSize();
-		scaleSpeedDialEntries($(".entry").toArray());
 		alignVertical();
 	});
 
@@ -268,6 +262,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	// Load the .css that refrences the .woff font file asynchronously in an ajax request, halves render speed of dial
 	$.ajax({ success: function() {
-		$("head").append('<link type="text/css" rel="stylesheet" href="css/general_foundicons.css" />');
+		$("#foundicons").prop("href", "css/general_foundicons.css");
 	}});
 });
