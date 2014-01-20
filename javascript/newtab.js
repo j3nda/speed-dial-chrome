@@ -1,6 +1,3 @@
-var RETURN_KEY = 13;
-var OPTIONS_KEY = "o";
-
 function addNewEntryButton(entryArray) {
 	var newEntry = $('<div class="entry" id="new_entry" title="Add New"><div><span class="foundicon-plus"></span></div></div>');
 	newEntry.on("click", function() {
@@ -148,7 +145,6 @@ function scaleSpeedDialEntries(entryArray) {
 	var entryHeight = entryWidth * 0.75 | 0;
 
 	// Set the entry size through CSS, rather than explicit attributes
-	$("style").remove();
 	$("<style type='text/css'> .entry { height:" + entryHeight + "px; width:" + entryWidth + "px; } </style>").appendTo("head");
 
 	entryArray.forEach(function(entry) {
@@ -225,7 +221,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	createSpeedDial(getStartingFolder());
 
 	$("#bookmark_form .title, #bookmark_form .url, #bookmark_form .icon").on("keydown", function(e) {
-		if (e.which === RETURN_KEY) {
+		if (e.which === 13) {
 			$("#bookmark_form button").trigger("click");
 		}
 	});
@@ -253,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				}
 			}
 			// Navigates to options page when letter "o" is pressed.
-			if (key === OPTIONS_KEY) {
+			if (key === "o") {
 				window.location = "options.html";
 			}
 		}

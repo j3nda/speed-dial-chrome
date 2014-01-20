@@ -23,6 +23,7 @@ This implementation is more limited than Opera's. Opera generates thumbnail inte
 
 Release Notes
 --------------
+- 2.4.3: Resolved vertical centering bug
 - 2.4.2: Performance improvements
 - 2.4.1: Minor permission and style fixes
 - 2.4.0: More comprehensive settings, shortcuts for opening dials, performance enhancements
