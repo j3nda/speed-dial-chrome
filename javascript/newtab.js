@@ -132,12 +132,9 @@ function createSpeedDial(folderId) {
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
 			$("#dial").sortable({
-				cursor: "move",
-				containment: "parent",
-				distance: 20,
-				items: ".entry:not(#new_entry)",
-				tolerance: "pointer",
-				stop: function() { updateBookmarksOrder(); }
+				items: ".entry:not(#new_entry)"
+			}).on("sortupdate", function() {
+				updateBookmarksOrder();
 			});
 		}
 	});
