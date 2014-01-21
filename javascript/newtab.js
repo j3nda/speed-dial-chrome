@@ -30,9 +30,9 @@ function addSpeedDialBookmark(bookmark, entryArray) {
 		}
 	});
 
-	//If custom icon for the URL exists, evaluates to true & centers it on the dial
+	// If custom icon URL has been set and exists, evaluates to true to center the custom icon
 	if (JSON.parse(localStorage.getItem("custom_icon_data"))[bookmark.url]) {
-		entry.find(".image").css({ "background-size": "contain", "background-position": "center" });
+		entry.find(".image").addClass("custom-icon");
 	}
 
 	entryArray.push(entry);
@@ -61,48 +61,39 @@ function addSpeedDialFolder(bookmark, entryArray) {
 		}
 	});
 
-	entry.find(".foundicon-folder").css("color", localStorage.getItem("folder_color"));
-
 	entryArray.push(entry);
 }
 
-// Scales a single speed dial entry to the specified size
-function scaleSpeedDialEntries() {
-	var entryWidth = $("#dial").prop("entryWidth");
-	var entryHeight = entryWidth * 0.75 | 0;
+// Figures out how big the dial and its elements should be
+// Needs to be called before the entries are inserted
+function setDialStyles() {
+	var dialColumns = localStorage.getItem("dial_columns");
+	var dialWidth = localStorage.getItem("dial_width");
+	var folderColor = localStorage.getItem("folder_color");
+	var adjustedDialWidth = window.innerWidth * (dialWidth / 100);
+	var borderWidth = 14;
+	var minEntryWidth = 120 - borderWidth;
+	var entryWidth = (adjustedDialWidth / dialColumns) - borderWidth;
+
+	if (entryWidth < minEntryWidth) {
+		entryWidth = minEntryWidth;
+	}
 
 	// Set the values through CSS, rather than explicit individual CSS styles
+	// Height values are 3/4 or * 0.75 width values
 	$("#styles").html(
-		".entry { height:" + entryHeight + "px; width:" + entryWidth + "px; } " +
-		"td.title { max-width:" + (entryWidth - 50) + "px; } " +
-		".image { height:" + (entryHeight - 20) + "px; } " +
-		".foundicon-folder { font-size:" + (entryWidth * 0.5 | 0) + "px; top:" + (entryWidth * 0.05 | 0) + "px; } " +
+		"#dial { width:" + (adjustedDialWidth | 0) + "px; } " +
+		".entry { height:" + (entryWidth * 0.75 | 0) + "px; width:" + (entryWidth | 0) + "px; } " +
+		"td.title { max-width:" + (entryWidth - 50 | 0) + "px; } " +
+		".image { height:" + ((entryWidth * 0.75) - 20 | 0) + "px; } " +
+		".foundicon-folder { font-size:" + (entryWidth * 0.5 | 0) + "px; top:" + (entryWidth * 0.05 | 0) + "px; color:" + folderColor + " } " +
 		".foundicon-plus { font-size:" + (entryWidth * 0.3 | 0) + "px; top:" + (entryWidth * 0.18 | 0) + "px; } "
 	);
 }
 
-// Figures out how big the dial and its elements should be
-// Needs to be called before the entries are created
-function calculateSpeedDialSize() {
-	var dialColumns = localStorage.getItem("dial_columns");
-	var dialWidth = localStorage.getItem("dial_width");
-
-	var borderWidth = 14;
-	var minEntryWidth = 120 - borderWidth;
-	var adjustedDialWidth = window.innerWidth * (dialWidth / 100);
-	var entryWidth = adjustedDialWidth / dialColumns - borderWidth;
-
-	if (entryWidth < minEntryWidth) {
-		entryWidth = minEntryWidth;
-		adjustedDialWidth = (adjustedDialWidth / (minEntryWidth + borderWidth)) * (minEntryWidth + borderWidth);
-	}
-	$("#dial").prop("entryWidth", entryWidth | 0).css("width", adjustedDialWidth | 0);
-	scaleSpeedDialEntries();
-}
-
 // Retrieve the bookmarks bar node and use it to generate speed dials
 function createSpeedDial(folderId) {
-	calculateSpeedDialSize();
+	setDialStyles();
 
 	chrome.bookmarks.getSubTree(folderId, function(node) {
 		// Loop over bookmarks in folder and add to the dial
@@ -153,11 +144,11 @@ function getThumbnailUrl(bookmark) {
 function showBookmarkEntryForm(heading, title, url, target) {
 	var form = $("#bookmark_form");
 
-	form.find("h1").text(heading);
+	form.find("h1").html(heading);
 	form.find(".title").prop("value", title);
-	form.find(".url").prop("value", url);
-	// Must clear parsed .icon property before setting it, .val seemed to hide it
-	form.find(".icon").prop("value", "").prop("value", JSON.parse(localStorage.getItem("custom_icon_data"))[url]);
+	// Must || "" .url and .icon fields when using .prop() to clear previously set input values
+	form.find(".url").prop("value", url || "");
+	form.find(".icon").prop("value", JSON.parse(localStorage.getItem("custom_icon_data"))[url] || "");
 	form.prop("target", target);
 
 	// Selectors to hide URL & custom icon fields when editing a folder name
@@ -202,9 +193,9 @@ function updateCustomIcon(url, old_url) {
 function alignVertical() {
 	var dial = $("#dial");
 	if (localStorage.getItem("show_folder_list") === "true") {
-		dial.css("padding-top", ((window.innerHeight - dial.height()) /2) -50 | 0);
+		dial.css("padding-top", ((window.innerHeight - dial.height()) / 2) - 50 | 0);
 	} else {
-		dial.css("padding-top", (window.innerHeight - dial.height()) /2 | 0);
+		dial.css("padding-top", (window.innerHeight - dial.height()) / 2 | 0);
 	}
 }
 
@@ -236,8 +227,8 @@ document.addEventListener("DOMContentLoaded", function() {
 		if (document.activeElement.type !== "text") {
 			var key = String.fromCharCode(e.which);
 			if (key >= 1 && key <= 9) {
-				if ($('.bookmark').eq(key - 1).length !== 0) {
-					window.location = $('.bookmark').get(key - 1).href;
+				if ($(".bookmark").eq(key - 1).length !== 0) {
+					window.location = $(".bookmark").get(key - 1).href;
 				}
 			}
 			// Navigates to options page when letter "o" is pressed.
@@ -248,7 +239,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	$(window).on("resize", function() {
-		calculateSpeedDialSize();
+		setDialStyles();
 		alignVertical();
 	});
 

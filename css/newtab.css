@@ -44,6 +44,11 @@ body {
 	border-top-right-radius: 5px;
 }
 
+.custom-icon {
+	background-size: contain;
+	background-position: center;
+}
+
 .details {
 	border-collapse: collapse;
 	width: 100%;
