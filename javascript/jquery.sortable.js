@@ -23,7 +23,7 @@ $.fn.sortable = function(options) {
 		}
 		var isHandle, index, items = $(this).children(options.items);
 		// *modified* to create our placeholder with a .entry class in an optimized fashion
-		var placeholder = $("<div>").prop("className", "entry sortable-placeholder");
+		var placeholder = $("<div>").prop("class", "entry sortable-placeholder");
 		items.find(options.handle).mousedown(function() {
 			isHandle = true;
 		}).mouseup(function() {

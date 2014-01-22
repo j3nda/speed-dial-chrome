@@ -118,7 +118,7 @@ function createSpeedDial(folderId) {
 
 		// Show the options gear icon only if enabled and doesn't already exist
 		if (localStorage.getItem("show_options_gear") === "true" && $("#options").children().length === 0) {
-			$("#options").append($("<a>").prop({ "className": "foundicon-settings", "href": "options.html", "title": "Options" }));
+			$("#options").append($("<a>").prop({ "class": "foundicon-settings", "href": "options.html", "title": "Options" }));
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {
@@ -249,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 	// Load the .css that refrences the .woff font file asynchronously in an ajax request, halves render speed of dial
-	$.ajax({ success: function() {
+	$.get().done(function() {
 		$("#foundicons").prop("href", "css/general_foundicons.css");
-	}});
+	});
 });
