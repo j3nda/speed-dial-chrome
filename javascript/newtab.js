@@ -191,11 +191,13 @@ function updateCustomIcon(url, old_url) {
 }
 
 function alignVertical() {
-	var dial = $("#dial");
-	if (localStorage.getItem("show_folder_list") === "true") {
-		dial.css("padding-top", ((window.innerHeight - dial.height()) / 2) - 50 | 0);
-	} else {
-		dial.css("padding-top", (window.innerHeight - dial.height()) / 2 | 0);
+	if (localStorage.getItem("center_vertically") === "true") {
+		var dial = $("#dial");
+		if (localStorage.getItem("show_folder_list") === "true") {
+			dial.css("padding-top", ((window.innerHeight - dial.height()) / 2) - 50 | 0);
+		} else {
+			dial.css("padding-top", (window.innerHeight - dial.height()) / 2 | 0);
+		}
 	}
 }
 

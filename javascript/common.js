@@ -55,6 +55,7 @@ function createDefaults() {
 	var default_values = {
 		background_color: "#cccccc",
 		custom_icon_data: "{}",
+		center_vertically: "true",
 		default_folder_id: "1",
 		dial_columns: "6",
 		dial_width: "70",

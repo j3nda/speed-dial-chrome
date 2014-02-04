@@ -2,6 +2,7 @@
 function restoreOptions() {
 	$("#background_color").prop("value", localStorage.getItem("background_color"));
 	$("#custom_icon_data").prop("value", localStorage.getItem("custom_icon_data"));
+	$("#center_vertically").prop("checked", localStorage.getItem("center_vertically") === "true");
 	$("#folder_list").prop("value", localStorage.getItem("default_folder_id"));
 	$("#dial_columns").prop("value", localStorage.getItem("dial_columns"));
 	$("#dial_width").prop("value", localStorage.getItem("dial_width"));
@@ -21,6 +22,7 @@ function restoreOptions() {
 function saveOptions() {
 	localStorage.setItem("background_color", $("#background_color").prop("value"));
 	localStorage.setItem("custom_icon_data", JSON.stringify(JSON.parse($("#custom_icon_data").prop("value"))));
+	localStorage.setItem("center_vertically", $("#center_vertically").prop("checked"));
 	localStorage.setItem("default_folder_id", $("#folder_list").prop("value"));
 	localStorage.setItem("dial_columns", $("#dial_columns").prop("value"));
 	localStorage.setItem("dial_width", $("#dial_width").prop("value"));
