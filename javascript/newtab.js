@@ -118,7 +118,7 @@ function createSpeedDial(folderId) {
 
 		// Show the options gear icon only if enabled and doesn't already exist
 		if (localStorage.getItem("show_options_gear") === "true" && $("#options").children().length === 0) {
-			$("#options").append($("<a>").prop({ "class": "foundicon-settings", "href": "options.html", "title": "Options" }));
+			$("#options").append($('<a class="foundicon-settings" href="options.html" title="Options"></a>'));
 		}
 
 		if (localStorage.getItem("drag_and_drop") === "true") {

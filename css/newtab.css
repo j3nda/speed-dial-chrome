@@ -20,7 +20,7 @@ body {
 
 .entry:hover {
 	border: 7px solid rgba(53, 191, 256, 0.5);
-	border-radius: 10px;
+	border-radius: 12px;
 }
 
 .bookmark {
