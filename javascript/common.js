@@ -68,7 +68,7 @@ function createDefaults() {
 		show_new_entry: "true",
 		show_options_gear: "true",
 		show_subfolder_icons: "true",
-		thumbnailing_service: "http://immediatenet.com/t/l3?Size=1280x1024&URL=[URL]"
+		thumbnailing_service: "http://api.webthumbnail.org/?width=500&height=400&screen=1280&url=[URL]"
 	};
 
 	// Creates default localStorage values if they don't already exist
@@ -77,6 +77,11 @@ function createDefaults() {
 			localStorage.setItem(name, default_values[name]);
 		}
 	});
+
+	// TODO remove at some point, this will convert everyone to the new thumbnailing API
+	if (localStorage.getItem("thumbnailing_service").indexOf("immediatenet.com") > 0) {
+		localStorage.setItem("thumbnailing_service", "http://api.webthumbnail.org/?width=500&height=400&screen=1280&url=[URL]");
+	}
 }
 
 // Initialisation routines for all pages
